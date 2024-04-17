@@ -12,12 +12,12 @@ import Image from "next/image";
 // - alt: The alt text of the image (if type is 'image')
 const features = [
   {
-    title: "Emails",
+    title: "Financial Metrics",
     description:
-      "Send transactional emails, setup your DNS to avoid spam folder (DKIM, DMARC, SPF in subdomain), and listen to webhook to receive & forward emails",
+      "Understand what is the Beta of your portfolio, your Sharpe ratio, detailed ROI, Sortino ratio, etc.",
     type: "video",
-    path: "https://d3m8mk7e1mf7xn.cloudfront.net/app/newsletter.webm",
-    format: "video/webm",
+    path:"",
+    format: "",
     svg: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -35,9 +35,9 @@ const features = [
     ),
   },
   {
-    title: "Payments",
+    title: "Portfolio Analysis",
     description:
-      "Create checkout sessions, handle webhooks to update user's account (subscriptions, one-time payments...) and tips to setup your account & reduce chargebacks",
+      "Retrieve complete reports on your portfolio to understand your risks and how you can improve its resilience",
     type: "image",
     path: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80",
     alt: "A computer",
@@ -59,9 +59,9 @@ const features = [
     ),
   },
   {
-    title: "Authentication",
+    title: "Tailored recommendations",
     description:
-      "Magic links setup, login with Google walkthrough, save user in MongoDB/Supabase, private/protected pages & API calls",
+      "Let the AI engine make recommendations that are based on your portfolio metrics",
     svg: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -80,9 +80,9 @@ const features = [
     ),
   },
   {
-    title: "Style",
+    title: "Easy to undertand interpretations",
     description:
-      "Components, animations & sections (like this features section), 20+ themes with daisyUI, automatic dark mode",
+      "Let our tool explain in plain English what all those metrics mean",
     svg: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@ const Item = ({ feature, isOpen, setFeatureSelected }) => {
 
 // A component to display the media (video or image) of the feature. If the type is not specified, it will display an empty div.
 // Video are set to autoplay for best UX.
-const Media = ({ feature }) => {
+{/*const Media = ({ feature }) => {
   const { type, path, format, alt } = feature;
   const style = "rounded-2xl aspect-square w-full sm:w-[26rem]";
   const size = {
@@ -182,7 +182,7 @@ const Media = ({ feature }) => {
   } else {
     return <div className={`${style} !border-none`}></div>;
   }
-};
+};*/}
 
 // A component to display 2 to 5 features in an accordion.
 // By default, the first feature is selected. When a feature is clicked, the others are closed.
@@ -196,9 +196,9 @@ const FeaturesAccordion = () => {
     >
       <div className="px-8">
         <h2 className="font-extrabold text-4xl lg:text-6xl tracking-tight mb-12 md:mb-24">
-          All you need to ship your startup fast
+          Use data to optimize your portfolio
           <span className="bg-neutral text-neutral-content px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-nowrap">
-            and get profitable
+           and start investing like a pro
           </span>
         </h2>
         <div className=" flex flex-col md:flex-row gap-12 md:gap-24">
@@ -215,7 +215,7 @@ const FeaturesAccordion = () => {
               ))}
             </ul>
 
-            <Media feature={features[featureSelected]} key={featureSelected} />
+            {/*<Media feature={features[featureSelected]} key={featureSelected} />*/}
           </div>
         </div>
       </div>

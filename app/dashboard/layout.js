@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import config from "@/config";
+import SideNav from '@/components/SideNavbar';
+
 
 // This is a server-side component to ensure the user is logged in.
 // If not, it will redirect to the login page.
@@ -15,5 +17,13 @@ export default async function LayoutPrivate({ children }) {
     redirect(config.auth.loginUrl);
   }
 
-  return <>{children}</>;
-}
+  return (
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+      <div className="w-full flex-none md:w-64">
+        <SideNav />
+      </div>
+      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    </div>
+  );
+} 
+

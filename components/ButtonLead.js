@@ -44,11 +44,11 @@ const ButtonLead = ({ extraStyle }) => {
         value={email}
         ref={inputRef}
         autoComplete="email"
-        placeholder="tom@cruise.com"
+        placeholder="your-email@gmail.com"
         className="input input-bordered w-full placeholder:opacity-60"
         onChange={(e) => setEmail(e.target.value)}
       />
-
+      
       <button
         className="btn btn-primary btn-block"
         type="submit"

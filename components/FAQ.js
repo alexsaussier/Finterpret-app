@@ -8,14 +8,13 @@ import { useRef, useState } from "react";
 const faqList = [
   {
     question: "What do I get exactly?",
-    answer: <div className="space-y-2 leading-relaxed">Loreum Ipseum</div>,
+    answer: <div className="space-y-2 leading-relaxed">A dashboard that outputs metrics about your portfolio, and tailored advice generated just for you.</div>,
   },
   {
     question: "Can I get a refund?",
     answer: (
       <p>
-        Yes! You can request a refund within 7 days of your purchase. Reach out
-        by email.
+        No, but you have 7 days of free trial to test Finterpret.
       </p>
     ),
   },

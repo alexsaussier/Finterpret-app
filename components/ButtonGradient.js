@@ -1,6 +1,6 @@
 "use client";
 
-const ButtonGradient = ({ title = "Gradient Button", onClick = () => {} }) => {
+const ButtonGradient = ({ title = "Import your portfolio", onClick = () => {} }) => {
   return (
     <button className="btn btn-gradient animate-shimmer" onClick={onClick}>
       {title}

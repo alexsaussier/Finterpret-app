@@ -15,7 +15,7 @@ const links = [
   },
   {
     href: "/#testimonials",
-    label: "Reviews",
+    label: "Join waitlist",
   },
   {
     href: "/#faq",
@@ -47,12 +47,12 @@ const Header = () => {
           <Link
             className="flex items-center gap-2 shrink-0 "
             href="/"
-            title={`${config.appName} hompage`}
+            title={`${config.appName} homepage`}
           >
             <Image
               src={logo}
               alt={`${config.appName} logo`}
-              className="w-8"
+              className="w-12"
               placeholder="blur"
               priority={true}
               width={32}

@@ -13,7 +13,7 @@ export default async function Dashboard() {
     <main className="flex-1 p-8 pb-24">
       <section className="max-w-xl space-y-8">
         <h1 className="text-2xl md:text-3xl font-bold text-left">
-          Cash Flow Analysis
+          Cash Flow Analysisss
         </h1>
         <ButtonGradient />
       </section>

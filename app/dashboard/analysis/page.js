@@ -10,12 +10,11 @@ export default async function Dashboard() {
   const user = await User.findById(session.user.id);
 
   return (
-    <main className="flex-1 p-8 pb-24">
+    <main className="flex-1 p-4 pb-24">
       <section className="max-w-xl space-y-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-left">
+        <h1 className="text-l md:text-xl font-bold text-left">
           Analysis of your porfolio components
         </h1>
-        <ButtonGradient />
       </section>
     </main>
   );

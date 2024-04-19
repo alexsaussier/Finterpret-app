@@ -3,6 +3,7 @@ import Image from "next/image";
 import NavLinks from '@/components/NavLinks';
 import logo from "@/app/icon.png";
 import config from "@/config";
+import ButtonAccount from './ButtonAccount';
 
 
 export default function SideNav() {

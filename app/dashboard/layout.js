@@ -25,7 +25,7 @@ export default async function LayoutPrivate({ children }) {
         <SideNav />
       </div>
       <div className="flex-grow p-4 md:overflow-y-auto md:p-6">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center pb-4">
           <ButtonGradient />
           <ButtonAccount />
         </div>

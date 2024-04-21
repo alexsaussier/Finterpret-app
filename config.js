@@ -21,46 +21,44 @@ const config = {
         // REQUIRED — we use this to find the plan in the webhook (for instance if you want to update the user's credits based on the plan)
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1Niyy5AxyNprDp7iZIqEyD2h"
+            ? "price_1P7z4TAvu92XwZMPBN6jl9FC"
             : "price_456",
         //  REQUIRED - Name of the plan, displayed on the pricing page
-        name: "Starter",
+        name: "Monthly Subscription",
         // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
-        description: "Perfect for small projects",
+        description: "Get full access to all features, billed monthly.",
         // The price you want to display, the one user will be charged on Stripe.
-        price: 79,
+        price: 5.99,
         // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
-        priceAnchor: 99,
+        priceAnchor: 9.99,
         features: [
-          {
-            name: "NextJS boilerplate",
-          },
-          { name: "User oauth" },
-          { name: "Database" },
-          { name: "Emails" },
+          { name: "Import your stock and crypto portfolios" },
+          { name: "Portfolio Metrics" },
+          { name: "Tailored Portfolio Reports" },
+          { name: "Investment recommendations and optimizations" },
         ],
+        mode: "subscription",
       },
       {
         // This plan will look different on the pricing page, it will be highlighted. You can only have one plan with isFeatured: true
         isFeatured: true,
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
+            ? "price_1P82UFAvu92XwZMPzUMvubpj"
             : "price_456",
-        name: "Advanced",
-        description: "You need more power",
-        price: 99,
-        priceAnchor: 149,
+        name: "Lifetime Access",
+        description: "Pay once, have it forever.",
+        price: 49.99,
+        priceAnchor: 79.99,
         features: [
-          {
-            name: "NextJS boilerplate",
-          },
-          { name: "User oauth" },
-          { name: "Database" },
-          { name: "Emails" },
-          { name: "1 year of updates" },
+          { name: "Import your stock and crypto portfolios" },
+          { name: "Portfolio Metrics" },
+          { name: "Tailored Portfolio Reports" },
+          { name: "Investment recommendations and optimizations" },
+          { name: "Lifetime access" },
           { name: "24/7 support" },
         ],
+        mode: "payment",
       },
     ],
   },

@@ -64,7 +64,7 @@ const ClientLayout = ({ children }) => {
         {/* Show Success/Error messages anywhere from the app with toast() */}
         <Toaster
           toastOptions={{
-            duration: 3000,
+            duration: 4000,
           }}
         />
 

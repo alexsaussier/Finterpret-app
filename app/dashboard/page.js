@@ -2,6 +2,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
+import AssetLayout from "@/components/AssetLayout";
+import DashboardCollapse from "@/components/DashboardCollapse";
+import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -11,84 +14,75 @@ export default async function Dashboard() {
   return (
     <main className="flex-1 pb-24">
       <section className="space-y-4">
-        <h1 className="text-l md:text-xl font-bold text-left">
+        <h1 className="text-lg md:text-xl font-bold text-left">
           Dashboard
         </h1>
         <p>Welcome {user.name}{user.email} 👋</p>
 
         <div className="flex flex-row flex-nowrap gap-4">
-          <div className="w-full border rounded border-neutral border-solid flex-col p-1">
-            <h1 className="">
+          <div className="w-full flex-col p-1">
+            <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Your holdings
             </h1>
-            <div className="collapse bg-base-200 hover:bg-secondary mb-1">
-              <input type="checkbox" /> 
-              <div className="collapse-title font-small">
-                Stocks
-              </div>
-              <div className="collapse-content"> 
-                <p>Tesla</p>
-              </div>
-            </div>
             
-            <div className="collapse bg-base-200 mb-1">
-              <input type="checkbox" /> 
-              <div className="collapse-title font-small">
-                Options
-              </div>
-              <div className="collapse-content"> 
-                <p>Calls</p>
-                <p>Puts</p>
-              </div>
-            </div>
+            <DashboardCollapse title="Stocks">
+              <AssetLayout title="AAPL" quantity="100" /> 
+              <AssetLayout title="TSLA" quantity="100"/>
+            </DashboardCollapse>
             
-            <div className="collapse bg-base-200 mb-1">
-              <input type="checkbox" /> 
-              <div className="collapse-title font-small">
-                Crypto
-              </div>
-              <div className="collapse-content"> 
-                <p>BTC</p>
-              </div>
-            </div>
+
+            <DashboardCollapse title="Options">
+              <p>Calls</p>
+              <AssetLayout title="AAPL" quantity="100" />
+              <p>Puts</p> 
+              <AssetLayout title="TSLA" quantity="100"/>
+            </DashboardCollapse>
+            
+            
+            <DashboardCollapse title="Crypto">
+              <AssetLayout title="BTC" quantity="100"/>
+              <AssetLayout title="ETH" quantity="100"/>
+              <AssetLayout title="DOGE" quantity="100"/>
+            </DashboardCollapse>
           </div>
 
+              
 
-          <div className="w-full border rounded border-neutral border-solid flex-col p-1">
-            <h1 className="">
+
+          <div className="w-full flex-col p-1">
+            <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Portfolio Report
             </h1>
             
-            <div className="collapse bg-base-200 mb-1">
-              <input type="checkbox" /> 
-              <div className="collapse-title font-small">
-                Sharpe Ratio
-              </div>
-              <div className="collapse-content"> 
-                <p>AI-generated explanation</p>
-              </div>
-            </div>
+            <DashboardCollapse title="General Analysis">
+              <AssetLayout title="Total Portfolio Value" quantity={"$ " + "100"}/>
+              <p>AI-generated explanation</p>
+            </DashboardCollapse>
+           
+            <DashboardCollapseValue title="Sharpe Ratio" quantity="20">
+              <p>
+                Think of the Sharpe ratio like a rating that tells you how good of a deal you are getting 
+                for the risk you are taking with an investment.
+              </p>
+              <p>
+                Imagine you can choose between two jobs. One is a bit risky but pays more, and the other is very safe but pays less. 
+                The Sharpe ratio is like a score that tells you which job pays more extra money for the extra risk. 
+                A higher score means you are getting a better deal for the risk you are taking. 
+                So, if you are comparing investments, you generally want the one with the higher Sharpe ratio 
+                because it means you are getting more return for each bit of risk you take on.
+              </p>
+            </DashboardCollapseValue>
 
-            <div className="collapse bg-base-200 mb-1">
-              <input type="checkbox" /> 
-              <div className="collapse-title font-small">
-                Portfolio Beta
-              </div>
-              <div className="collapse-content"> 
-                <p>AI-generated explanation</p>
-              </div>
-            </div>
+            
+            <DashboardCollapseValue title="Portfolio Beta" quantity="1.4">
+              <p>AI-generated explanation</p>
+            </DashboardCollapseValue>
 
-            <div className="collapse bg-base-200 mb-1">
-              <input type="checkbox" /> 
-              <div className="collapse-title font-small">
-                YoY Return
-              </div>
-              <div className="collapse-content"> 
-                <p>AI-generated explanation</p>
-              </div>
-            </div>
+            <DashboardCollapseValue title="YoY Return" quantity={12}>
+              <p>AI-generated explanation</p>
+            </DashboardCollapseValue>
           </div>
+
         </div>
 
       </section>

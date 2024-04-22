@@ -3,8 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import config from "@/config";
 import SideNav from '@/components/SideNavbar';
-import ButtonGradient from '@/components/ButtonGradient';
-import ButtonGlass from '@/components/ButtonGlass';
 import ButtonAccount from "@/components/ButtonAccount";
 
 
@@ -26,9 +24,8 @@ export default async function LayoutPrivate({ children }) {
         <SideNav />
       </div>
       <div className="flex-grow p-4 md:overflow-y-auto md:p-6">
-        <div className="flex justify-between items-center pb-4">
-          <ButtonGradient />
-          <ButtonAccount />
+        <div className="flex justify-between items-right pb-4">
+          <ButtonAccount /* This shoudl go in SideNav at some point */ /> 
         </div>
         {children}
       </div>

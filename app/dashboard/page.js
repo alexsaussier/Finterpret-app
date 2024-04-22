@@ -5,11 +5,17 @@ import User from "@/models/User";
 import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
 import DashboardCollapseValue from "@/components/DashboardCollapseValue";
+import ButtonGradient from '@/components/ButtonGradient';
+import ButtonSnaptrade from "@/components/ButtonSnaptrade";
+
 
 export default async function Dashboard() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
+
+  
+  
 
   return (
     <main className="flex-1 pb-24">
@@ -18,6 +24,7 @@ export default async function Dashboard() {
           Dashboard
         </h1>
         <p>Welcome {user.name}{user.email} 👋</p>
+        <ButtonSnaptrade title="Import a Portfolio" />
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">

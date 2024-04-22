@@ -43,6 +43,7 @@ export const authOptions = {
     session: async ({ session, token }) => {
       if (session?.user) {
         session.user.id = token.sub;
+        session.user.snaptrade_user_secret = token.snaptrade_user_secret;
       }
       return session;
     },

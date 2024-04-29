@@ -13,7 +13,8 @@ export default async function Dashboard() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
-
+  console.log(user);
+  console.log(user.snaptrade_user_secret)
   
   
 
@@ -24,7 +25,10 @@ export default async function Dashboard() {
           Dashboard
         </h1>
         <p>Welcome {user.name}{user.email} 👋</p>
-        <ButtonSnaptrade title="Import a Portfolio" />
+        <ButtonSnaptrade 
+          title="Import a Portfolio" 
+          snaptrade_user_secret={user.snaptrade_user_secret}
+        />
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">

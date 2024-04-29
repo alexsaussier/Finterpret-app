@@ -6,25 +6,43 @@ import { useRouter } from "next/navigation";
 import config from "@/config";
 import { useState } from "react";
 import apiClient from "@/libs/api";
+//import User from "@/models/User";
+
+
 
 // A simple button to sign in with our providers (Google & Magic Links).
 // It automatically redirects user to callbackUrl (config.auth.callbackUrl) after login, which is normally a private page for users to manage their accounts.
 // If the user is already logged in, it will show their profile picture & redirect them to callbackUrl immediately.
-const ButtonSignin = ({ title = "Import portfolio" }) => {
-  const router = useRouter();
+const ButtonSnaptrade = ({ title = "Import portfolio", snaptrade_user_secret}) => {
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
-
+  
   const handleSnaptrade = async () => {
-    setIsLoading(true);
 
-    console.log(session.user);
-    //Check if user is registered with snaptrade
-    if(!session.user.snaptrade_user_secret) {
+    //Create an api route for fetching a value in the database
+    //Fetch the snaptrade_user_secret associated to the id of the logged in user
+    //if cannot fetch than register user and fetch again
+    //store in variable
+
+    
+    const userId = session.user.id;
+    const user_secret = snaptrade_user_secret;
+    console.log("userId: " + userId);
+
+    //Find user in db
+    //const user_in_db = await fetch(`/api/user/${userId}`).then(res => res.json());
+    //const user_secret = user_in_db.snaptrade_user_secret;
+    console.log("user secret: " + snaptrade_user_secret);
+
+    
+
+
+    //Check if user is registered with snaptrade. Currently does not work because snaptrade_user_secret is not retrieved in the session variable
+    if(snaptrade_user_secret === '') {
       try {
         await apiClient.post("/snaptrade/register-user", {
-          _id: session.user.id
+          userId
         });
       } catch (e) {
         console.error(e);
@@ -34,8 +52,8 @@ const ButtonSignin = ({ title = "Import portfolio" }) => {
     if (status === "authenticated") {
       try {
         const result = await apiClient.post("/snaptrade/redirect-URI", {
-          userId: session.user.id, 
-          userSecret: session.user.snaptrade_user_secret
+          userId, 
+          user_secret
         });
   
         window.location.href = result.redirectURI;
@@ -47,7 +65,6 @@ const ButtonSignin = ({ title = "Import portfolio" }) => {
       signIn(undefined, { callbackUrl: config.auth.callbackUrl });
     }
 
-    setIsLoading(false);
   };
 
   
@@ -59,4 +76,4 @@ const ButtonSignin = ({ title = "Import portfolio" }) => {
   );
 };
 
-export default ButtonSignin;
+export default ButtonSnaptrade;

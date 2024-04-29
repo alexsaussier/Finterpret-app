@@ -14,8 +14,9 @@ export async function POST(req) {
   //Capture the body of the request
   const body = await req.json();
 
+  
   //If there is no user id passed in the request body, send error
-  if (!body._id) {
+  if (!body.userId) {
     return NextResponse.json({ error: "Cannot create a Snaptrade user if customer ID missing" }, { status: 400 });
   }
 
@@ -28,7 +29,7 @@ export async function POST(req) {
       
     // Body of the request is the user id. We will need to store the response
     const response = await snaptrade.authentication.registerSnapTradeUser(
-      { userId: body._id },
+      { userId: body.userId },
     );
 
     // Snaptrade returns a user secret unique for this user.
@@ -36,6 +37,8 @@ export async function POST(req) {
     const session = await getServerSession(authOptions);
     const user = await User.findById(session?.user?.id);
     user.snaptrade_user_secret = response.data.userSecret;
+    await user.save();
+
     // For me: f74447fd-af2a-4df8-9dbe-89eeb375a23d
     
     console.log(response.data);

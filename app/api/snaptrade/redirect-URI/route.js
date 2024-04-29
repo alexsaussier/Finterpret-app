@@ -10,12 +10,13 @@ export async function POST(req) {
 
   //Capture the body of the request
   const body = await req.json();
+  console.log('body: ' + {body})
 
   //If there is no user id passed in the request body, send error
-  if (!body._id) {
+  if (!body.userId) {
     return NextResponse.json({ error: "Cannot generate a Snaptrade URI if customer ID missing" }, { status: 400 });
   }
-  if (!body.snaptrade_user_secret) {
+  if (!body.user_secret) {
     return NextResponse.json({ error: "Cannot generate a Snaptrade URI if snaptrade_user_secret is missing" }, { status: 400 });
   }
 
@@ -30,13 +31,16 @@ export async function POST(req) {
     // Body of the request is the userId and userSecret.
     const response = await snaptrade.authentication.loginSnapTradeUser(
         {
-        userId: body._id,
-        userSecret: body.snaptrade_user_secret,
+        userId: body.userId,
+        userSecret: body.user_secret,
         },
     );
 
     // Snaptrade returns a redirectURI and a sessionId.
-    const redirectURI = response.data.userSecret;
+    console.log(response.data);
+
+
+    const redirectURI = response.data.redirectURI;
     const sessionId = response.data.sessionId;
     
     console.log(response.data);

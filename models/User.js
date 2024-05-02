@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema(
     snaptrade_user_secret: {
       type: String,
     },
+    // Used in the Snaptrade SDK to identify the user in Snaptrade
+    importedWallet: {
+      type: Boolean,
+    },
     // Used in the Stripe webhook. should match a plan in config.js file.
     priceId: {
       type: String,

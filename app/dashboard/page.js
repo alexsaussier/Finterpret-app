@@ -1,12 +1,15 @@
-import { getServerSession } from "next-auth";
+import { getServerSession, getSession} from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
 import DashboardCollapseValue from "@/components/DashboardCollapseValue";
-import ButtonGradient from '@/components/ButtonGradient';
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
+import Card from "@/components/Card";
+import apiClient from "@/libs/api";
+
+
 
 
 export default async function Dashboard() {
@@ -14,7 +17,22 @@ export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
   console.log(user);
-  console.log(user.snaptrade_user_secret)
+
+  const userId = user.id;
+  const userSecret = user.snaptrade_user_secret;
+  console.log(userSecret)
+
+  //Check if we can extract stocks for this user:
+  //Store all account IDs in an array
+  //For each account ID, fetch all stocks
+  //if there is no account ID --> show button to import wallet (ButtonSnaptrade)
+  //if there is at least 1 account ID --> hide button
+
+  /*const brokerAuthorizations = await apiClient.post("/snaptrade/list-brokerage-authorizations", {
+    userId, 
+    userSecret
+  });*/
+
   
   
 
@@ -25,10 +43,13 @@ export default async function Dashboard() {
           Dashboard
         </h1>
         <p>Welcome {user.name}{user.email} 👋</p>
+        
         <ButtonSnaptrade 
           title="Import a Portfolio" 
-          snaptrade_user_secret={user.snaptrade_user_secret}
+          snaptrade_user_secret={userSecret}
         />
+
+        <Card title="Brokerage Authorizations" content="De Giro"/>
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">
@@ -100,4 +121,3 @@ export default async function Dashboard() {
     </main>
   );
 }
-

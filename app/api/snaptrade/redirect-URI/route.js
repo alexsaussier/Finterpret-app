@@ -33,6 +33,7 @@ export async function POST(req) {
         {
         userId: body.userId,
         userSecret: body.user_secret,
+        customRedirect: "http://localhost:3000/dashboard"
         },
     );
 

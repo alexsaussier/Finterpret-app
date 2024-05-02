@@ -2,11 +2,9 @@
 "use client";
 
 import { useSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import config from "@/config";
 import { useState } from "react";
 import apiClient from "@/libs/api";
-//import User from "@/models/User";
 
 
 
@@ -27,13 +25,13 @@ const ButtonSnaptrade = ({ title = "Import portfolio", snaptrade_user_secret}) =
 
     
     const userId = session.user.id;
-    const user_secret = snaptrade_user_secret;
+    const userSecret = snaptrade_user_secret;
     console.log("userId: " + userId);
 
     //Find user in db
     //const user_in_db = await fetch(`/api/user/${userId}`).then(res => res.json());
     //const user_secret = user_in_db.snaptrade_user_secret;
-    console.log("user secret: " + snaptrade_user_secret);
+    console.log("user secret: " + userSecret);
 
     
 
@@ -53,10 +51,16 @@ const ButtonSnaptrade = ({ title = "Import portfolio", snaptrade_user_secret}) =
       try {
         const result = await apiClient.post("/snaptrade/redirect-URI", {
           userId, 
-          user_secret
+          userSecret
         });
   
         window.location.href = result.redirectURI;
+
+        //change status of user --> imported_portfolio = TRUE. We need a db entry for that.
+        const updateUser = await apiClient.post("/user/set-wallet-imported");
+
+        
+
       } catch (e) {
         console.error(e);
       }

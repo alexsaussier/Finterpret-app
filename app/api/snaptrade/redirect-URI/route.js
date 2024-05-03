@@ -16,7 +16,7 @@ export async function POST(req) {
   if (!body.userId) {
     return NextResponse.json({ error: "Cannot generate a Snaptrade URI if customer ID missing" }, { status: 400 });
   }
-  if (!body.user_secret) {
+  if (!body.userSecret) {
     return NextResponse.json({ error: "Cannot generate a Snaptrade URI if snaptrade_user_secret is missing" }, { status: 400 });
   }
 
@@ -32,7 +32,7 @@ export async function POST(req) {
     const response = await snaptrade.authentication.loginSnapTradeUser(
         {
         userId: body.userId,
-        userSecret: body.user_secret,
+        userSecret: body.userSecret,
         customRedirect: "http://localhost:3000/dashboard"
         },
     );

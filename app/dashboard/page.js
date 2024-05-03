@@ -28,11 +28,6 @@ export default async function Dashboard() {
   //if there is no account ID --> show button to import wallet (ButtonSnaptrade)
   //if there is at least 1 account ID --> hide button
 
-  /*const brokerAuthorizations = await apiClient.post("/snaptrade/list-brokerage-authorizations", {
-    userId, 
-    userSecret
-  });*/
-
   
   
 
@@ -49,7 +44,8 @@ export default async function Dashboard() {
           snaptrade_user_secret={userSecret}
         />
 
-        <Card title="Brokerage Authorizations" content="De Giro"/>
+        <Card title="Brokerage Authorization" user={user} />
+              
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">

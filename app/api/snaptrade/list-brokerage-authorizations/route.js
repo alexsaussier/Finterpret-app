@@ -2,7 +2,7 @@ import { Snaptrade } from "snaptrade-typescript-sdk";
 import { NextResponse } from "next/server";
 
 
-export async function POST(req) {
+export async function GET(req) {
 
     try{
   
@@ -26,7 +26,7 @@ export async function POST(req) {
 
 
         
-        return NextResponse.json({ response });
+        return NextResponse.json({ response: response.data });
 
     } catch (e) {
         console.error(e);

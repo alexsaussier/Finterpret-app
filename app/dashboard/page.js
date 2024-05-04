@@ -8,6 +8,7 @@ import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import Card from "@/components/Card";
 import apiClient from "@/libs/api";
+//import { useEffect } from "react";
 
 
 
@@ -28,7 +29,29 @@ export default async function Dashboard() {
   //if there is no account ID --> show button to import wallet (ButtonSnaptrade)
   //if there is at least 1 account ID --> hide button
 
-  
+
+  //------
+
+  //@max this is the useffect hook that you explained to me. I think next.js treats it differently, because it does not compile. See trello
+  {/*
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch the user's brokerage connections
+      const response = await apiClient.get("/brokerage-connections");
+      const connections = response.data;
+
+      // Check if the user has at least 1 connection
+      if (connections.length > 0) {
+        // User has at least 1 connection, hide the import button
+        // TODO: Implement the logic to hide the import button
+      } else {
+        // User has no connections, show the import button
+        // TODO: Implement the logic to show the import button
+      }
+    }; 
+
+    fetchData();
+  }, []);*/}
   
 
   return (

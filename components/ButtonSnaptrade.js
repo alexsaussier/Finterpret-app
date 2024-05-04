@@ -34,7 +34,7 @@ const ButtonSnaptrade = ({
     //Check if user is registered with snaptrade.
     if (!snaptrade_user_secret) {
       try {
-        await apiClient.post("/snaptrade/register-user2", {
+        await apiClient.post("/snaptrade/register-user", {
           userId,
         });
       } catch (e) {

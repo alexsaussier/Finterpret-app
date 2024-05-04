@@ -5,8 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import User from "@/models/User";
 
-// This route is used to create a new snaptrade user
-
+// This route is used to create a new snaptrade user secret
 export async function POST(req) {
   await connectMongo();
 
@@ -28,7 +27,13 @@ export async function POST(req) {
       consumerKey: process.env.SNAPTRADE_CONSUMER_KEY,
     });
 
-    // Body of the request is the user id. We will need to store the response
+    // First we delete the registered user from SnapTrade
+    const deleteSnapTradeUserResponse =
+      await snaptrade.authentication.deleteSnapTradeUser({
+        userId: body.userId,
+      });
+
+    // Then we register the user again
     const response = await snaptrade.authentication.registerSnapTradeUser({
       userId: body.userId,
     });
@@ -38,11 +43,10 @@ export async function POST(req) {
     const session = await getServerSession(authOptions);
     const user = await User.findById(session?.user?.id);
     user.snaptrade_user_secret = response.data.userSecret;
+
     await user.save();
 
     // For me: f74447fd-af2a-4df8-9dbe-89eeb375a23d
-
-    console.log(response.data);
 
     return NextResponse.json({ response: response.data });
   } catch (e) {

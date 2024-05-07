@@ -9,12 +9,32 @@ import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import Card from "@/components/Card";
 import FetchHoldings from "@/components/FetchHoldings";
 
+async function getHoldings(userId, snaptrade_user_secret) {
+  const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
+  const data = { userId, snaptrade_user_secret };
+  const response = await fetch(url, {
+    method: "POST",
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response.json();
+}
+
 export default async function Dashboard() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
+  const data = await getHoldings(userId, userSecret);
 
   //Check if we can extract stocks for this user:
   //Store all account IDs in an array

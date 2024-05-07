@@ -99,11 +99,12 @@ export default async function Dashboard() {
         <p>          
           Positions in your portfolio: {stocks}
         </p>
-
-        <ButtonSnaptrade
-          title="Import a Portfolio"
-          snaptrade_user_secret={userSecret}
-        />
+        
+        {
+        //If there is no account ID, show the button to import a portfolio
+        }
+        {!accountId && <ButtonSnaptrade title="Import a Portfolio" snaptrade_user_secret={userSecret} />}
+        
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">

@@ -7,18 +7,14 @@ import DashboardCollapse from "@/components/DashboardCollapse";
 import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import Card from "@/components/Card";
-import apiClient from "@/libs/api";
-//import { useEffect } from "react";
+import FetchHoldings from "@/components/FetchHoldings";
 
 export default async function Dashboard() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
-  console.log(user);
-
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
-  console.log(userSecret);
 
   //Check if we can extract stocks for this user:
   //Store all account IDs in an array
@@ -53,6 +49,7 @@ export default async function Dashboard() {
 
   return (
     <main className="flex-1 pb-24">
+      <FetchHoldings userId={userId} snaptrade_user_secret={userSecret} />
       <section className="space-y-4">
         <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
         <p>

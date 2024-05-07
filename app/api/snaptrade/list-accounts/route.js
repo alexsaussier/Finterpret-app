@@ -2,10 +2,11 @@ import { Snaptrade } from "snaptrade-typescript-sdk";
 import { NextResponse } from "next/server";
 
 
-export async function GET(req) {
 
+export async function POST(req) {
+    
+    
     try{
-  
         //Capture the body of the request
         const body = await req.json();
 
@@ -14,18 +15,15 @@ export async function GET(req) {
             consumerKey: process.env.SNAPTRADE_CONSUMER_KEY,
         });
 
-        const response =
-        await snaptrade.connections.listBrokerageAuthorizations(
+        const response = await snaptrade.accountInformation.listUserAccounts(
             {
             userId: body.userId,
-            userSecret: body.userSecret,
+            userSecret: body.snaptrade_user_secret,
             },
         );
 
         console.log(response.data);
 
-
-        
         return NextResponse.json({ response: response.data });
 
     } catch (e) {

@@ -8,10 +8,29 @@ import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import Card from "@/components/Card";
 import FetchHoldings from "@/components/FetchHoldings";
+import FetchAccounts from "@/components/FetchAccounts";
 
-async function getHoldings(userId, snaptrade_user_secret) {
-  const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
+async function ListAccounts(userId, snaptrade_user_secret) {
+  const url = `http://localhost:3000/api/snaptrade/list-accounts`;
   const data = { userId, snaptrade_user_secret };
+  const response = await fetch(url, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data),
+  });
+  return response.json();
+}
+
+async function getHoldings(userId, snaptrade_user_secret, accountId) {
+  const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
+  const data = { userId, snaptrade_user_secret, accountId };
   const response = await fetch(url, {
     method: "POST",
     mode: "cors", // no-cors, *cors, same-origin
@@ -34,7 +53,25 @@ export default async function Dashboard() {
   const user = await User.findById(session.user.id);
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
-  const data = await getHoldings(userId, userSecret);
+  
+  // First, get IDs of accounts that are connected
+  // Ideally would need to store all account IDs in an array
+  const accounts = await ListAccounts(userId, userSecret);
+  const accountId = accounts["response"][0]["id"];
+
+  //save this portfolio account ID to the user
+  user.portfolioAccountId = accountId;
+  await user.save();
+  
+
+  // Then, fetch all stocks for this account ID
+  const holdings = await getHoldings(userId, userSecret, accountId);
+  const stocks = holdings["positions"];
+  //const balances = holdings["balances"][0]["currency"];
+
+  console.log("Accounts: " + accountId);
+
+  console.log("Holdings: " + stocks);
 
   //Check if we can extract stocks for this user:
   //Store all account IDs in an array
@@ -44,45 +81,29 @@ export default async function Dashboard() {
 
   //------
 
-  //@max this is the useffect hook that you explained to me. I think next.js treats it differently, because it does not compile. See trello
-  {
-    /*
-  useEffect(() => {
-    const fetchData = async () => {
-      // Fetch the user's brokerage connections
-      const response = await apiClient.get("/brokerage-connections");
-      const connections = response.data;
-
-      // Check if the user has at least 1 connection
-      if (connections.length > 0) {
-        // User has at least 1 connection, hide the import button
-        // TODO: Implement the logic to hide the import button
-      } else {
-        // User has no connections, show the import button
-        // TODO: Implement the logic to show the import button
-      }
-    }; 
-
-    fetchData();
-  }, []);*/
-  }
-
   return (
     <main className="flex-1 pb-24">
-      <FetchHoldings userId={userId} snaptrade_user_secret={userSecret} />
+      {
+      //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
+      }
+
       <section className="space-y-4">
         <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
         <p>
           Welcome {user.name}
           {user.email} 👋
         </p>
+        <p>          
+          Connected account ID: {accountId}
+        </p>
+        <p>          
+          Positions in your portfolio: {stocks}
+        </p>
 
         <ButtonSnaptrade
           title="Import a Portfolio"
           snaptrade_user_secret={userSecret}
         />
-
-        <Card title="Brokerage Authorization" user={user} />
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">

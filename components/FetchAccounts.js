@@ -2,12 +2,12 @@
 "use client";
 import { useEffect } from "react";
 import apiClient from "@/libs/api";
-import { AccountInformationApi } from "snaptrade-typescript-sdk";
 
-const FetchHoldings = ({ userId, snaptrade_user_secret, accountId }) => {
-  
+const FetchAccounts = ({ userId, snaptrade_user_secret }) => {
+ 
+
   useEffect(() => {
-    const fetchHoldings = async () => {
+    const fetchAccounts = async () => {
       try {
         if (!userId || !snaptrade_user_secret) {
           throw new Error(
@@ -15,22 +15,22 @@ const FetchHoldings = ({ userId, snaptrade_user_secret, accountId }) => {
           );
         }
 
-        const url = `/snaptrade/pull-holdings`;
+        const url = `/snaptrade/list-accounts`;
         const response = await apiClient.post(url, {
           userId,
           snaptrade_user_secret,
-          accountId
         });
         //TODO: Implement redux dispatch here
-        console.log(response);
+        const accountId = response["response"][0]["id"];
+        console.log(accountId);
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchHoldings();
-  }, [userId, snaptrade_user_secret, accountId]);
+    fetchAccounts();
+  }, [userId, snaptrade_user_secret]);
   return <></>;
 };
 
-export default FetchHoldings;
+export default FetchAccounts;

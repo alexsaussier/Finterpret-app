@@ -32,6 +32,11 @@ const userSchema = mongoose.Schema(
     importedWallet: {
       type: Boolean,
     },
+
+    portfolioAccountId: {
+      type: String,
+    },
+
     // Used in the Stripe webhook. should match a plan in config.js file.
     priceId: {
       type: String,

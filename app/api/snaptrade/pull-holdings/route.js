@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectMongo from "@/libs/mongoose";
 import { Snaptrade } from "snaptrade-typescript-sdk";
-import { data } from "autoprefixer";
 
 // This route is used to pull the user holdings
 // We need to pass the userId and the snaptrade user secret generated when we registered the user

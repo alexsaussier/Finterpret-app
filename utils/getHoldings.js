@@ -15,13 +15,14 @@ export async function getHoldings(
     let accountIdNew = "";
     //Check if there is not account ID in DB-->then list accounts and save the first one
 
-    await listAccounts(userId, snaptrade_user_secret).then((accounts) => {
-      if (accounts[0]) {
-        accountIdNew = accounts[0].id;
-        user.portfolioAccountId = accounts[0].id;
-      }
-    });
-    await user.save();
+    const accounts = await listAccounts(userId, snaptrade_user_secret);
+    if (accounts[0]) {
+      accountIdNew = accounts[0].id;
+      user.portfolioAccountId = accounts[0].id;
+      await user.save();
+    } else {
+      return undefined;
+    }
     const data = { userId, snaptrade_user_secret, accountIdNew };
     const response = await fetch(url, {
       method: "POST",

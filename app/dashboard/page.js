@@ -11,6 +11,14 @@ import FetchHoldings from "@/components/FetchHoldings";
 import FetchAccounts from "@/components/FetchAccounts";
 import { getHoldings } from "@/utils/getHoldings";
 import { listAccounts } from "@/utils/listAccounts";
+import {
+  mockBalances,
+  mockOption_positions,
+  mockOrders,
+  mockPositions,
+  mockTotalValue,
+} from "@/utils/mockData";
+import { separateCallsAndPuts } from "@/utils/separateCallsPuts";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -19,12 +27,35 @@ export default async function Dashboard() {
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
   const accountId = user.portfolioAccountId;
+  let balances = [];
+  let stocks = [];
+  let options = [];
+  let orders = [];
+  let value = [];
 
   //save this portfolio account ID to the user
 
   // Then, fetch all stocks for this account ID
   const holdings = await getHoldings(userId, userSecret, accountId, user);
-  const stocks = holdings["positions"];
+
+  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY DELETE THIS
+  balances = mockBalances;
+  stocks = mockPositions;
+  options = mockOption_positions;
+  orders = mockOrders;
+  value = mockTotalValue;
+
+  if (holdings) {
+    balances = holdings.balances;
+    stocks = holdings.positions;
+    options = holdings.option_positions;
+    orders = holdings.orders;
+    value = holdings.total_value;
+  }
+
+  let { calls, puts } = separateCallsAndPuts(options);
+  console.log(calls);
+
   //const balances = holdings["balances"][0]["currency"];
 
   //console.log("Accounts: " + accountId);
@@ -52,8 +83,7 @@ export default async function Dashboard() {
           {user.email} 👋
         </p>
         <p>Connected account ID: {accountId}</p>
-        <p>Positions in your portfolio: {stocks}</p>
-
+        {/* <p>Positions in your portfolio: {stocks}</p> */}
         {
           //If there is no account ID, show the button to import a portfolio
         }
@@ -63,7 +93,6 @@ export default async function Dashboard() {
             snaptrade_user_secret={userSecret}
           />
         )}
-
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
@@ -71,15 +100,36 @@ export default async function Dashboard() {
             </h1>
 
             <DashboardCollapse title="Stocks">
-              <AssetLayout title="AAPL" quantity="100" />
-              <AssetLayout title="TSLA" quantity="100" />
+              {stocks.map((position, index) => (
+                <AssetLayout
+                  key={position.symbol.id}
+                  title={position.symbol.symbol.raw_symbol}
+                  quantity={position.units}
+                />
+              ))}
             </DashboardCollapse>
 
             <DashboardCollapse title="Options">
-              <p>Calls</p>
-              <AssetLayout title="AAPL" quantity="100" />
-              <p>Puts</p>
-              <AssetLayout title="TSLA" quantity="100" />
+              <p>
+                <strong>Calls</strong>
+              </p>
+              {calls.map((call, index) => (
+                <AssetLayout
+                  key={call.symbol.id}
+                  title={call.symbol.description}
+                  quantity={call.units}
+                />
+              ))}
+              <p>
+                <strong>Puts</strong>
+              </p>
+              {puts.map((put, index) => (
+                <AssetLayout
+                  key={put.symbol.id}
+                  title={put.symbol.description}
+                  quantity={put.units}
+                />
+              ))}
             </DashboardCollapse>
 
             <DashboardCollapse title="Crypto">

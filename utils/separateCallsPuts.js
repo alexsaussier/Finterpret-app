@@ -1,9 +1,9 @@
 export function separateCallsAndPuts(optionPositions) {
   const calls = optionPositions.filter(
-    (position) => position.symbol.option_symbol.option_type === "CALL"
+    (position) => position.optionType === "CALL"
   );
   const puts = optionPositions.filter(
-    (position) => position.symbol.option_symbol.option_type === "PUT"
+    (position) => position.optionType === "PUT"
   );
   return { calls, puts };
 }

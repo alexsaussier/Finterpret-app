@@ -56,7 +56,7 @@ export async function POST(req) {
       userSecret: body.snaptrade_user_secret,
     });
 
-    console.log(response.data);
+    //console.log(response.data);
     return NextResponse.json({ response: response.data });
   } catch (e) {
     console.error(e);

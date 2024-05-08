@@ -31,42 +31,61 @@ export default async function Dashboard() {
   let stocks = [];
   let options = [];
   let orders = [];
-  let value = [];
+  let totalValue = [];
 
   //save this portfolio account ID to the user
 
   // Then, fetch all stocks for this account ID
   const holdings = await getHoldings(userId, userSecret, accountId, user);
 
-  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY COMMENT THIS
-  balances = mockBalances;
-  stocks = mockPositions;
-  options = mockOption_positions;
-  orders = mockOrders;
-  value = mockTotalValue;
 
   if (holdings) {
     balances = holdings.balances;
-    stocks = holdings.positions;
-    options = holdings.option_positions;
-    orders = holdings.orders;
-    value = holdings.total_value;
+    //stocks = holdings.response.positions;
+    //options = holdings.response.option_positions;
+    //orders = holdings.response.orders;
+    const portfolioValue = holdings.response.total_value.value;
+    const portfolioCurrency = holdings.response.total_value.currency;
+
+    totalValue = { portfolioValue, portfolioCurrency}
+
+    //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
+    for (const position of holdings.response.positions) {
+      const ticker = position.symbol.symbol.symbol;
+      const stockName = position.symbol.symbol.description;
+      const units = position.units;
+
+      stocks.push({ stockName, units });
+    }
+
+      for (const option_position of holdings.response.option_positions) {
+        const ticker = option_position.symbol.symbol.symbol;
+        const stockName = option_position.symbol.symbol.description;
+        const quantity = option_position.units;
+
+        const strikePrice = option_position.symbol.option_symbol.strike_price;
+        const expirationDate = option_position.symbol.option_symbol.expiration_date;
+        const optionType = option_position.symbol.option_symbol.option_type; 
+  
+        options.push({ stockName, quantity, strikePrice, expirationDate, optionType });
+    }
+
   }
 
+  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY COMMENT THIS
+
+  //balances = mockBalances;
+  //stocks = mockPositions;
+  //options = mockOption_positions;
+  //orders = mockOrders;
+  //value = mockTotalValue;
+
   let { calls, puts } = separateCallsAndPuts(options);
-  //console.log(calls);
 
-  //const balances = holdings["balances"][0]["currency"];
+  console.log("stocks: ", stocks);
+  console.log(totalValue)
+ 
 
-  //console.log("Accounts: " + accountId);
-
-  //console.log("Holdings: " + stocks);
-
-  //Check if we can extract stocks for this user:
-  //Store all account IDs in an array
-  //For each account ID, fetch all stocks
-  //if there is no account ID --> show button to import wallet (ButtonSnaptrade)
-  //if there is at least 1 account ID --> hide button
 
   //------
 
@@ -100,11 +119,11 @@ export default async function Dashboard() {
             </h1>
 
             <DashboardCollapse title="Stocks">
-              {stocks.map((position, index) => (
+              {stocks.map((stocks, index) => (
                 <AssetLayout
-                  key={position.symbol.id}
-                  title={position.symbol.symbol.raw_symbol}
-                  quantity={position.units}
+                  key={stocks.stockName}
+                  title={stocks.stockName}
+                  quantity={stocks.units}
                 />
               ))}
             </DashboardCollapse>
@@ -147,7 +166,7 @@ export default async function Dashboard() {
             <DashboardCollapse title="General Analysis">
               <AssetLayout
                 title="Total Portfolio Value"
-                quantity={"$ " + "100"}
+                quantity={totalValue.portfolioValue + ' ' + totalValue.portfolioCurrency}
               />
               <p>AI-generated explanation</p>
             </DashboardCollapse>

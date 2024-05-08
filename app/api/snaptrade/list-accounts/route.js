@@ -22,7 +22,7 @@ export async function POST(req) {
             },
         );
 
-        console.log(response.data);
+        //console.log(response.data);
 
         return NextResponse.json({ response: response.data });
 

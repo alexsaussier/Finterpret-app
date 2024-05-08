@@ -9,43 +9,8 @@ import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import Card from "@/components/Card";
 import FetchHoldings from "@/components/FetchHoldings";
 import FetchAccounts from "@/components/FetchAccounts";
-
-async function ListAccounts(userId, snaptrade_user_secret) {
-  const url = `http://localhost:3000/api/snaptrade/list-accounts`;
-  const data = { userId, snaptrade_user_secret };
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data),
-  });
-  return response.json();
-}
-
-async function getHoldings(userId, snaptrade_user_secret, accountId) {
-  const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
-  const data = { userId, snaptrade_user_secret, accountId };
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json();
-}
+import { getHoldings } from "@/utils/getHoldings";
+import { listAccounts } from "@/utils/listAccounts";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -53,16 +18,20 @@ export default async function Dashboard() {
   const user = await User.findById(session.user.id);
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
-  
+  let accountId = "";
+
   // First, get IDs of accounts that are connected
   // Ideally would need to store all account IDs in an array
-  const accounts = await ListAccounts(userId, userSecret);
-  const accountId = accounts["response"][0]["id"];
+  const accounts = await listAccounts(userId, userSecret);
+  //This needs attention in the near future, ideally we will move the logic of saving accountId to the listAccounts file
+  //I implemented this because my user does not have account ID and this causes an error
+  if (accounts.response.length !== 0) {
+    accountId = accounts["response"][0]["id"];
+    user.portfolioAccountId = accountId;
+    await user.save();
+  }
 
   //save this portfolio account ID to the user
-  user.portfolioAccountId = accountId;
-  await user.save();
-  
 
   // Then, fetch all stocks for this account ID
   const holdings = await getHoldings(userId, userSecret, accountId);
@@ -84,7 +53,7 @@ export default async function Dashboard() {
   return (
     <main className="flex-1 pb-24">
       {
-      //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
+        //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
       }
 
       <section className="space-y-4">
@@ -93,18 +62,18 @@ export default async function Dashboard() {
           Welcome {user.name}
           {user.email} 👋
         </p>
-        <p>          
-          Connected account ID: {accountId}
-        </p>
-        <p>          
-          Positions in your portfolio: {stocks}
-        </p>
-        
+        <p>Connected account ID: {accountId}</p>
+        <p>Positions in your portfolio: {stocks}</p>
+
         {
-        //If there is no account ID, show the button to import a portfolio
+          //If there is no account ID, show the button to import a portfolio
         }
-        {!accountId && <ButtonSnaptrade title="Import a Portfolio" snaptrade_user_secret={userSecret} />}
-        
+        {!accountId && (
+          <ButtonSnaptrade
+            title="Import a Portfolio"
+            snaptrade_user_secret={userSecret}
+          />
+        )}
 
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">

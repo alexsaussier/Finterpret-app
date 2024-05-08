@@ -18,29 +18,18 @@ export default async function Dashboard() {
   const user = await User.findById(session.user.id);
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
-  let accountId = "";
-
-  // First, get IDs of accounts that are connected
-  // Ideally would need to store all account IDs in an array
-  const accounts = await listAccounts(userId, userSecret);
-  //This needs attention in the near future, ideally we will move the logic of saving accountId to the listAccounts file
-  //I implemented this because my user does not have account ID and this causes an error
-  if (accounts.response.length !== 0) {
-    accountId = accounts["response"][0]["id"];
-    user.portfolioAccountId = accountId;
-    await user.save();
-  }
+  const accountId = user.portfolioAccountId;
 
   //save this portfolio account ID to the user
 
   // Then, fetch all stocks for this account ID
-  const holdings = await getHoldings(userId, userSecret, accountId);
+  const holdings = await getHoldings(userId, userSecret, accountId, user);
   const stocks = holdings["positions"];
   //const balances = holdings["balances"][0]["currency"];
 
-  console.log("Accounts: " + accountId);
+  //console.log("Accounts: " + accountId);
 
-  console.log("Holdings: " + stocks);
+  //console.log("Holdings: " + stocks);
 
   //Check if we can extract stocks for this user:
   //Store all account IDs in an array

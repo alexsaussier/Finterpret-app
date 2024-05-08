@@ -9,43 +9,16 @@ import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import Card from "@/components/Card";
 import FetchHoldings from "@/components/FetchHoldings";
 import FetchAccounts from "@/components/FetchAccounts";
-
-async function ListAccounts(userId, snaptrade_user_secret) {
-  const url = `http://localhost:3000/api/snaptrade/list-accounts`;
-  const data = { userId, snaptrade_user_secret };
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data),
-  });
-  return response.json();
-}
-
-async function getHoldings(userId, snaptrade_user_secret, accountId) {
-  const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
-  const data = { userId, snaptrade_user_secret, accountId };
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json();
-}
+import { getHoldings } from "@/utils/getHoldings";
+import { listAccounts } from "@/utils/listAccounts";
+import {
+  mockBalances,
+  mockOption_positions,
+  mockOrders,
+  mockPositions,
+  mockTotalValue,
+} from "@/utils/mockData";
+import { separateCallsAndPuts } from "@/utils/separateCallsPuts";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -53,25 +26,41 @@ export default async function Dashboard() {
   const user = await User.findById(session.user.id);
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
-  
-  // First, get IDs of accounts that are connected
-  // Ideally would need to store all account IDs in an array
-  const accounts = await ListAccounts(userId, userSecret);
-  const accountId = accounts["response"][0]["id"];
+  const accountId = user.portfolioAccountId;
+  let balances = [];
+  let stocks = [];
+  let options = [];
+  let orders = [];
+  let value = [];
 
   //save this portfolio account ID to the user
-  user.portfolioAccountId = accountId;
-  await user.save();
-  
 
   // Then, fetch all stocks for this account ID
-  const holdings = await getHoldings(userId, userSecret, accountId);
-  const stocks = holdings["positions"];
+  const holdings = await getHoldings(userId, userSecret, accountId, user);
+
+  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY COMMENT THIS
+  balances = mockBalances;
+  stocks = mockPositions;
+  options = mockOption_positions;
+  orders = mockOrders;
+  value = mockTotalValue;
+
+  if (holdings) {
+    balances = holdings.balances;
+    stocks = holdings.positions;
+    options = holdings.option_positions;
+    orders = holdings.orders;
+    value = holdings.total_value;
+  }
+
+  let { calls, puts } = separateCallsAndPuts(options);
+  //console.log(calls);
+
   //const balances = holdings["balances"][0]["currency"];
 
-  console.log("Accounts: " + accountId);
+  //console.log("Accounts: " + accountId);
 
-  console.log("Holdings: " + stocks);
+  //console.log("Holdings: " + stocks);
 
   //Check if we can extract stocks for this user:
   //Store all account IDs in an array
@@ -84,7 +73,7 @@ export default async function Dashboard() {
   return (
     <main className="flex-1 pb-24">
       {
-      //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
+        //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
       }
 
       <section className="space-y-4">
@@ -93,19 +82,17 @@ export default async function Dashboard() {
           Welcome {user.name}
           {user.email} 👋
         </p>
-        <p>          
-          Connected account ID: {accountId}
-        </p>
-        <p>          
-          Positions in your portfolio: {stocks}
-        </p>
-        
+        <p>Connected account ID: {accountId}</p>
+        {/* <p>Positions in your portfolio: {stocks}</p> */}
         {
-        //If there is no account ID, show the button to import a portfolio
+          //If there is no account ID, show the button to import a portfolio
         }
-        {!accountId && <ButtonSnaptrade title="Import a Portfolio" snaptrade_user_secret={userSecret} />}
-        
-
+        {!accountId && (
+          <ButtonSnaptrade
+            title="Import a Portfolio"
+            snaptrade_user_secret={userSecret}
+          />
+        )}
         <div className="flex flex-row flex-nowrap gap-4">
           <div className="w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
@@ -113,15 +100,36 @@ export default async function Dashboard() {
             </h1>
 
             <DashboardCollapse title="Stocks">
-              <AssetLayout title="AAPL" quantity="100" />
-              <AssetLayout title="TSLA" quantity="100" />
+              {stocks.map((position, index) => (
+                <AssetLayout
+                  key={position.symbol.id}
+                  title={position.symbol.symbol.raw_symbol}
+                  quantity={position.units}
+                />
+              ))}
             </DashboardCollapse>
 
             <DashboardCollapse title="Options">
-              <p>Calls</p>
-              <AssetLayout title="AAPL" quantity="100" />
-              <p>Puts</p>
-              <AssetLayout title="TSLA" quantity="100" />
+              <p>
+                <strong>Calls</strong>
+              </p>
+              {calls.map((call, index) => (
+                <AssetLayout
+                  key={call.symbol.id}
+                  title={call.symbol.description}
+                  quantity={call.units}
+                />
+              ))}
+              <p>
+                <strong>Puts</strong>
+              </p>
+              {puts.map((put, index) => (
+                <AssetLayout
+                  key={put.symbol.id}
+                  title={put.symbol.description}
+                  quantity={put.units}
+                />
+              ))}
             </DashboardCollapse>
 
             <DashboardCollapse title="Crypto">

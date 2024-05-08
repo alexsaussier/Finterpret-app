@@ -38,7 +38,7 @@ export default async function Dashboard() {
   // Then, fetch all stocks for this account ID
   const holdings = await getHoldings(userId, userSecret, accountId, user);
 
-  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY DELETE THIS
+  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY COMMENT THIS
   balances = mockBalances;
   stocks = mockPositions;
   options = mockOption_positions;
@@ -54,7 +54,7 @@ export default async function Dashboard() {
   }
 
   let { calls, puts } = separateCallsAndPuts(options);
-  console.log(calls);
+  //console.log(calls);
 
   //const balances = holdings["balances"][0]["currency"];
 

@@ -12,7 +12,12 @@ export default async function AnalyticsDashboard() {
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
 
-  const stocks = ''; // import user porfolio data that is fetched in main dashboard
+  // import user porfolio data that is fetched in main dashboard
+  const stocks = [
+    {ticker: 'TSLA', stockName: 'Tesla', units: 100},
+    {ticker: 'AMZN', stockName: 'Amazon', units: 100},
+
+  ]; 
 
   
 
@@ -24,11 +29,11 @@ export default async function AnalyticsDashboard() {
         </h1>
         
 
-        {stocks.map((stocks, index) => (
-          <button onClick={getStats(stocks.ticker)} key={stocks.stockName}>
+        {stocks.map((stock, index) => (
+          <button onClick={getStats(stock.ticker)} key={stock.stockName}>
                 <StockCard
-                  title={stocks.stockName}
-                  units={stocks.units}
+                  title={stock.stockName}
+                  units={stock.units}
                 />
           </button>
 

@@ -4,13 +4,10 @@ import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import ButtonGradient from "@/components/ButtonGradient";
 import StockCard from "@/components/StockCard"
+import getStats from "@/utils/getStats"
 
-async function getStats(ticker) {
-    // API CALL to retrieve stock metrics
-    // BETA, EPS, P/E, 
-}
 
-export default async function AnalysisDashboard() {
+export default async function AnalyticsDashboard() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);

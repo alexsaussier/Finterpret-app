@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
-import ButtonGradient from "@/components/ButtonGradient";
 import StockCard from "@/components/StockCard"
 import getStats from "@/utils/getStats"
 

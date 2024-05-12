@@ -6,9 +6,6 @@ import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
 import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
-import Card from "@/components/Card";
-import FetchHoldings from "@/components/FetchHoldings";
-import FetchAccounts from "@/components/FetchAccounts";
 import { getHoldings } from "@/utils/getHoldings";
 import { listAccounts } from "@/utils/listAccounts";
 import {
@@ -55,19 +52,19 @@ export default async function Dashboard() {
       const stockName = position.symbol.symbol.description;
       const units = position.units;
 
-      stocks.push({ stockName, units });
+      stocks.push({ stockName, ticker, units });
     }
 
-      for (const option_position of holdings.response.option_positions) {
-        const ticker = option_position.symbol.symbol.symbol;
-        const stockName = option_position.symbol.symbol.description;
-        const quantity = option_position.units;
+    for (const option_position of holdings.response.option_positions) {
+      const ticker = option_position.symbol.symbol.symbol;
+      const stockName = option_position.symbol.symbol.description;
+      const quantity = option_position.units;
 
-        const strikePrice = option_position.symbol.option_symbol.strike_price;
-        const expirationDate = option_position.symbol.option_symbol.expiration_date;
-        const optionType = option_position.symbol.option_symbol.option_type; 
-  
-        options.push({ stockName, quantity, strikePrice, expirationDate, optionType });
+      const strikePrice = option_position.symbol.option_symbol.strike_price;
+      const expirationDate = option_position.symbol.option_symbol.expiration_date;
+      const optionType = option_position.symbol.option_symbol.option_type; 
+
+      options.push({ stockName, ticker, quantity, strikePrice, expirationDate, optionType });
     }
 
   }
@@ -123,7 +120,7 @@ export default async function Dashboard() {
                 <AssetLayout
                   key={stocks.stockName}
                   title={stocks.stockName}
-                  quantity={stocks.units}
+                  units={stocks.units}
                 />
               ))}
             </DashboardCollapse>
@@ -136,7 +133,7 @@ export default async function Dashboard() {
                 <AssetLayout
                   key={call.symbol.id}
                   title={call.symbol.description}
-                  quantity={call.units}
+                  units={call.units}
                 />
               ))}
               <p>
@@ -146,15 +143,15 @@ export default async function Dashboard() {
                 <AssetLayout
                   key={put.symbol.id}
                   title={put.symbol.description}
-                  quantity={put.units}
+                  units={put.units}
                 />
               ))}
             </DashboardCollapse>
 
             <DashboardCollapse title="Crypto">
-              <AssetLayout title="BTC" quantity="100" />
-              <AssetLayout title="ETH" quantity="100" />
-              <AssetLayout title="DOGE" quantity="100" />
+              <AssetLayout title="BTC" units="100" />
+              <AssetLayout title="ETH" units="100" />
+              <AssetLayout title="DOGE" units="100" />
             </DashboardCollapse>
           </div>
 
@@ -166,7 +163,7 @@ export default async function Dashboard() {
             <DashboardCollapse title="General Analysis">
               <AssetLayout
                 title="Total Portfolio Value"
-                quantity={totalValue.portfolioValue + ' ' + totalValue.portfolioCurrency}
+                units={totalValue.portfolioValue + ' ' + totalValue.portfolioCurrency}
               />
               <p>AI-generated explanation</p>
             </DashboardCollapse>
@@ -189,11 +186,11 @@ export default async function Dashboard() {
               </p>
             </DashboardCollapseValue>
 
-            <DashboardCollapseValue title="Portfolio Beta" quantity="1.4">
+            <DashboardCollapseValue title="Portfolio Beta" units="1.4">
               <p>AI-generated explanation</p>
             </DashboardCollapseValue>
 
-            <DashboardCollapseValue title="YoY Return" quantity={12}>
+            <DashboardCollapseValue title="YoY Return" units={12}>
               <p>AI-generated explanation</p>
             </DashboardCollapseValue>
           </div>

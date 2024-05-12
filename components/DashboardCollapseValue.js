@@ -1,7 +1,7 @@
 "use client";
 
 //For when you want to display a value on the title
-const DashboardCollapseValue = ({ title, quantity, children }) => {
+const DashboardCollapseValue = ({ title, units, children }) => {
     return (
       <div className="collapse bg-base-200 hover:bg-primary-content mb-2">
         <input type="checkbox" /> 
@@ -10,7 +10,7 @@ const DashboardCollapseValue = ({ title, quantity, children }) => {
                 {title}
             </div>
             <div className="">
-                {quantity}
+                {units}
             </div>
         </div>
           

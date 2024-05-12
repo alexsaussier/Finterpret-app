@@ -6,20 +6,20 @@ import apiClient from "@/libs/api";
 
 
 
-const Card = () => {
+const StockCard = ({ title, units }) => {
 
     
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
             <button >
                 <div className="card-body">
-                    <h2 className="card-title">Title</h2>
+                    <h2 className="card-title">{title}</h2>
                     
-                    <p>List the brokerage accounts that are connected here</p>
+                    <p>{units}</p>
                 </div>
             </button>
         </div>
     )
 };
 
-export default Card;
+export default StockCard;

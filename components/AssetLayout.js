@@ -1,14 +1,14 @@
 "use client";
 
 
-const AssetLayout = ({title, quantity}) => {
+const AssetLayout = ({title, units}) => {
   return (
     <div className="flex justify-between items-center pb-2">
         <div className="">
             {title}
         </div>
         <div className="">
-            {quantity}
+            {units}
         </div>
     </div>
   );

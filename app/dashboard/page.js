@@ -35,7 +35,6 @@ export default async function Dashboard() {
   // Then, fetch all stocks for this account ID
   const holdings = await getHoldings(userId, userSecret, accountId, user);
 
-
   if (holdings) {
     balances = holdings.balances;
     //stocks = holdings.response.positions;
@@ -44,7 +43,7 @@ export default async function Dashboard() {
     const portfolioValue = holdings.response.total_value.value;
     const portfolioCurrency = holdings.response.total_value.currency;
 
-    totalValue = { portfolioValue, portfolioCurrency}
+    totalValue = { portfolioValue, portfolioCurrency };
 
     //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
     for (const position of holdings.response.positions) {
@@ -61,12 +60,19 @@ export default async function Dashboard() {
       const quantity = option_position.units;
 
       const strikePrice = option_position.symbol.option_symbol.strike_price;
-      const expirationDate = option_position.symbol.option_symbol.expiration_date;
-      const optionType = option_position.symbol.option_symbol.option_type; 
+      const expirationDate =
+        option_position.symbol.option_symbol.expiration_date;
+      const optionType = option_position.symbol.option_symbol.option_type;
 
-      options.push({ stockName, ticker, quantity, strikePrice, expirationDate, optionType });
+      options.push({
+        stockName,
+        ticker,
+        quantity,
+        strikePrice,
+        expirationDate,
+        optionType,
+      });
     }
-
   }
 
   //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY COMMENT THIS
@@ -80,9 +86,7 @@ export default async function Dashboard() {
   let { calls, puts } = separateCallsAndPuts(options);
 
   console.log("stocks: ", stocks);
-  console.log(totalValue)
- 
-
+  console.log(totalValue);
 
   //------
 
@@ -163,7 +167,9 @@ export default async function Dashboard() {
             <DashboardCollapse title="General Analysis">
               <AssetLayout
                 title="Total Portfolio Value"
-                units={totalValue.portfolioValue + ' ' + totalValue.portfolioCurrency}
+                units={
+                  totalValue.portfolioValue + " " + totalValue.portfolioCurrency
+                }
               />
               <p>AI-generated explanation</p>
             </DashboardCollapse>

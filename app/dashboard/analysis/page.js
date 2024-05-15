@@ -6,6 +6,7 @@ import StockCard from "@/components/StockCard";
 import getStats from "@/utils/getStats";
 import { getHoldings } from "@/utils/getHoldings";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
+import StockAnalyticsCard from "@/components/StockAnalyticsCard";
 
 export default async function AnalyticsDashboard() {
   await connectMongo();
@@ -71,11 +72,24 @@ export default async function AnalyticsDashboard() {
 
         {holdings ? (
           <>
-            {stocks.map((stock, index) => (
-              <button onClick={getStats(stock.ticker)} key={stock.stockName}>
-                <StockCard title={stock.stockName} units={stock.units} />
-              </button>
-            ))}
+            <div className="flex">
+              <div className="w-1/2">
+                {stocks.map((stock, index) => (
+                  <button onClick={getStats(stock.ticker)} key={stock.stockName}>
+                    <StockCard title={stock.stockName} units={stock.units} />
+                    <div className="mt-4"></div>
+                  </button>
+                ))}
+              </div>
+              <div className="w-1/2">
+                {stocks.map((stock, index) => (
+                  <div key={stock.stockName}> 
+                    <StockAnalyticsCard stockName={stock.stockName} ticker={stock.ticker} units={stock.units} />
+                    <div className="mt-4"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </>
         ) : (
           <>

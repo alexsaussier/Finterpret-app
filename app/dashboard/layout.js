@@ -25,8 +25,10 @@ export default async function LayoutPrivate({ children }) {
       </div>
       <div className="flex-grow p-4 md:overflow-y-auto md:p-6">
         <div className="flex justify-between items-right pb-4">
-          <ButtonAccount /* This shoudl go in SideNav at some point */ /> 
+          <div className="flex-grow"></div>
+          <ButtonAccount /* This should go in SideNav at some point */ />
         </div>
+        
         {children}
       </div>
     </div>

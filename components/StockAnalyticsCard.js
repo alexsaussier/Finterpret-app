@@ -1,5 +1,6 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 
 //Add all data needed as props
 const StockAnalyticsCard = ({ stockName, ticker, units }) => {

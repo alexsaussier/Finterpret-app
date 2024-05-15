@@ -5,15 +5,15 @@ import apiClient from "@/libs/api";
 
 const StockCard = ({ title, units }) => {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <button>
-        <div className="card-body">
-          <h2 className="card-title">{title}</h2>
-
-          <p>{units}</p>
-        </div>
-      </button>
-    </div>
+    <div className="stats shadow">
+  
+  <div className="stat">
+    <div className="stat-title">{title}</div>
+    <div className="stat-value">{units}</div>
+    <div className="stat-desc">Some description here</div>
+  </div>
+  
+</div>
   );
 };
 

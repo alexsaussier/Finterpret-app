@@ -73,21 +73,21 @@ export default async function AnalyticsDashboard() {
         {holdings ? (
           <>
             <div className="flex">
+              
               <div className="w-1/2">
                 {stocks.map((stock, index) => (
-                  <button onClick={getStats(stock.ticker)} key={stock.stockName}>
+                 <div className="mt-4" key={stock.stockName}> 
+                  <button>{/*onClick = SET THIS STOCK AS SELECTED, AND OPEN THE STOCKANALYTICS CARD */}
                     <StockCard title={stock.stockName} units={stock.units} />
-                    <div className="mt-4"></div>
                   </button>
+                </div>
                 ))}
+
               </div>
-              <div className="w-1/2">
-                {stocks.map((stock, index) => (
-                  <div key={stock.stockName}> 
-                    <StockAnalyticsCard stockName={stock.stockName} ticker={stock.ticker} units={stock.units} />
-                    <div className="mt-4"></div>
-                  </div>
-                ))}
+              {/* This will be a larger card that appears on the right when clicking on the StockCard above.
+                  It will display all the statistics fetched from Yahoo API + LLM input*/ }
+              <div className="w-1/2">   
+                <StockAnalyticsCard ticker={stocks[0].ticker}/>
               </div>
             </div>
           </>

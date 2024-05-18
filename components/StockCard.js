@@ -5,7 +5,7 @@ import apiClient from "@/libs/api";
 
 const StockCard = ({ title, units }) => {
   return (
-    <div className="stats shadow">
+  <div className="stats shadow">
   
   <div className="stat">
     <div className="stat-title">{title}</div>
@@ -13,7 +13,7 @@ const StockCard = ({ title, units }) => {
     <div className="stat-desc">Some description here</div>
   </div>
   
-</div>
+  </div>
   );
 };
 

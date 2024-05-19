@@ -5,34 +5,28 @@ import getStats from "@/utils/getStats";
 
 //Add all data needed as props
 const StockAnalyticsCard = ({ticker}) => {
-  const [stats, setStats] = useState();
+  const [stats, setStats] = useState(null);
+  const statistics = [];
   const importantMetrics = []
 
   //We should fetch data here on initial render of the component and store it as state
   
-/*
   useEffect(() => {
-    const getStats = async (ticker) => {
-      const url = "http://localhost:3000/api/yahoo-finance/key-statistics";
-      await fetch(url, {
-        method: "POST",
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-          'X-RapidAPI-Key': '9bd7bf1ab5msh9844a86da9ae0aap142550jsnbd39264e4217',
-          'X-RapidAPI-Host': 'yahoo-finance127.p.rapidapi.com'
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(ticker), // body data type must match "Content-Type" header
-      }).then((data) => {
-        setStats(data);
-      });
+    const fetchData = async () => {
+      const data = await getStats(ticker);
+      setStats(data);
+      
     };
-  }, []);
-  */
 
+    fetchData();
+  }, [ticker]);
+
+  /*if (!stats) {
+    return <div>Loading...</div>; // or some loading spinner
+  }*/
+
+  //We should then parse the data and store it in an array
+  
   /*
   importantMetrics.push(
     ["PE Ratio", stats.trailingPE.raw], 
@@ -46,8 +40,8 @@ const StockAnalyticsCard = ({ticker}) => {
     // stats.debtToEquity, 
     // stats.grossProfits, 
     // stats.grossMargins)
-  );*/
-
+  );
+*/
   //with mock data
   importantMetrics.push(
     ["PE Ratio", 32.62331], 
@@ -63,19 +57,7 @@ const StockAnalyticsCard = ({ticker}) => {
     <>
       {/*
   We can then display data here and pass it to other components (like the ones where GPT will take metrics and return response) 
-  
-    CALL GETSTATS
-    PARSE RESPONSE TO RETRIEVE STATISTICS:
-      Trailing P/E
-      Shares outstanding
-      Earnings per share (EPS)
-      Price to Earnings (P/E) ratio
-      Book value and Price to book value (price to book)
-      Dividend Yield
-      Quick ratio
-      Debt to Equity
-      Gross profits and gross margins
-  
+    
   */}
 
   {/* 

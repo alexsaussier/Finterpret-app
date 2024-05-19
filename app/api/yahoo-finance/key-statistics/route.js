@@ -22,9 +22,9 @@ export async function POST(req) {
         console.log(response.data);
         return NextResponse.json({ response: response.data });
 
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ error: e.message }, { status: 500 });
 
     }
     

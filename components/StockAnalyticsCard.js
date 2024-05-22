@@ -2,20 +2,18 @@
 import { useEffect, useState } from "react";
 import getStats from "@/utils/getStats";
 
-
 //Add all data needed as props
-const StockAnalyticsCard = ({ticker}) => {
+const StockAnalyticsCard = ({ ticker }) => {
   const [stats, setStats] = useState(null);
   const statistics = [];
-  const importantMetrics = []
+  const importantMetrics = [];
 
   //We should fetch data here on initial render of the component and store it as state
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getStats(ticker);
       setStats(data);
-      
     };
 
     fetchData();
@@ -26,7 +24,7 @@ const StockAnalyticsCard = ({ticker}) => {
   }*/
 
   //We should then parse the data and store it in an array
-  
+
   /*
   importantMetrics.push(
     ["PE Ratio", stats.trailingPE.raw], 
@@ -44,13 +42,13 @@ const StockAnalyticsCard = ({ticker}) => {
 */
   //with mock data
   importantMetrics.push(
-    ["PE Ratio", 32.62331], 
-    ["Shares Outstanding", 15728700416], 
+    ["PE Ratio", 32.62331],
+    ["Shares Outstanding", 15728700416],
     ["Earnings Per Share", 5.98],
     ["Price/EPS ratio", 32.295986],
-    ["Book Value", 3.953], 
-    ["Price to Book Value", 48.856564], 
-    ["Dividend Yield", 0.5],
+    ["Book Value", 3.953],
+    ["Price to Book Value", 48.856564],
+    ["Dividend Yield", 0.5]
   );
 
   return (
@@ -60,22 +58,21 @@ const StockAnalyticsCard = ({ticker}) => {
     
   */}
 
-  {/* 
+      {/* 
   For each statistic, display using a stat component
   Below or next to each statistic, we will do an LLM API call 
-  */ }
-  
-  <div className="flex-row">
-    {importantMetrics.map((metric, index) => (
-      <div className="stats shadow mt-4" key={metric[0]}>
-        <div className="stat">
-          <div className="stat-title">{metric[0]}</div>
-          <div className="stat-value">{metric[1]}</div>
-        </div>
+  */}
+
+      <div className="flex-row">
+        {importantMetrics.map((metric, index) => (
+          <div className="stats shadow mt-4" key={metric[0]}>
+            <div className="stat">
+              <div className="stat-title">{metric[0]}</div>
+              <div className="stat-value">{metric[1]}</div>
+            </div>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-  
     </>
   );
 };

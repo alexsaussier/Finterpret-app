@@ -7,6 +7,8 @@ import getStats from "@/utils/getStats";
 import { getHoldings } from "@/utils/getHoldings";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import StockAnalyticsCard from "@/components/StockAnalyticsCard";
+import StockAnalyticsDash from "@/components/StockAnalyticsDash";
+import { mockPositions } from "@/utils/mockData";
 
 export default async function AnalyticsDashboard() {
   await connectMongo();
@@ -64,6 +66,7 @@ export default async function AnalyticsDashboard() {
       });
     }
   }
+  const stocksMock = mockPositions;
 
   return (
     <main className="flex-1 pb-24">
@@ -74,24 +77,30 @@ export default async function AnalyticsDashboard() {
 
         {holdings ? (
           <>
+            {/* 
             <div className="flex">
-              
               <div className="w-1/2">
                 {stocks.map((stock, index) => (
-                 <div className={`mt-4 ${selectedStock === stock.ticker ? 'border-solid' : ''}`} key={stock.stockName}> 
-                  <button>{/*onClick = SET THIS STOCK AS SELECTED, AND OPEN THE STOCKANALYTICS CARD */}
-                    <StockCard title={stock.stockName} units={stock.units} />
-                  </button>
-                </div>
+                  <div
+                    className={`mt-4 ${
+                      selectedStock === stock.ticker ? "border-solid" : ""
+                    }`}
+                    key={stock.stockName}
+                  >
+                    <button>
+                      <StockCard title={stock.stockName} units={stock.units} />
+                    </button>
+                  </div>
                 ))}
+              </div>
 
+              <div className="w-1/2">
+                <StockAnalyticsCard ticker={selectedStock} />
               </div>
-              {/* This will be a larger card that appears on the right when clicking on the StockCard above.
-                  It will display all the statistics fetched from Yahoo API + LLM input*/ }
-              <div className="w-1/2">   
-                <StockAnalyticsCard ticker={selectedStock}/>
-              </div>
-            </div>
+            </div>*/}
+
+            {/* I had to create another custom component, because we need a CLIENT component for setting stock ticker on click */}
+            <StockAnalyticsDash stocks={stocksMock} />
           </>
         ) : (
           <>

@@ -100,7 +100,7 @@ export default async function AnalyticsDashboard() {
             </div>*/}
 
             {/* I had to create another custom component, because we need a CLIENT component for setting stock ticker on click */}
-            <StockAnalyticsDash stocks={stocksMock} />
+            <StockAnalyticsDash stocks={stocks} />
           </>
         ) : (
           <>

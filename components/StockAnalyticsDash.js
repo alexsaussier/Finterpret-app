@@ -11,26 +11,27 @@ const StockAnalyticsDash = ({ stocks }) => {
 
   //For testing and debugging, this will console log the selected stock on every click
   useEffect(() => {
-    console.log(selectedStock);
+    console.log("selected stock: " + selectedStock);
   }, [selectedStock]);
   return (
     <div
       className="flex"
       style={{
-        backgroundColor: "red",
         minHeight: "500px",
       }}
     >
       <div className="w-1/2">
         {stocks.map((stock, index) => (
           <div
-            className={`mt-4 ${
-              selectedStock === stock.ticker ? "border-solid" : ""
-            }`}
+            className={`mt-4`}
             key={stock.stockName}
           >
-            <button onClick={() => setSelectedStock(stock)}>
-              <StockCard title={stock.stockName} units={stock.units} />
+            <button onClick={() => setSelectedStock(stock.ticker)}>
+              <div className={`${
+              stock.ticker === selectedStock ? "border border-current rounded-lg" : ""
+            }`}>
+                <StockCard title={stock.stockName} units={stock.units} />
+              </div>
             </button>
           </div>
         ))}

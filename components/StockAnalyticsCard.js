@@ -24,6 +24,8 @@ const StockAnalyticsCard = ({ ticker }) => {
     fetchData();
   }, [ticker]);
 
+  console.log("Stats: " + JSON.stringify(stats, null, 2));
+
   if (!stats) {
     return <div>Loading...</div>; // or some loading spinner
   }
@@ -32,13 +34,13 @@ const StockAnalyticsCard = ({ ticker }) => {
 
   try {
     importantMetrics.push(
-    ["PE Ratio", stats.trailingPE.raw], 
-    ["Shares Outstanding", stats.sharesOutstanding.raw], 
-    ["Earnings Per Share" + stats.epsCurrentYear.raw],
-    ["Price/earnings ratio", stats.priceEpsCurrentYear.raw],
-    ["Book Value", stats.bookValue.raw], 
-    ["Price to Book Value", stats.priceToBook.raw], 
-    ["Dividend Yield", stats.dividendYield.raw + "%"],
+    ["PE Ratio", stats.response.trailingPE.raw], 
+    ["Shares Outstanding", stats.response.sharesOutstanding.raw], 
+    ["Earnings Per Share", stats.response.epsCurrentYear.raw],
+    ["Price/earnings ratio", stats.response.priceEpsCurrentYear.raw],
+    ["Book Value", stats.response.bookValue.raw], 
+    ["Price to Book Value", stats.response.priceToBook.raw], 
+    ["Dividend Yield", stats.response.dividendYield.raw + "%"],
     // stats.quickRatio, 
     // stats.debtToEquity, 
     // stats.grossProfits, 
@@ -60,46 +62,48 @@ const StockAnalyticsCard = ({ ticker }) => {
     ["Dividend Yield", 0.5]
   );
 
-  return (
-    <>
-      {/*
-  We can then display data here and pass it to other components (like the ones where GPT will take metrics and return response) 
-    
-  */}
 
-      {/* 
-  For each statistic, display using a stat component
-  Below or next to each statistic, we will do an LLM API call 
-  */}
+    return (
+      <>
+        {/*
+    We can then display data here and pass it to other components (like the ones where GPT will take metrics and return response) 
+      
+    */}
 
-    <p>With mock data:</p>  
-      <div className="flex-row">
-        {mockImportantMetrics.map((metric, index) => (
-          <div className="stats shadow mt-4" key={metric[0]}>
-            <div className="stat">
-              <div className="stat-title">{metric[0]}</div>
-              <div className="stat-value">{metric[1]}</div>
+        {/* 
+    For each statistic, display using a stat component
+    Below or next to each statistic, we will do an LLM API call 
+    */}
+
+      <p>With mock data:</p>  
+        <div className="flex-row">
+          {mockImportantMetrics.map((metric, index) => (
+            <div className="stats shadow mt-4" key={metric[0]}>
+              <div className="stat">
+                <div className="stat-title">{metric[0]}</div>
+                <div className="stat-value">{metric[1]}</div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <p>With real data:</p>
+        <p>With real data:</p>
 
-      <div className="flex-row">
-        {importantMetrics.map((metric, index) => (
-          <div className="stats shadow mt-4" key={metric[0]}>
-            <div className="stat">
-              <div className="stat-title">{metric[0]}</div>
-              <div className="stat-value">{metric[1]}</div>
+        <div className="flex-row">
+          {importantMetrics.map((metric, index) => (
+            <div className="stats shadow mt-4" key={metric[0]}>
+              <div className="stat">
+                <div className="stat-title">{metric[0]}</div>
+                <div className="stat-value">{metric[1]}</div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </>
+          ))}
+        </div>
+      </>
 
-    
-  );
-};
+      
+    );
+  
+  };
 
 export default StockAnalyticsCard;

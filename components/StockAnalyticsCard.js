@@ -145,9 +145,6 @@ console.log("Important metrics: " + JSON.stringify(importantMetrics, null, 2));
       
     ) : (
       <div>
-        {/* Render your actual data here */}
-        <p>Real data:</p>
-
         <div className="flex-row">
           {importantMetrics.map((metric, index) => (
             <div className="stats shadow mt-4" key={metric[0]}>

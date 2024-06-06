@@ -39,10 +39,14 @@ export default async function AnalyticsDashboard() {
 
     //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
     for (const position of holdings.response.positions) {
-      const ticker = position.symbol.symbol.symbol;
+      var ticker = position.symbol.symbol.symbol;
       const stockName = position.symbol.symbol.description;
       const units = position.units;
 
+      if (ticker === 'CGG.PA'){ 
+        ticker =  'VIRI.PA'; 
+        //because company just changed name and brokers can use the previous name
+      }
       stocks.push({ stockName, ticker, units });
     }
 

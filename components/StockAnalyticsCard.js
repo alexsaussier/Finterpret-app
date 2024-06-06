@@ -13,6 +13,8 @@ const StockAnalyticsCard = ({ ticker }) => {
   const importantMetrics = [];
   const mockImportantMetrics = [];
 
+  
+
   //We should fetch data here on initial render of the component and store it as state
 
   useEffect(() => {
@@ -30,52 +32,105 @@ const StockAnalyticsCard = ({ ticker }) => {
     return <div>Loading...</div>; // or some loading spinner
   }
 
-  //We should then parse the data and store it in an array
+  //-------------LOAD IMPORTANT METRICS -------------
 
+  //PE ratio:
   try {
-    importantMetrics.push(
-    ["PE Ratio", stats.response.trailingPE.raw], 
-    ["Shares Outstanding", stats.response.sharesOutstanding.raw], 
-    ["Earnings Per Share", stats.response.epsCurrentYear.raw],
-    ["Price/earnings ratio", stats.response.priceEpsCurrentYear.raw],
-    ["Book Value", stats.response.bookValue.raw], 
-    ["Price to Book Value", stats.response.priceToBook.raw], 
-    ["Dividend Yield", stats.response.dividendYield.raw + "%"],
-    // stats.quickRatio, 
-    // stats.debtToEquity, 
-    // stats.grossProfits, 
-    // stats.grossMargins)
-  );
+    importantMetrics.push(["PE Ratio", stats.response.trailingPE.raw]);
   } catch (error) {
-    console.error(error);
-  }
+    console.log();
+    try{
+      importantMetrics.push(["PE Ratio", stats.response.forwardPE.raw]);
+    }catch (error) {
+      console.log('Error: PE Ratio is not correctly loaded.');
+    }
+  } 
   
 
-  //with mock data
-  mockImportantMetrics.push(
-    ["PE Ratio", 32.62331],
-    ["Shares Outstanding", 15728700416],
-    ["Earnings Per Share", 5.98],
-    ["Price/EPS ratio", 32.295986],
-    ["Book Value", 3.953],
-    ["Price to Book Value", 48.856564],
-    ["Dividend Yield", 0.5]
-  );
+  //Shares Outstanding:
+  try {
+    importantMetrics.push(["Shares Outstanding", stats.response.sharesOutstanding.raw]);
+  } catch (error) {
+    console.log('Error: Shares Outstanding is not correctly loaded.');
+  }
+
+  //EPS:
+  try {
+    importantMetrics.push(["Earnings Per Share", stats.response.epsCurrentYear.raw]);
+  } catch (error) {
+    console.log(); 
+    try{
+      importantMetrics.push(["Earnings Per Share", stats.response.epsTrailingTwelveMonths.raw]);
+    }catch (error) {
+      console.log('Error: EPS is not correctly loaded.');
+    }
+  } 
+
+  //P/E ratio
+  try {
+    importantMetrics.push(["Price/earnings ratio", stats.response.priceEpsCurrentYear.raw]);
+  } catch (error) {
+    console.log('Error: P/E ratio is not correctly loaded.');
+  }
+
+  //Book Value
+  try {
+    importantMetrics.push(["Book Value", stats.response.bookValue.raw]);
+  } catch (error) {
+    console.log('Error: Book Value is not correctly loaded.');
+  }
+
+  //Price to Book Value
+  try {
+    importantMetrics.push(["Price to Book Value", stats.response.priceToBook.raw]);
+  } catch (error) {
+    console.log('Error: Price to Book Value is not correctly loaded.');
+  }
+
+  //Dividend Yield:
+  try {
+    importantMetrics.push(["Dividend Yield", stats.response.dividendYield.raw + "%"]);
+  } catch (error) {
+    console.log(); 
+    try{
+      importantMetrics.push(["Dividend Yield", stats.response.trailingAnnualDividendYield.raw + "%"]);
+    }catch (error) {
+      console.log('Error: Dividend Yield is not correctly loaded.');
+    }
+  } 
+ 
+// We can add:
+// stats.quickRatio, 
+// stats.debtToEquity, 
+// stats.grossProfits, 
+// stats.grossMargins
+
+console.log("Important metrics: " + JSON.stringify(importantMetrics, null, 2));
+
+  if (importantMetrics.length === 0) {
+
+    //with mock data
+    mockImportantMetrics.push(
+      ["PE Ratio", 32.62331],
+      ["Shares Outstanding", 15728700416],
+      ["Earnings Per Share", 5.98],
+      ["Price/EPS ratio", 32.295986],
+      ["Book Value", 3.953],
+      ["Price to Book Value", 48.856564],
+      ["Dividend Yield", 0.5]
+    );
+  } 
 
 
     return (
       <>
-        {/*
-    We can then display data here and pass it to other components (like the ones where GPT will take metrics and return response) 
-      
-    */}
-
         {/* 
     For each statistic, display using a stat component
     Below or next to each statistic, we will do an LLM API call 
     */}
-
-      <p>With mock data:</p>  
+    {importantMetrics.length === 0 ? (
+      <div>
+        <p>This is mock data, there was an issue retrieving the real data:</p>  
         <div className="flex-row">
           {mockImportantMetrics.map((metric, index) => (
             <div className="stats shadow mt-4" key={metric[0]}>
@@ -86,8 +141,12 @@ const StockAnalyticsCard = ({ ticker }) => {
             </div>
           ))}
         </div>
-
-        <p>With real data:</p>
+      </div>
+      
+    ) : (
+      <div>
+        {/* Render your actual data here */}
+        <p>Real data:</p>
 
         <div className="flex-row">
           {importantMetrics.map((metric, index) => (
@@ -99,6 +158,10 @@ const StockAnalyticsCard = ({ ticker }) => {
             </div>
           ))}
         </div>
+      </div>
+    )}
+      
+      
       </>
 
       

@@ -47,7 +47,7 @@ export default async function Dashboard() {
 
     //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
     for (const position of holdings.response.positions) {
-      const ticker = position.symbol.symbol.symbol;
+      const ticker = position.symbol.symbol.raw_symbol;
       const stockName = position.symbol.symbol.description;
       const units = position.units;
 
@@ -55,7 +55,7 @@ export default async function Dashboard() {
     }
 
     for (const option_position of holdings.response.option_positions) {
-      const ticker = option_position.symbol.symbol.symbol;
+      const ticker = option_position.symbol.symbol.raw_symbol;
       const stockName = option_position.symbol.symbol.description;
       const quantity = option_position.units;
 

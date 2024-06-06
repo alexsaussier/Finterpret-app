@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import getStats from "@/utils/getStats";
+import Modal from "@/components/Modal";  
 
 // TO DO: 
-//    - Ensure data is fetched from yahoo and displayed correctly
 //    - Ensure data is cached so we do not make multiple calls to the API if we click on the stock cards multiple times
 
 
@@ -13,7 +13,11 @@ const StockAnalyticsCard = ({ ticker }) => {
   const importantMetrics = [];
   const mockImportantMetrics = [];
 
+  const [isOpen, setIsOpen] = useState(false);
   
+  const openModal = () => {
+    setIsOpen(true);
+  };
 
   //We should fetch data here on initial render of the component and store it as state
 
@@ -147,17 +151,21 @@ console.log("Important metrics: " + JSON.stringify(importantMetrics, null, 2));
       <div>
         <div className="flex-row">
           {importantMetrics.map((metric, index) => (
-            <div className="stats shadow mt-4" key={metric[0]}>
-              <div className="stat">
-                <div className="stat-title">{metric[0]}</div>
-                <div className="stat-value">{metric[1]}</div>
+            <button onClick={openModal} key={metric[0]}>
+              <div className="stats shadow mt-4" >
+                <div className="stat">
+                  <div className="stat-title">{metric[0]}</div>
+                  <div className="stat-value">{metric[1]}</div>
+                </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
     )}
       
+    <Modal isModalOpen={isOpen} setIsModalOpen={() => setIsOpen(false)} />
+
       
       </>
 

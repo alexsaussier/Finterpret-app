@@ -9,13 +9,16 @@ import Modal from "@/components/Modal";
 
 const StockAnalyticsCard = ({ ticker }) => {
   const [stats, setStats] = useState(null);
-  const statistics = [];
   const importantMetrics = [];
   const mockImportantMetrics = [];
+  
 
   const [isOpen, setIsOpen] = useState(false);
+  const [currentMetric, setCurrentMetric] = useState(['', '']);
+
   
-  const openModal = () => {
+  const openModal = (metric) => {
+    setCurrentMetric(metric);
     setIsOpen(true);
   };
 
@@ -151,7 +154,7 @@ console.log("Important metrics: " + JSON.stringify(importantMetrics, null, 2));
       <div>
         <div className="flex-row">
           {importantMetrics.map((metric, index) => (
-            <button onClick={openModal} key={metric[0]}>
+            <button onClick={() => openModal(metric)} key={metric[0]}>
               <div className="stats shadow mt-4" >
                 <div className="stat">
                   <div className="stat-title">{metric[0]}</div>
@@ -159,17 +162,16 @@ console.log("Important metrics: " + JSON.stringify(importantMetrics, null, 2));
                 </div>
               </div>
             </button>
+            
+
           ))}
+
         </div>
+        <Modal isModalOpen={isOpen} setIsModalOpen={() => setIsOpen(false)} metric={currentMetric} />
+
       </div>
     )}
-      
-    <Modal isModalOpen={isOpen} setIsModalOpen={() => setIsOpen(false)} />
-
-      
       </>
-
-      
     );
   
   };

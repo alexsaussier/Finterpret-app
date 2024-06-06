@@ -2,10 +2,20 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { sendOpenAi } from "@/libs/gpt";
+
 
 // A simple modal component which can be shown/hidden with a boolean and a function
 // Because of the setIsModalOpen function, you can't use it in a server component.
-const Modal = ({ isModalOpen, setIsModalOpen }) => {
+const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
+
+  console.log("Metric: " + JSON.stringify(metric, null, 2));
+  
+  //const gptMessage = "Can you tell me more about " + metric[0] + "?" + " The value is " + metric[1] + ", what does it mean?";
+  //const response = sendOpenAi(gptMessage, '1');
+  //console.log(response);
+
+
   return (
     <Transition appear show={isModalOpen} as={Fragment}>
       <Dialog
@@ -56,7 +66,7 @@ const Modal = ({ isModalOpen, setIsModalOpen }) => {
                   </button>
                 </div>
 
-                <section>And here is my content</section>
+                <section>Response: {/*response*/} </section>
               </Dialog.Panel>
             </Transition.Child>
           </div>

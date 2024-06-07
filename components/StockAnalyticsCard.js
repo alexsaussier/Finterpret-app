@@ -42,7 +42,6 @@ const StockAnalyticsCard = ({ ticker }) => {
   try {
     importantMetrics.push(["PE Ratio", stats.response.trailingPE.raw]);
   } catch (error) {
-    console.log();
     try {
       importantMetrics.push(["PE Ratio", stats.response.forwardPE.raw]);
     } catch (error) {
@@ -67,7 +66,6 @@ const StockAnalyticsCard = ({ ticker }) => {
       stats.response.epsCurrentYear.raw,
     ]);
   } catch (error) {
-    console.log();
     try {
       importantMetrics.push([
         "Earnings Per Share",
@@ -81,7 +79,7 @@ const StockAnalyticsCard = ({ ticker }) => {
   //P/E ratio
   try {
     importantMetrics.push([
-      "Price/earnings ratio",
+      "Price/EPS ratio",
       stats.response.priceEpsCurrentYear.raw,
     ]);
   } catch (error) {
@@ -112,7 +110,6 @@ const StockAnalyticsCard = ({ ticker }) => {
       stats.response.dividendYield.raw + "%",
     ]);
   } catch (error) {
-    console.log();
     try {
       importantMetrics.push([
         "Dividend Yield",
@@ -180,11 +177,14 @@ const StockAnalyticsCard = ({ ticker }) => {
               </button>
             ))}
           </div>
-          <Modal
-            isModalOpen={isOpen}
-            setIsModalOpen={setIsOpen}
-            metric={currentMetric}
-          />
+          
+          {isOpen && (
+            <Modal
+              isModalOpen={isOpen}
+              setIsModalOpen={setIsOpen}
+              metric={currentMetric}
+            />
+          )}
         </div>
       )}
     </>

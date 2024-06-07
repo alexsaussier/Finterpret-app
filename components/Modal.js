@@ -1,22 +1,33 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { sendOpenAi } from "@/libs/gpt";
 
 // A simple modal component which can be shown/hidden with a boolean and a function
 // Because of the setIsModalOpen function, you can't use it in a server component.
 const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
-  console.log("Metric: " + JSON.stringify(metric, null, 2));
-  let response = "";
-  //const gptMessage = "Can you tell me more about " + metric[0] + "?" + " The value is " + metric[1] + ", what does it mean?";
-  //const response = sendOpenAi(gptMessage, '1');
-  //console.log(response);
+  console.log("Metric selected: " + JSON.stringify(metric, null, 2));
+  console.log("Metric name: " + metric[0]);
+
+  const gptMessage = "Can you tell me more about " + metric[0] + "?" + " Its value for an asset I own is " + metric[1] + ", what does it mean?" +
+  " Please make the text spaced. each paragraph should have 1 line of spacing. Focus more on what the metric value means for me." +
+  " Make it very concise and easy to understand for the common folk. The person reading that does not know anything about finance." +
+  " Be somewhat serious but friendly, and you can occasionnally give funny metaphors. Answer in HTML format." + 
+  " You should sound very confident in your answer, as if you are a financial advisor.";
+  const [response, setResponse] = useState(null);
 
   useEffect(() => {
+    if (isModalOpen) {
     //Run this on component render only
     //response = sendOpenAi(gptMessage, "1");
-  }, []);
+    sendOpenAi(gptMessage, "1").then((data) => {
+      setResponse(data);
+      console.log(response);
+    });
+  }
+
+  }, [isModalOpen]);
 
   return (
     <Transition appear show={isModalOpen} as={Fragment}>
@@ -51,7 +62,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
               <Dialog.Panel className="relative w-full max-w-3xl h-full overflow-visible transform text-left align-middle shadow-xl transition-all rounded-xl bg-base-100 p-6 md:p-8">
                 <div className="flex justify-between items-center mb-4">
                   <Dialog.Title as="h2" className="font-semibold">
-                    I&apos;m a modal
+                    What does this mean?
                   </Dialog.Title>
                   <button
                     className="btn btn-square btn-ghost btn-sm"
@@ -68,7 +79,12 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
                   </button>
                 </div>
 
-                <section>Response: {/*response*/} </section>
+                {response === null ? (
+                  <p>Loading ...</p>
+                ) : (
+                  <section dangerouslySetInnerHTML={{ __html: response }} />
+                )}
+
               </Dialog.Panel>
             </Transition.Child>
           </div>

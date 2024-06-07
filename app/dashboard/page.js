@@ -94,7 +94,7 @@ export default async function Dashboard() {
     <main
       style={{
         maxHeight: "100vh",
-        overflow: "hidden",
+        overflow: "auto",
         height: "90%",
         padding: "20px",
       }}

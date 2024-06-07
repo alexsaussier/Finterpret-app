@@ -1,5 +1,5 @@
 "use client";
-
+import "./FAQ.css";
 import { useRef, useState } from "react";
 
 // <FAQ> component is a lsit of <Item> component
@@ -8,15 +8,16 @@ import { useRef, useState } from "react";
 const faqList = [
   {
     question: "What do I get exactly?",
-    answer: <div className="space-y-2 leading-relaxed">A dashboard that outputs metrics about your portfolio, and tailored advice generated just for you.</div>,
+    answer: (
+      <div className="space-y-2 leading-relaxed">
+        A dashboard that outputs metrics about your portfolio, and tailored
+        advice generated just for you.
+      </div>
+    ),
   },
   {
     question: "Can I get a refund?",
-    answer: (
-      <p>
-        No, but you have 7 days of free trial to test Finterpret.
-      </p>
-    ),
+    answer: <p>No, but you have 7 days of free trial to test Finterpret.</p>,
   },
   {
     question: "I have another question",
@@ -41,7 +42,8 @@ const Item = ({ item }) => {
         aria-expanded={isOpen}
       >
         <span
-          className={`flex-1 text-base-content ${isOpen ? "text-primary" : ""}`}
+          className={`flex-1 text-base-content`}
+          style={{ color: isOpen ? "#05d8be" : "#222" }}
         >
           {item?.question}
         </span>
@@ -88,10 +90,18 @@ const Item = ({ item }) => {
 
 const FAQ = () => {
   return (
-    <section className="bg-base-200" id="faq">
+    <section
+      className="min-h-screen bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-20 px-20 py-8 lg:py-20 md:pt-20 background"
+      id="faq"
+    >
       <div className="py-24 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
         <div className="flex flex-col text-left basis-1/2">
-          <p className="inline-block font-semibold text-primary mb-4">FAQ</p>
+          <p
+            className="inline-block font-semibold text-primary mb-4"
+            style={{ color: "#05d8be" }}
+          >
+            FAQ
+          </p>
           <p className="sm:text-4xl text-3xl font-extrabold text-base-content">
             Frequently Asked Questions
           </p>

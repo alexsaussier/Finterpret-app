@@ -4,8 +4,7 @@ const config = {
   // REQUIRED
   appName: "Finterpret",
   // REQUIRED: a short description of your app for SEO tags (can be overwritten)
-  appDescription:
-    "LLM-Powered Analytics for retail investors.",
+  appDescription: "LLM-Powered Analytics for retail investors.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
   domainName: "shipfa.st",
   crisp: {
@@ -74,7 +73,7 @@ const config = {
     // REQUIRED — Email 'From' field to be used when sending magic login links
     fromNoReply: `ShipFast <noreply@sandboxfbe2cdb4113e4ca58e8f982babbc54dc.mailgun.org>`,
     // REQUIRED — Email 'From' field to be used when sending other emails, like abandoned carts, updates etc..
-    fromAdmin: 'Alex at Finterpret <hello@alexandresaussier.com>',
+    fromAdmin: "Alex at Finterpret <hello@alexandresaussier.com>",
     // Email shown to customer if need support. Leave empty if not needed => if empty, set up Crisp above, otherwise you won't be able to offer customer support."
     supportEmail: "asaussier99@gmail.com ",
     // When someone replies to supportEmail sent by the app, forward it to the email below (otherwise it's lost). If you set supportEmail to empty, this will be ignored.

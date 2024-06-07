@@ -9,8 +9,12 @@ const Hero = () => {
   return (
     <section className="hero1-background min-h-screen bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-20 px-20 py-8 lg:py-20 md:pt-20">
       <div className="flex flex-col gap-10 lg:gap-14 items-center justify-center text-center lg:text-left lg:items-start w-full max-w-xl mx-auto">
-        <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4">
-          Start investing <span style={{ color: "#05d8be" }}>smartly</span>
+        <h1
+          className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4"
+          style={{ lineHeight: "1.2" }}
+        >
+          Start investing{" "}
+          <span style={{ color: "#05d8be" }}>smartly with AI.</span>
         </h1>
         <p className="text-lg opacity-80 leading-relaxed">
           Connect your investment accounts to {config.appName}, and get full

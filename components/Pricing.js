@@ -7,10 +7,15 @@ import ButtonCheckout from "./ButtonCheckout";
 
 const Pricing = () => {
   return (
-    <section className="bg-base-200 overflow-hidden" id="pricing">
+    <section className="overflow-hidden" id="pricing">
       <div className="py-24 px-8 max-w-5xl mx-auto">
         <div className="flex flex-col text-center w-full mb-20">
-          <p className="font-medium text-primary mb-8">Pricing</p>
+          <p
+            className="font-medium text-primary mb-12 text-xl"
+            style={{ color: "#05d8be" }}
+          >
+            Pricing
+          </p>
           <h2 className="font-bold text-3xl lg:text-5xl tracking-tight">
             Get your AI investment companion and start investing like a pro!
           </h2>
@@ -22,7 +27,8 @@ const Pricing = () => {
               {plan.isFeatured && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                   <span
-                    className={`badge text-xs text-primary-content font-semibold border-0 bg-primary`}
+                    className={`badge text-xs text-primary-content font-semibold border-0`}
+                    style={{ backgroundColor: "#05d8be", color: "white" }}
                   >
                     POPULAR
                   </span>
@@ -32,10 +38,14 @@ const Pricing = () => {
               {plan.isFeatured && (
                 <div
                   className={`absolute -inset-[1px] rounded-[9px] bg-primary z-10`}
+                  style={{ backgroundColor: "#05d8be" }}
                 ></div>
               )}
 
-              <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10 bg-base-100 p-8 rounded-lg">
+              <div
+                className="relative flex flex-col h-full gap-5 lg:gap-8 z-10 bg-base-100 p-8 rounded-lg"
+                style={{ backgroundColor: "#c2e8e4" }}
+              >
                 <div className="flex justify-between items-center gap-4">
                   <div>
                     <p className="text-lg lg:text-xl font-bold">{plan.name}</p>

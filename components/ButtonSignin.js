@@ -50,6 +50,7 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
     <button
       className={`btn ${extraStyle ? extraStyle : ""}`}
       onClick={handleClick}
+      style={{ backgroundColor: "#05d8be", color: "white", border: "none" }}
     >
       {text}
     </button>

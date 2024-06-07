@@ -5,6 +5,7 @@ const Arrow = ({ extraStyle }) => {
       viewBox="0 0 138 138"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      stroke="#222"
     >
       <g>
         <path
@@ -23,7 +24,10 @@ const Arrow = ({ extraStyle }) => {
 };
 const Step = ({ emoji, text }) => {
   return (
-    <div className="w-full md:w-48 flex flex-col gap-2 items-center justify-center">
+    <div
+      className="w-full md:w-48 flex flex-col gap-2 items-center justify-center"
+      style={{ color: "#222" }}
+    >
       <span className="text-4xl">{emoji}</span>
       <h3 className="font-bold">{text}</h3>
     </div>
@@ -41,13 +45,21 @@ const Step = ({ emoji, text }) => {
 // - Features: "ShipFast has user auth, Stripe, emails all set up for you"
 const Problem = () => {
   return (
-    <section className="bg-neutral text-neutral-content">
+    <section className="text-neutral-content">
       <div className="max-w-7xl mx-auto px-8 py-16 md:py-32 text-center">
-        <h2 className="max-w-3xl mx-auto font-extrabold text-4xl md:text-5xl tracking-tight mb-6 md:mb-8">
-          Retail investors lack data to make smart decisions on the financial markets
+        <h2
+          className="max-w-3xl mx-auto font-extrabold text-4xl md:text-5xl tracking-tight mb-6 md:mb-8"
+          style={{ color: "#05d8be" }}
+        >
+          Retail investors lack data to make smart decisions on the financial
+          markets
         </h2>
-        <p className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20">
-          Lack of financial knowledge and emotional choices affect common people on the markets.
+        <p
+          className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20"
+          style={{ color: "#222" }}
+        >
+          Lack of financial knowledge and emotional choices affect common people
+          on the markets.
         </p>
 
         <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">

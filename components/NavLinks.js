@@ -5,46 +5,49 @@ HomeIcon,
 DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'; 
 */
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
-
-
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-    { name: 'Overview', href: '/dashboard', /* add icon: HomeIcon at the end after you import icons*/},
-    {
-        name: 'Portfolio Analysis',
-        href: '/dashboard/analysis',
-        /* icon: DocumentDuplicateIcon, */
-    },
-    { name: 'Cash Flow', href: '/dashboard/cashflow', /* icon: UserGroupIcon */},
-    ];
+  {
+    name: "Overview",
+    href: "/dashboard" /* add icon: HomeIcon at the end after you import icons*/,
+  },
+  {
+    name: "Portfolio Analysis",
+    href: "/dashboard/analysis",
+    /* icon: DocumentDuplicateIcon, */
+  },
+  { name: "Cash Flow", href: "/dashboard/cashflow" /* icon: UserGroupIcon */ },
+];
 
 export default function NavLinks() {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
-    return (
-        <>
-        {links.map((link) => {
-            /*const LinkIcon = link.icon;*/
-            return (
-            <Link
-                key={link.name}
-                href={link.href}
-                className={clsx(
-                    'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-base-200 p-3 text-sm font-medium hover:bg-primary-content md:flex-none md:justify-start md:p-2 md:px-3',
-                    {
-                      'bg-primary-content': pathname === link.href,
-                    },
-                  )}
-            >
-                <p className="hidden md:block">{link.name}</p>
-            </Link>
-            );
-        })}
-        </>
-    );
+  return (
+    <>
+      {links.map((link) => {
+        /*const LinkIcon = link.icon;*/
+        return (
+          <Link
+            key={link.name}
+            href={link.href}
+            className={clsx(
+              "flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3"
+            )}
+            style={{
+              color: pathname === link.href ? "#05d8be" : "",
+              backgroundColor: "#fff",
+              cursor: "pointer",
+            }}
+          >
+            <p className="hidden md:block">{link.name}</p>
+          </Link>
+        );
+      })}
+    </>
+  );
 }

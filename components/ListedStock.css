@@ -1,0 +1,31 @@
+.listedStock {
+  max-width: 100px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-width: 150px;
+  text-align: left;
+  margin: 8px;
+
+  .stockName {
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  .stockAmmount {
+    color: gray;
+  }
+  .priceMetrics {
+    display: flex;
+    justify-content: space-between;
+    .stockPrice {
+      font-weight: bold;
+    }
+  }
+}
+
+.listedMetric:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}

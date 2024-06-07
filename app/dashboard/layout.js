@@ -2,9 +2,8 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import config from "@/config";
-import SideNav from '@/components/SideNavbar';
+import SideNav from "@/components/SideNavbar";
 import ButtonAccount from "@/components/ButtonAccount";
-
 
 // This is a server-side component to ensure the user is logged in.
 // If not, it will redirect to the login page.
@@ -23,15 +22,17 @@ export default async function LayoutPrivate({ children }) {
       <div className="w-full flex-none md:w-64">
         <SideNav />
       </div>
-      <div className="flex-grow p-4 md:overflow-y-auto md:p-6">
+      <div
+        className="flex-grow p-4 md:overflow-y-auto md:p-6"
+        style={{ backgroundColor: "#fafafa" }}
+      >
         <div className="flex justify-between items-right pb-4">
           <div className="flex-grow"></div>
           <ButtonAccount /* This should go in SideNav at some point */ />
         </div>
-        
+
         {children}
       </div>
     </div>
   );
-} 
-
+}

@@ -91,30 +91,54 @@ export default async function Dashboard() {
   //------
 
   return (
-    <main className="flex-1 pb-24">
+    <main
+      style={{
+        maxHeight: "100vh",
+        overflow: "hidden",
+        height: "90%",
+        padding: "20px",
+      }}
+    >
       {
         //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
       }
 
       <section className="space-y-4">
-        <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
-        <p>
-          Welcome {user.name}
-          {user.email} 👋
-        </p>
-        <p>Connected account ID: {accountId}</p>
-        {/* <p>Positions in your portfolio: {stocks}</p> */}
-        {
-          //If there is no account ID, show the button to import a portfolio
-        }
-        {!accountId && (
-          <ButtonSnaptrade
-            title="Import a Portfolio"
-            snaptrade_user_secret={userSecret}
-          />
-        )}
+        <div
+          style={{
+            backgroundColor: "#fefefe",
+            borderRadius: "12px",
+            padding: "20px",
+            boxShadow: "0 8px 12px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
+          <p>
+            Welcome {user.name}
+            {user.email} 👋
+          </p>
+          <p>Connected account ID: {accountId}</p>
+          {/* <p>Positions in your portfolio: {stocks}</p> */}
+          {
+            //If there is no account ID, show the button to import a portfolio
+          }
+          {!accountId && (
+            <ButtonSnaptrade
+              title="Import a Portfolio"
+              snaptrade_user_secret={userSecret}
+            />
+          )}
+        </div>
         <div className="flex flex-row flex-nowrap gap-4">
-          <div className="w-full flex-col p-1">
+          <div
+            className="w-full flex-col p-1"
+            style={{
+              backgroundColor: "#fefefe",
+              borderRadius: "12px",
+              padding: "20px",
+              boxShadow: "0 8px 12px rgba(0, 0, 0, 0.1)",
+            }}
+          >
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Your holdings
             </h1>
@@ -159,7 +183,15 @@ export default async function Dashboard() {
             </DashboardCollapse>
           </div>
 
-          <div className="w-full flex-col p-1">
+          <div
+            className="w-full flex-col p-1"
+            style={{
+              backgroundColor: "#fefefe",
+              borderRadius: "12px",
+              padding: "20px",
+              boxShadow: "0 8px 12px rgba(0, 0, 0, 0.1)",
+            }}
+          >
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Portfolio Report
             </h1>

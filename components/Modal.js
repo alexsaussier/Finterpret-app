@@ -1,17 +1,22 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { sendOpenAi } from "@/libs/gpt";
 
 // A simple modal component which can be shown/hidden with a boolean and a function
 // Because of the setIsModalOpen function, you can't use it in a server component.
 const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
   console.log("Metric: " + JSON.stringify(metric, null, 2));
-
+  let response = "";
   //const gptMessage = "Can you tell me more about " + metric[0] + "?" + " The value is " + metric[1] + ", what does it mean?";
   //const response = sendOpenAi(gptMessage, '1');
   //console.log(response);
+
+  useEffect(() => {
+    //Run this on component render only
+    //response = sendOpenAi(gptMessage, "1");
+  }, []);
 
   return (
     <Transition appear show={isModalOpen} as={Fragment}>

@@ -27,6 +27,8 @@ export default async function AnalyticsDashboard() {
 
   const holdings = await getHoldings(userId, userSecret, accountId, user);
 
+  console.log("Holdings: " + JSON.stringify(holdings, null, 2));
+
   if (holdings) {
     balances = holdings.balances;
     //stocks = holdings.response.positions;
@@ -42,12 +44,15 @@ export default async function AnalyticsDashboard() {
       var ticker = position.symbol.symbol.symbol;
       const stockName = position.symbol.symbol.description;
       const units = position.units;
+      const price = position.price;
+      const delta = position.open_pnl;
+      const currency = position.symbol.symbol.currency.code;
 
       if (ticker === "CGG.PA") {
         ticker = "VIRI.PA";
         //because company just changed name and brokers can use the previous name
       }
-      stocks.push({ stockName, ticker, units });
+      stocks.push({ stockName, ticker, units, price, delta, currency });
     }
 
     for (const option_position of holdings.response.option_positions) {

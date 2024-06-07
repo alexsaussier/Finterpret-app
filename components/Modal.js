@@ -21,7 +21,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
     if (isModalOpen) {
     //Run this on component render only
     //response = sendOpenAi(gptMessage, "1");
-    sendOpenAi(gptMessage, "1").then((data) => {
+    sendOpenAi(gptMessage, "1", 300).then((data) => {
       setResponse(data);
       console.log(response);
     });
@@ -80,7 +80,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
                 </div>
 
                 {response === null ? (
-                  <p>Loading ...</p>
+                  <p>Creating a custom explanation for you ...</p>
                 ) : (
                   <section dangerouslySetInnerHTML={{ __html: response }} />
                 )}

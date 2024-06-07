@@ -37,7 +37,7 @@ const Header = () => {
   }, [searchParams]);
 
   return (
-    <header className="bg-base-200">
+    <header className="bg-base-100">
       <nav
         className="container flex items-center justify-between px-8 py-4 mx-auto"
         aria-label="Global"
@@ -49,16 +49,9 @@ const Header = () => {
             href="/"
             title={`${config.appName} homepage`}
           >
-            <Image
-              src={logo}
-              alt={`${config.appName} logo`}
-              className="w-12"
-              placeholder="blur"
-              priority={true}
-              width={32}
-              height={32}
-            />
-            <span className="font-extrabold text-lg">{config.appName}</span>
+            <span className="text-2xl lg:text-3xl" style={{ color: "#05d8be" }}>
+              {config.appName}
+            </span>
           </Link>
         </div>
         {/* Burger button to open menu on mobile */}

@@ -43,8 +43,8 @@ export default async function AnalyticsDashboard() {
       const stockName = position.symbol.symbol.description;
       const units = position.units;
 
-      if (ticker === 'CGG.PA'){ 
-        ticker =  'VIRI.PA'; 
+      if (ticker === "CGG.PA") {
+        ticker = "VIRI.PA";
         //because company just changed name and brokers can use the previous name
       }
       stocks.push({ stockName, ticker, units });

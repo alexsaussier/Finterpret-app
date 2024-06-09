@@ -26,6 +26,7 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
       <Link
         href={config.auth.callbackUrl}
         className={`btn ${extraStyle ? extraStyle : ""}`}
+        style={{ backgroundColor: "#05d8be", color: "white", border: "none" }}
       >
         {session.user?.image ? (
           <img
@@ -37,7 +38,10 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
             height={24}
           />
         ) : (
-          <span className="w-6 h-6 bg-base-300 flex justify-center items-center rounded-full shrink-0">
+          <span
+            className="w-6 h-6 bg-base-300 flex justify-center items-center rounded-full shrink-0"
+            style={{ textTransform: "lowercase" }}
+          >
             {session.user?.name?.charAt(0) || session.user?.email?.charAt(0)}
           </span>
         )}

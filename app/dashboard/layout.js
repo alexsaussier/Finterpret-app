@@ -18,7 +18,7 @@ export default async function LayoutPrivate({ children }) {
   }
 
   return (
-    <div className="flex h-screen md:overflow-hidden">
+    <div className="flex flex-col md:flex-row h-screen md:overflow-hidden">
       <div className="w-full flex-none md:w-64">
         <SideNav />
       </div>

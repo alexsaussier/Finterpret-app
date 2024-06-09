@@ -1,40 +1,127 @@
+"use client";
 import Link from "next/link";
-import Image from "next/image";
 import NavLinks from "@/components/NavLinks";
-import logo from "@/app/icon.png";
 import config from "@/config";
-import ButtonAccount from "./ButtonAccount";
+import { useState } from "react";
+import "./SideNavbar.css";
+import { LogoutIcon } from "@/utils/svgIcons";
 
 export default function SideNav() {
-  return (
-    <div
-      className="flex h-full flex-col px-3 py-4 md:px-2"
-      style={{ backgroundColor: "#fff" }}
-    >
-      <Link
-        className="mb-2 flex h-10 items-center justify-center gap-2"
-        style={{ backgroundColor: "#fff", color: "#05d8be" }}
-        href="/dashboard"
-      >
-        <span className="font-extrabold text-lg">{config.appName}</span>
-      </Link>
+  const [isOpen, setIsOpen] = useState(false);
 
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-        <NavLinks /> {/* See Vercel starter example Nav-links file in Github */}
-        <div
-          className="hidden h-auto w-full grow rounded-md md:block"
-          style={{ backgroundColor: "#fff" }}
-        ></div>
-        <form>
-          <button
-            className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-base-200 p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3"
-            style={{ backgroundColor: "#fff" }}
+  return (
+    <div style={{ height: "100%", position: "relative" }}>
+      {/* Mobile Header */}
+      <div
+        className="md:hidden flex justify-between items-center p-4"
+        style={{ backgroundColor: "#fff" }}
+      >
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <span className="font-extrabold text-lg" style={{ color: "#05d8be" }}>
+            {config.appName}
+          </span>
+        </Link>
+        <button
+          className="btn btn-square btn-ghost"
+          onClick={() => setIsOpen(true)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <p>Icon here </p>
-            <div className="hidden md:block">Sign Out</div>
-          </button>
-        </form>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
       </div>
+
+      {/* Desktop SideNav */}
+      <div className="desktopSidebar hidden md:flex h-full flex-col px-3 py-4">
+        <div>
+          <Link
+            className="mb-2 flex h-10 items-center justify-center gap-2"
+            style={{ backgroundColor: "#fff", color: "#05d8be" }}
+            href="/dashboard"
+          >
+            <span className="font-extrabold text-lg">{config.appName}</span>
+          </Link>
+          <div className="flex grow flex-col space-y-2">
+            <NavLinks />
+          </div>
+        </div>
+        <div className="flex-none">
+          <form>
+            <button
+              className="flex h-[48px] w-full items-center justify-center gap-2 rounded-md bg-base-200 p-3 text-sm font-medium md:justify-start md:p-2 md:px-3"
+              style={{ backgroundColor: "#fff" }}
+            >
+              <LogoutIcon />
+              <div className="hidden md:block">Sign Out</div>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto bg-white"
+          style={{ maxHeight: "100vh" }}
+        >
+          <div className="p-4">
+            <div className="flex justify-end">
+              <button
+                className="btn btn-square btn-ghost"
+                onClick={() => setIsOpen(false)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <Link
+              className="mb-2 flex h-10 items-center justify-center gap-2"
+              style={{ backgroundColor: "#fff", color: "#05d8be" }}
+              href="/dashboard"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="font-extrabold text-lg">{config.appName}</span>
+            </Link>
+            <div className="flex flex-col space-y-2">
+              <NavLinks />
+            </div>
+            <div className="mt-4">
+              <form>
+                <button
+                  className="flex h-[48px] w-full items-center justify-center gap-2 rounded-md bg-base-200 p-3 text-sm font-medium"
+                  style={{ backgroundColor: "#fff" }}
+                >
+                  <LogoutIcon />
+                  <div>Sign Out</div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

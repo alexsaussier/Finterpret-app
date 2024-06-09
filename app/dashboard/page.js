@@ -16,6 +16,7 @@ import {
   mockTotalValue,
 } from "@/utils/mockData";
 import { separateCallsAndPuts } from "@/utils/separateCallsPuts";
+import "./dashboard.css";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -91,27 +92,13 @@ export default async function Dashboard() {
   //------
 
   return (
-    <main
-      style={{
-        maxHeight: "100vh",
-        overflow: "auto",
-        height: "90%",
-        padding: "20px",
-      }}
-    >
+    <main className="dashboardWrapper">
       {
         //<FetchHoldings userId={userId} snaptrade_user_secret={userSecret} accountId={accountId}/>
       }
 
       <section className="space-y-4">
-        <div
-          style={{
-            backgroundColor: "#fefefe",
-            borderRadius: "12px",
-            padding: "20px",
-            boxShadow: "0 8px 12px rgba(0, 0, 0, 0.1)",
-          }}
-        >
+        <div className="dashboardCard">
           <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
           <p>
             Welcome {user.name}
@@ -129,16 +116,8 @@ export default async function Dashboard() {
             />
           )}
         </div>
-        <div className="flex flex-row flex-nowrap gap-4">
-          <div
-            className="w-full flex-col p-1"
-            style={{
-              backgroundColor: "#fefefe",
-              borderRadius: "12px",
-              padding: "20px",
-              boxShadow: "0 8px 12px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="dashboardPortfolio flex flex-row flex-nowrap gap-4">
+          <div className="dashboardCard w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Your holdings
             </h1>
@@ -183,15 +162,7 @@ export default async function Dashboard() {
             </DashboardCollapse>
           </div>
 
-          <div
-            className="w-full flex-col p-1"
-            style={{
-              backgroundColor: "#fefefe",
-              borderRadius: "12px",
-              padding: "20px",
-              boxShadow: "0 8px 12px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+          <div className="dashboardCard w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Portfolio Report
             </h1>

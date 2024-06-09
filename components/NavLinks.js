@@ -44,7 +44,7 @@ export default function NavLinks() {
               cursor: "pointer",
             }}
           >
-            <p className="hidden md:block">{link.name}</p>
+            <p className="md:block">{link.name}</p>
           </Link>
         );
       })}

@@ -24,7 +24,7 @@ const links = [
   { name: "Cash Flow", href: "/dashboard/cashflow" /* icon: UserGroupIcon */ },
 ];
 
-export default function NavLinks() {
+export default function NavLinks({ setIsOpen }) {
   const pathname = usePathname();
 
   return (
@@ -38,6 +38,7 @@ export default function NavLinks() {
             className={clsx(
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3"
             )}
+            onClick={() => setIsOpen(false)}
             style={{
               color: pathname === link.href ? "#05d8be" : "",
               backgroundColor: "#fff",

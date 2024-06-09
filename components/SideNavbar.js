@@ -5,6 +5,7 @@ import config from "@/config";
 import { useState } from "react";
 import "./SideNavbar.css";
 import { LogoutIcon } from "@/utils/svgIcons";
+import ButtonAccount from "./ButtonAccount";
 
 export default function SideNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,8 +53,9 @@ export default function SideNav() {
           >
             <span className="font-extrabold text-lg">{config.appName}</span>
           </Link>
+          <ButtonAccount />
           <div className="flex grow flex-col space-y-2">
-            <NavLinks />
+            <NavLinks setIsOpen={setIsOpen} />
           </div>
         </div>
         <div className="flex-none">
@@ -105,8 +107,13 @@ export default function SideNav() {
             >
               <span className="font-extrabold text-lg">{config.appName}</span>
             </Link>
-            <div className="flex flex-col space-y-2">
-              <NavLinks />
+
+            <div
+              className="flex flex-col space-y-2"
+              style={{ alignItems: "center" }}
+            >
+              <ButtonAccount />
+              <NavLinks setIsOpen={setIsOpen} />
             </div>
             <div className="mt-4">
               <form>

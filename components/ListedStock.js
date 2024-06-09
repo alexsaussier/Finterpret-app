@@ -4,15 +4,16 @@ import { useState } from "react";
 import "./ListedStock.css";
 import Modal from "./Modal";
 
-const ListedStock = ({ percentage, price, name, units, currency }) => {
+const ListedStock = ({ selected= false, percentage, price, name, units, currency }) => {
   const [isOpen, setIsOpen] = useState(false);
   const isNegative = percentage < 0 ? true : false;
+
   return (
-    <div className="listedStock" onClick={() => setIsOpen(true)}>
+    <div className={`listedStock min-w-56 hover:bg-teal-300/50 ${selected ? "bg-teal-300/50 " : ""}`} >
       <p className="stockName">{name}</p>
-      <p className="stockAmmount">{units} units</p>
-      <div className="priceMetrics">
-        <p className="stockPrice">{price} {currency}</p>
+      <p className="stockAmount">{units} units</p>
+      <div className="priceMetrics space-x-4">
+        <p className="stockPrice">{price.toFixed(2)} {currency} </p>
         <p style={{ color: isNegative ? "red" : "green" }}>
           {isNegative ? "" : "+"}
           {percentage}%

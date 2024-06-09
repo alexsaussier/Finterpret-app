@@ -31,6 +31,8 @@ export default async function Dashboard() {
   let orders = [];
   let totalValue = [];
 
+  let SharpeRatio = 0;
+
   //save this portfolio account ID to the user
 
   // Then, fetch all stocks for this account ID
@@ -177,7 +179,7 @@ export default async function Dashboard() {
               <p>AI-generated explanation</p>
             </DashboardCollapse>
 
-            <DashboardCollapseValue title="Sharpe Ratio" quantity="20">
+            <DashboardCollapseValue title="Sharpe Ratio" units={SharpeRatio}>
               <p>
                 Think of the Sharpe ratio like a rating that tells you how good
                 of a deal you are getting for the risk you are taking with an

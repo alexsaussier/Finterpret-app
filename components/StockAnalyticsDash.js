@@ -28,13 +28,16 @@ const StockAnalyticsDash = ({ stocks }) => {
             key={stock.stockName}
           >
             <button onClick={() => setSelectedStock(stock.ticker)}>
-              <div className={`${
-              stock.ticker === selectedStock ? "border border-current rounded-lg" : "" //set the style for the selected stock
-            }`}>
-                {/*<StockCard title={stock.stockName} units={stock.units} />*/}
-                <ListedStock percentage={stock.delta} price={stock.price} name={stock.stockName} units={stock.units} currency={stock.currency}/>
+              
+              {/*<StockCard title={stock.stockName} units={stock.units} />*/}
+              <ListedStock
+                selected ={stock.ticker === selectedStock} 
+                percentage={stock.delta} price={stock.price} 
+                name={stock.stockName} 
+                units={stock.units} 
+                currency={stock.currency}
+              />
 
-              </div>
             </button>
           </div>
         ))}

@@ -49,7 +49,7 @@ const Header = () => {
             href="/"
             title={`${config.appName} homepage`}
           >
-            <span className="text-2xl lg:text-3xl" style={{ color: "#05d8be" }}>
+            <span className="text-2xl lg:text-3xl" style={{ color: "#285A5D" }}>
               {config.appName}
             </span>
           </Link>

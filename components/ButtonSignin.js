@@ -26,7 +26,7 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
       <Link
         href={config.auth.callbackUrl}
         className={`btn ${extraStyle ? extraStyle : ""}`}
-        style={{ backgroundColor: "#05d8be", color: "white", border: "none" }}
+        style={{ backgroundColor: "#285A5D", color: "white", border: "none" }}
       >
         {session.user?.image ? (
           <img
@@ -54,7 +54,7 @@ const ButtonSignin = ({ text = "Get started", extraStyle }) => {
     <button
       className={`btn ${extraStyle ? extraStyle : ""}`}
       onClick={handleClick}
-      style={{ backgroundColor: "#05d8be", color: "white", border: "none" }}
+      style={{ backgroundColor: "#285A5D", color: "white", border: "none" }}
     >
       {text}
     </button>

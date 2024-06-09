@@ -18,7 +18,7 @@ export default function SideNav() {
         style={{ backgroundColor: "#fff" }}
       >
         <Link href="/dashboard" className="flex items-center gap-2">
-          <span className="font-extrabold text-lg" style={{ color: "#05d8be" }}>
+          <span className="font-extrabold text-lg" style={{ color: "#285A5D" }}>
             {config.appName}
           </span>
         </Link>
@@ -48,7 +48,7 @@ export default function SideNav() {
         <div>
           <Link
             className="mb-2 flex h-10 items-center justify-center gap-2"
-            style={{ backgroundColor: "#fff", color: "#05d8be" }}
+            style={{ backgroundColor: "#fff", color: "#285A5D" }}
             href="/dashboard"
           >
             <span className="font-extrabold text-lg">{config.appName}</span>
@@ -101,7 +101,7 @@ export default function SideNav() {
             </div>
             <Link
               className="mb-2 flex h-10 items-center justify-center gap-2"
-              style={{ backgroundColor: "#fff", color: "#05d8be" }}
+              style={{ backgroundColor: "#fff", color: "#285A5D" }}
               href="/dashboard"
               onClick={() => setIsOpen(false)}
             >

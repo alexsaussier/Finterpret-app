@@ -58,20 +58,19 @@ const Problem = () => {
           className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20"
           style={{ color: "#222" }}
         >
-          Lack of financial knowledge and emotional choices affect common people
-          on the markets.
+          Finterpret makes it easy to understand the metrics associated to your portfolio, and helps you make better investments.
         </p>
 
         <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
-          <Step emoji="🧑‍💻" text="Buy Nvidia stock" />
+          <Step emoji="🧑‍💻" text="Your average P/E ratio is 80" />
 
           <Arrow extraStyle="max-md:-scale-x-100 md:-rotate-90" />
 
-          <Step emoji="😮‍💨" text="stock price drops" />
+          <Step emoji="🔎" text="Finterpret explains to you what it means" />
 
           <Arrow extraStyle="md:-scale-x-100 md:-rotate-90" />
 
-          <Step emoji="😔" text="Panick and sell" />
+          <Step emoji="📈" text="Your Finterpret advisor suggests a tailored strategy" />
         </div>
       </div>
     </section>

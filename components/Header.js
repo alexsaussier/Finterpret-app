@@ -14,10 +14,6 @@ const links = [
     label: "Pricing",
   },
   {
-    href: "/#testimonials",
-    label: "Join waitlist",
-  },
-  {
     href: "/#faq",
     label: "FAQ",
   },
@@ -42,6 +38,7 @@ const Header = () => {
         className="container flex items-center justify-between px-8 py-4 mx-auto"
         aria-label="Global"
       >
+      
         {/* Your logo/name on large screens */}
         <div className="flex lg:flex-1">
           <Link
@@ -54,6 +51,7 @@ const Header = () => {
             </span>
           </Link>
         </div>
+        
         {/* Burger button to open menu on mobile */}
         <div className="flex lg:hidden">
           <button
@@ -80,7 +78,7 @@ const Header = () => {
         </div>
 
         {/* Your links on large screens */}
-        <div className="hidden lg:flex lg:justify-center lg:gap-12 lg:items-center">
+        <div className="hidden lg:flex lg:justify-end lg:gap-12 lg:items-center">
           {links.map((link) => (
             <Link
               href={link.href}

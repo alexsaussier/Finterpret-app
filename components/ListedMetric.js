@@ -9,9 +9,13 @@ const ListedMetric = ({ metric, value }) => {
 
   return (
     <div className="listedMetric" onClick={() => setIsOpen(true)}>
-      <p className="metricName">{metric}</p>
-      <p className="metricValue">{value}</p>
-      <Modal isModalOpen={isOpen} setIsModalOpen={setIsOpen} />
+      <p className="metricName">{metric[0]}</p>
+      <p className="metricValue">{metric[1]}</p>
+      <Modal
+              isModalOpen={isOpen}
+              setIsModalOpen={setIsOpen}
+              metric={metric}
+            />
     </div>
   );
 };

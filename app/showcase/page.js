@@ -19,7 +19,7 @@ const Showcase = () => {
       <h1 style={{ fontWeight: "bold", marginTop: "30px" }}>
         Listed Metric component has modal integrated
       </h1>
-      <ListedMetric metric={"PE Ratio"} value={32.7} />
+      <ListedMetric metric={["PE Ratio", 0]}/>
     </main>
   );
 };

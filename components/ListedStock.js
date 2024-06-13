@@ -13,7 +13,7 @@ const ListedStock = ({ selected= false, percentage, price, name, units, currency
       <p className="stockName">{name}</p>
       <p className="stockAmount">{units} units</p>
       <div className="priceMetrics space-x-4">
-        <p className="stockPrice">{price.toFixed(2)} {currency} </p>
+        <p className="stockPrice">{price} {currency} </p>
         <p style={{ color: isNegative ? "red" : "green" }}>
           {isNegative ? "" : "+"}
           {percentage}%

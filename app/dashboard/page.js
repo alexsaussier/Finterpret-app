@@ -134,6 +134,8 @@ export default async function Dashboard() {
               ))}
             </DashboardCollapse>
 
+{/* HIDING OPTIONS AND CRYPTO AS WE WILL NOT IMPLEMENT THIS IN MVP
+    WE HAVE TO THINK ABOUT CRYPTO AND OPTIONS LATER, BECAUSE THE IMPORTANT METRICS FOR THESE ASSETS ARE DIFFERENT
             <DashboardCollapse title="Options">
               <p>
                 <strong>Calls</strong>
@@ -162,7 +164,9 @@ export default async function Dashboard() {
               <AssetLayout title="ETH" units="100" />
               <AssetLayout title="DOGE" units="100" />
             </DashboardCollapse>
+*/}
           </div>
+
 
           <div className="dashboardCard w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">

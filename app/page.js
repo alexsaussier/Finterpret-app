@@ -11,16 +11,6 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      {/* 
-      
-      <main>
-        <Hero />
-        <Problem />
-        <FeaturesAccordion />
-        <Pricing />
-        <FAQ />
-      </main>
-      <Footer />*/}
       <Suspense>
         <Header />
         <Hero />

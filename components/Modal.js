@@ -11,9 +11,9 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
   console.log("Metric name: " + metric[0]);
 
   const gptMessage = "Can you tell me more about " + metric[0] + "?" + " Its value for an asset I own is " + metric[1] + ", what does it mean?" +
-  " Please make the text spaced. each paragraph should have 1 line of spacing. Focus more on what the metric value means for me." +
+  " Please make the response concise and the text spaced. each paragraph should have 1 line of spacing. Focus more on what the metric value means for me." +
   " Make it very concise and easy to understand for the common folk. The person reading that does not know anything about finance." +
-  " Be somewhat serious but friendly, and you can occasionnally give funny metaphors. Answer in HTML format." + 
+  " Be somewhat serious but friendly. Answer in HTML format." + 
   " You should sound very confident in your answer, as if you are a financial advisor.";
   const [response, setResponse] = useState(null);
 

@@ -10,7 +10,7 @@ const DashboardCollapseValue = ({ title, units, children }) => {
                 {title}
             </div>
             <div className="">
-                {units}
+                {units} 
             </div>
         </div>
           

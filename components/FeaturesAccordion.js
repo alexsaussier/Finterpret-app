@@ -33,6 +33,8 @@ const features = [
         />
       </svg>
     ),
+  
+  
   },
   {
     title: "Portfolio Analysis",

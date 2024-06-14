@@ -58,7 +58,7 @@ const Problem = () => {
           className="max-w-xl mx-auto text-lg opacity-90 leading-relaxed mb-12 md:mb-20"
           style={{ color: "#222" }}
         >
-          Finterpret makes it easy to understand the metrics associated to your portfolio, and helps you make better investments.
+          Finterpret makes it easy to understand the metrics associated to your portfolio, and helps you make better investment decisions.
         </p>
 
         <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">

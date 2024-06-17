@@ -17,6 +17,7 @@ import {
 } from "@/utils/mockData";
 import { separateCallsAndPuts } from "@/utils/separateCallsPuts";
 import "./dashboard.css";
+import { sendOpenAi } from "@/libs/gpt";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -32,6 +33,16 @@ export default async function Dashboard() {
   let totalValue = [];
 
   let SharpeRatio = 0;
+
+  /*useEffect(() => {
+    if (isOpen) {
+      sendOpenAi("some message for testing", "1", 300).then((data) => {
+      
+      
+      .then(response => response.json())
+      .then(data => setApiResponse(data.choices[0].text));
+    }
+  }, [isOpen]);*/
 
   //save this portfolio account ID to the user
 

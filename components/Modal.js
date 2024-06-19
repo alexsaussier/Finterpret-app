@@ -9,19 +9,24 @@ import { sendOpenAi } from "@/libs/gpt";
 const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
   console.log("Metric selected: " + JSON.stringify(metric, null, 2));
   console.log("Metric name: " + metric[0]);
+  
+  const guideline = "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly" +
+  " Answer in HTML format. Use 1 <br> tags between each paragraph." +
+  " Use <b> tags to put the important statements in bold. " + 
+  " You should sound very confident in your answer, as if you are a financial advisor." +
+  " Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance.";
 
-  const gptMessage = "Can you tell me more about " + metric[0] + "?" + " Its value for an asset I own is " + metric[1] + ", what does it mean?" +
-  " Please make the response concise and the text spaced. each paragraph should have 1 line of spacing. Focus more on what the metric value means for me." +
-  " Make it very concise and easy to understand for the common folk. The person reading that does not know anything about finance." +
-  " Be somewhat serious but friendly. Answer in HTML format." + 
-  " You should sound very confident in your answer, as if you are a financial advisor.";
+  const gptMessage = "Tell me more about " + metric[0] + "?" + " Its value for an asset I own is " + metric[1] + ", what does it mean?" +
+  " Focus more on what the metric value means for me." ;
+  
   const [response, setResponse] = useState(null);
+
 
   useEffect(() => {
     if (isModalOpen) {
     //Run this on component render only
     //response = sendOpenAi(gptMessage, "1");
-    sendOpenAi(gptMessage, "1", 300).then((data) => {
+    sendOpenAi(guideline, gptMessage, "1", 300).then((data) => {
       setResponse(data);
       console.log(response);
     });
@@ -80,7 +85,13 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
                 </div>
 
                 {response === null ? (
-                  <p>Creating a custom explanation for you ...</p>
+                  <div className="flex items-center space-x-3">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating a custom explanation for you...
+                </div>
                 ) : (
                   <section dangerouslySetInnerHTML={{ __html: response }} />
                 )}

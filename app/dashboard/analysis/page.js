@@ -10,7 +10,9 @@ import StockAnalyticsCard from "@/components/StockAnalyticsCard";
 import StockAnalyticsDash from "@/components/StockAnalyticsDash";
 import { mockPositions } from "@/utils/mockData";
 
-export default async function AnalyticsDashboard() {
+export default async function AnalyticsDashboard(req, res) {
+
+
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
@@ -25,9 +27,8 @@ export default async function AnalyticsDashboard() {
 
   let selectedStock = null; //This will be used to retrieve the right analytics for the selected stock
 
-  const holdings = await getHoldings(userId, userSecret, accountId, user);
 
-  console.log("Holdings: " + JSON.stringify(holdings, null, 2));
+  const holdings = await getHoldings(userId, userSecret, accountId, user);
 
   if (holdings) {
     balances = holdings.balances;
@@ -38,6 +39,8 @@ export default async function AnalyticsDashboard() {
     const portfolioCurrency = holdings.response.total_value.currency;
 
     totalValue = { portfolioValue, portfolioCurrency };
+
+
 
     //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
     for (const position of holdings.response.positions) {
@@ -55,6 +58,9 @@ export default async function AnalyticsDashboard() {
       stocks.push({ stockName, ticker, units, price, delta, currency });
     }
 
+
+// OPTIONS
+/*
     for (const option_position of holdings.response.option_positions) {
       const ticker = option_position.symbol.symbol.symbol;
       const stockName = option_position.symbol.symbol.description;
@@ -73,9 +79,8 @@ export default async function AnalyticsDashboard() {
         expirationDate,
         optionType,
       });
-    }
+    }*/
   }
-  const stocksMock = mockPositions;
 
   return (
     <main className="flex-1 pb-24">
@@ -86,28 +91,6 @@ export default async function AnalyticsDashboard() {
 
         {holdings ? (
           <>
-            {/* 
-            <div className="flex">
-              <div className="w-1/2">
-                {stocks.map((stock, index) => (
-                  <div
-                    className={`mt-4 ${
-                      selectedStock === stock.ticker ? "border-solid" : ""
-                    }`}
-                    key={stock.stockName}
-                  >
-                    <button>
-                      <StockCard title={stock.stockName} units={stock.units} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="w-1/2">
-                <StockAnalyticsCard ticker={selectedStock} />
-              </div>
-            </div>*/}
-
             {/* I had to create another custom component, because we need a CLIENT component for setting stock ticker on click */}
             <StockAnalyticsDash stocks={stocks} />
           </>

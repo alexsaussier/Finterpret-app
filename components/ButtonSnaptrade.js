@@ -60,7 +60,7 @@ const ButtonSnaptrade = ({
 
         // Tanstack query
         //change status of user --> imported_portfolio = TRUE. We need a db entry for that.
-        const updateUser = await apiClient.post("/user/set-wallet-imported");
+        await apiClient.post("/user/set-wallet-imported");
       } catch (e) {
         console.error(e);
       }

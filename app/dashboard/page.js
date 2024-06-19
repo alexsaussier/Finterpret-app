@@ -1,6 +1,7 @@
 import { getServerSession, getSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
+import apiClient from "@/libs/api";
 import User from "@/models/User";
 import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
@@ -35,6 +36,12 @@ export default async function Dashboard() {
 
   let SharpeRatio = 0;
 
+  //retrieve the name of the broker to which we are connected
+  const listAccountsResponse = await listAccounts(userId, userSecret);
+  const connectedBrokers = listAccountsResponse.response.map(account => account.institution_name);
+  
+  
+
   /*useEffect(() => {
     if (isOpen) {
       sendOpenAi("some message for testing", "1", 300).then((data) => {
@@ -68,8 +75,10 @@ export default async function Dashboard() {
 
       stocks.push({ stockName, ticker, units });
     }
+                  
+    // OPTIONS
 
-    for (const option_position of holdings.response.option_positions) {
+    /*for (const option_position of holdings.response.option_positions) {
       const ticker = option_position.symbol.symbol.raw_symbol;
       const stockName = option_position.symbol.symbol.description;
       const quantity = option_position.units;
@@ -87,18 +96,13 @@ export default async function Dashboard() {
         expirationDate,
         optionType,
       });
-    }
+    }  */
+
   }
 
-  //NOTE: THIS WAS JUST FOR MY MOCK DATA, YOU CAN SAFELY COMMENT THIS
-
-  //balances = mockBalances;
-  //stocks = mockPositions;
-  //options = mockOption_positions;
-  //orders = mockOrders;
-  //value = mockTotalValue;
-
+  
   let { calls, puts } = separateCallsAndPuts(options);
+ 
 
   console.log("stocks: ", stocks);
   console.log(totalValue);
@@ -118,7 +122,7 @@ export default async function Dashboard() {
             Welcome {user.name}
             {user.email} 👋
           </p>
-          <p>Connected account ID: {accountId}</p>
+          <p>Connected account(s): {connectedBrokers}</p>
           {/* <p>Positions in your portfolio: {stocks}</p> */}
           {
             //If there is no account ID, show the button to import a portfolio

@@ -18,8 +18,6 @@ export default async function getStats(ticker) {
     body: JSON.stringify({ ticker: ticker }), // body data type must match "Content-Type" header
   });
   try{
-    console.log("getStats ticker: " + ticker);
-    console.log("getStats response: " + response);
     return response.json();
   } catch (error) {
     console.error("getStats error: " + error);

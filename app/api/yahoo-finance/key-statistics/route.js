@@ -7,7 +7,6 @@ export async function POST(req) {
     const body = await req.json();
 
     const ticker = body.ticker;
-    console.log("Ticker: " + ticker);
 
     const options = {
     method: 'GET',
@@ -16,13 +15,10 @@ export async function POST(req) {
         'X-RapidAPI-Key': '9bd7bf1ab5msh9844a86da9ae0aap142550jsnbd39264e4217',
         'X-RapidAPI-Host': 'yahoo-finance127.p.rapidapi.com'
     },
-    //body: JSON.stringify(ticker), // body data type must match "Content-Type" header
-
     };
 
     try {
         const response = await axios.request(options);
-        console.log("API response data: " + JSON.stringify(response.data));
         return NextResponse.json({ response: response.data });
 
     } catch (e) {

@@ -39,18 +39,6 @@ export default async function Dashboard() {
   //retrieve the name of the broker to which we are connected
   const listAccountsResponse = await listAccounts(userId, userSecret);
   const connectedBrokers = listAccountsResponse.response.map(account => account.institution_name);
-  
-  
-
-  /*useEffect(() => {
-    if (isOpen) {
-      sendOpenAi("some message for testing", "1", 300).then((data) => {
-      
-      
-      .then(response => response.json())
-      .then(data => setApiResponse(data.choices[0].text));
-    }
-  }, [isOpen]);*/
 
   //save this portfolio account ID to the user
 
@@ -189,41 +177,13 @@ export default async function Dashboard() {
               Portfolio Report
             </h1>
 
-            <DashboardCollapse title="General Analysis">
-              <AssetLayout
-                title="Total Portfolio Value"
-                units={
-                  totalValue.portfolioValue + " " + totalValue.portfolioCurrency
-                }
-              />
-              <p>AI-generated explanation</p>
-            </DashboardCollapse>
+            <DashboardCollapseValue title="Portfolio Value" units={totalValue.portfolioValue + " " + totalValue.portfolioCurrency}/>
 
-            <DashboardCollapseValue title="Sharpe Ratio" units={SharpeRatio}>
-              <p>
-                Think of the Sharpe ratio like a rating that tells you how good
-                of a deal you are getting for the risk you are taking with an
-                investment.
-              </p>
-              <p>
-                Imagine you can choose between two jobs. One is a bit risky but
-                pays more, and the other is very safe but pays less. The Sharpe
-                ratio is like a score that tells you which job pays more extra
-                money for the extra risk. A higher score means you are getting a
-                better deal for the risk you are taking. So, if you are
-                comparing investments, you generally want the one with the
-                higher Sharpe ratio because it means you are getting more return
-                for each bit of risk you take on.
-              </p>
-            </DashboardCollapseValue>
+            <DashboardCollapseValue title="Sharpe Ratio" units={SharpeRatio}/>
 
-            <DashboardCollapseValue title="Portfolio Beta" units="1.4">
-              <p>AI-generated explanation</p>
-            </DashboardCollapseValue>
+            <DashboardCollapseValue title="Portfolio Beta" units="1.4"/>
 
-            <DashboardCollapseValue title="YoY Return" units={12}>
-              <p>AI-generated explanation</p>
-            </DashboardCollapseValue>
+            <DashboardCollapseValue title="YoY Return" units={12}/>
           </div>
         </div>
       </section>

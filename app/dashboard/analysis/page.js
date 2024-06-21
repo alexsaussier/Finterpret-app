@@ -9,6 +9,8 @@ import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import StockAnalyticsCard from "@/components/StockAnalyticsCard";
 import StockAnalyticsDash from "@/components/StockAnalyticsDash";
 import { mockPositions } from "@/utils/mockData";
+import { pick } from 'lodash';
+
 
 export default async function AnalyticsDashboard(req, res) {
 
@@ -28,7 +30,10 @@ export default async function AnalyticsDashboard(req, res) {
   let selectedStock = null; //This will be used to retrieve the right analytics for the selected stock
 
 
-  const holdings = await getHoldings(userId, userSecret, accountId, user);
+  const holdings = await getHoldings();
+
+  console.log("Holdings: ");
+  console.log(holdings.response.positions);
 
   if (holdings) {
     balances = holdings.balances;
@@ -92,7 +97,8 @@ export default async function AnalyticsDashboard(req, res) {
         {holdings ? (
           <>
             {/* I had to create another custom component, because we need a CLIENT component for setting stock ticker on click */}
-            <StockAnalyticsDash stocks={stocks} />
+            <StockAnalyticsDash stocks={stocks} //userId={userId} userSecret={userSecret} accountId={accountId} user={userProps} 
+            />
           </>
         ) : (
           <>

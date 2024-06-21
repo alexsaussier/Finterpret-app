@@ -16,12 +16,16 @@ const DashboardCollapseValue = ({ title, units, children }) => {
   " Define what " + title + "means but focus more on what the value means for me." ;
 
   const [response, setResponse] = useState(null);
+  const [hasMadeApiCall, setHasMadeApiCall] = useState(false);
+
   
   const handleOpen = async (event) => {
-    if (event.target.checked) {
+    if (event.target.checked && !hasMadeApiCall) {
       // The component is being opened, send a request to OpenAI
       const res = await sendOpenAi(guideline, gptMessage, "1", 300); 
       setResponse(res);
+      setHasMadeApiCall(true);
+
     }
   };
     

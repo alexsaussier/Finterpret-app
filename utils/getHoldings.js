@@ -1,13 +1,17 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
+import User from "@/models/User";
 import { listAccounts } from "./listAccounts";
 
-export async function getHoldings(
-  userId,
-  snaptrade_user_secret,
-  accountId,
-  user
-) {
+export async function getHoldings() {
   await connectMongo();
+  const session = await getServerSession(authOptions);
+  const user = await User.findById(session.user.id);
+  const userId = user.id;
+  const snaptrade_user_secret = user.snaptrade_user_secret;
+  const accountId = user.portfolioAccountId;
+
   const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
   //For now, we can automatically fetch the first account, but we will separate the logic once we support multiple accounts
   //I recommend this so that our code is cleaner, specifically the dashboard page file

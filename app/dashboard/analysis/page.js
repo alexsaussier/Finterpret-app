@@ -12,6 +12,7 @@ import { mockPositions } from "@/utils/mockData";
 import { pick } from 'lodash';
 
 
+
 export default async function AnalyticsDashboard(req, res) {
 
 
@@ -27,6 +28,7 @@ export default async function AnalyticsDashboard(req, res) {
   let orders = [];
   let totalValue = [];
 
+
   let selectedStock = null; //This will be used to retrieve the right analytics for the selected stock
 
 
@@ -36,7 +38,7 @@ export default async function AnalyticsDashboard(req, res) {
   console.log(holdings.response.positions);
 
   if (holdings) {
-    balances = holdings.balances;
+    //balances = holdings.balances;
     //stocks = holdings.response.positions;
     //options = holdings.response.option_positions;
     //orders = holdings.response.orders;
@@ -61,6 +63,12 @@ export default async function AnalyticsDashboard(req, res) {
         //because company just changed name and brokers can use the previous name
       }
       stocks.push({ stockName, ticker, units, price, delta, currency });
+
+
+      
+
+
+
     }
 
 

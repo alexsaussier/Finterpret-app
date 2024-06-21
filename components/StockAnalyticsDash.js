@@ -4,25 +4,44 @@ import { useEffect, useState } from "react";
 import StockCard from "./StockCard";
 import ListedStock from "./ListedStock";
 import StockAnalyticsCard from "./StockAnalyticsCard";
+import getStats from "@/utils/getStats";
+import getPrice from "@/utils/getPrice";
+
 //import { getHoldings } from "@/utils/getHoldings";
 
 
 const StockAnalyticsDash = ({ stocks }) => {
   
-  let refreshedStocks = []
-
-  //const [holdings, setholdings] = useState(null);
-
-  
-  //This might not work on first try, because I was still using mock data
-  //basically, selectedStock ticker initially should be set to the first of stocks.ticker
   const [selectedStock, setSelectedStock] = useState(stocks[0].ticker);
 
-  //For testing and debugging, this will console log the selected stock on every click
-  useEffect(() => {
-    console.log("selected stock: " + selectedStock);
-  }, [selectedStock]);
+  // Initialize state to hold stock stats
+  const [stockStats, setStockStats] = useState({});
 
+
+  // get the price and delta for the stock cards once the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      const statsPromises = stocks.map(async (stock) => {
+        const stats = await getPrice(stock.ticker); // Assuming getStats is an async function that fetches the stock's stats
+        return { ticker: stock.ticker, ...stats };
+      });
+
+      const statsResults = await Promise.all(statsPromises);
+      const statsMap = statsResults.reduce((acc, current) => {
+        acc[current.ticker] = current;
+        return acc;
+      }, {});
+
+      setStockStats(statsMap);
+    };
+
+    fetchData();
+  }, [stocks]);
+
+  
+  
+  console.log("stockStats: ", stockStats);
+  
 
   //HERE : FETCH THE MAIN STOCK VALUES WITH GETHOLDINGS HERE
   /*useEffect(() => {
@@ -64,7 +83,7 @@ const StockAnalyticsDash = ({ stocks }) => {
         {stocks.map((stock, index) => (
           <div
             className={`mt-4`}
-            key={stock.stockName}
+            key={stock.ticker}
           >
             <button onClick={() => setSelectedStock(stock.ticker)}>
               

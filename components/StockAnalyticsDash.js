@@ -22,8 +22,16 @@ const StockAnalyticsDash = ({ stocks }) => {
   useEffect(() => {
     const fetchData = async () => {
       const statsPromises = stocks.map(async (stock) => {
-        const stats = await getPrice(stock.ticker); // Assuming getStats is an async function that fetches the stock's stats
-        return { ticker: stock.ticker, ...stats };
+        const response = await getPrice(stock.ticker); // Fetch stock stats
+        console.log("response: ", response);
+
+        const { regularMarketPrice, regularMarketChangePercent } = response.data;
+
+        return { 
+          ticker: stock.ticker,
+          price: regularMarketPrice.fmt, // Formatted price string
+          changePercent: regularMarketChangePercent.fmt // Formatted change percent string};
+        };
       });
 
       const statsResults = await Promise.all(statsPromises);
@@ -74,23 +82,15 @@ const StockAnalyticsDash = ({ stocks }) => {
 
   return (
     <div
-      className="flex"
-      style={{
-        minHeight: "500px",
-      }}
-    >
+      className="flex" style={{minHeight: "500px"}}>
       <div className="w-1/2">
-        {stocks.map((stock, index) => (
-          <div
-            className={`mt-4`}
-            key={stock.ticker}
-          >
+        {stocks.map((stock) => (
+          <div className={`mt-4`} key={stock.stockName}>
             <button onClick={() => setSelectedStock(stock.ticker)}>
-              
-              {/*<StockCard title={stock.stockName} units={stock.units} />*/}
               <ListedStock
                 selected ={stock.ticker === selectedStock} 
-                percentage={stock.delta} price={stock.price} 
+                percentage={stockStats[stock.ticker]?.changePercent} 
+                price={stockStats[stock.ticker]?.price} 
                 name={stock.stockName} 
                 units={stock.units} 
                 currency={stock.currency}

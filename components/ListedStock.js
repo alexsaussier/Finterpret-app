@@ -6,7 +6,7 @@ import Modal from "./Modal";
 
 const ListedStock = ({ selected= false, percentage, price, name, units, currency }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isNegative = percentage.startsWith("-") ? true : false;
+  const isNegative = percentage.toString().startsWith("-") ? true : false;
 
   return (
     <div className={`listedStock min-w-56 hover:bg-teal-300/50 ${selected ? "bg-teal-300/50 " : ""}`} >

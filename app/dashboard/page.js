@@ -1,7 +1,6 @@
 import { getServerSession, getSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
-import apiClient from "@/libs/api";
 import User from "@/models/User";
 import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
@@ -18,8 +17,9 @@ import {
 } from "@/utils/mockData";
 import { separateCallsAndPuts } from "@/utils/separateCallsPuts";
 import "./dashboard.css";
-import { sendOpenAi } from "@/libs/gpt";
-//
+import getPortfolioData from "@/utils/getPortfolioData";
+import getPrice from "@/utils/getPrice";
+
 
 export default async function Dashboard() {
   await connectMongo();
@@ -28,11 +28,12 @@ export default async function Dashboard() {
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
   const accountId = user.portfolioAccountId;
+  let portfolioCurrency = ""; 
+  let portfolioValue = null;
   let balances = [];
   let stocks = [];
   let options = [];
   let orders = [];
-  let totalValue = [];
 
   let SharpeRatio = 0;
 
@@ -50,19 +51,38 @@ export default async function Dashboard() {
     //stocks = holdings.response.positions;
     //options = holdings.response.option_positions;
     //orders = holdings.response.orders;
-    const portfolioValue = holdings.response.total_value.value;
-    const portfolioCurrency = holdings.response.total_value.currency;
+    portfolioCurrency = holdings.response.total_value.currency;
 
-    totalValue = { portfolioValue, portfolioCurrency };
 
     //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
     for (const position of holdings.response.positions) {
-      const ticker = position.symbol.symbol.raw_symbol;
+      let ticker = position.symbol.symbol.symbol;
       const stockName = position.symbol.symbol.description;
       const units = position.units;
 
-      stocks.push({ stockName, ticker, units });
+      if (ticker === "CGG.PA") {
+        ticker = "VIRI.PA";
+        //because company just changed name and brokers can use the previous name
+      }
+
+      console.log("ticker: ", ticker);
+
+      const response = await getPrice(ticker); // Fetch stock stats
+      if (response && response.data) {
+        const regularMarketPrice = response.data.regularMarketPrice.raw;
+        const currentPrice= regularMarketPrice; // Update the stock object with the current price
+        stocks.push({ stockName, ticker, units, currentPrice });
+
+      } else {
+        console.error(`Failed to fetch price for ticker: ${ticker}`);
+        stocks.push({ stockName, ticker, units, currentPrice: 0 });
+
+      }
     }
+
+    portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
+    console.log("Portfolio Value: ", portfolioValue);
+
                   
     // OPTIONS
 
@@ -89,11 +109,10 @@ export default async function Dashboard() {
   }
 
   
-  let { calls, puts } = separateCallsAndPuts(options);
+  //let { calls, puts } = separateCallsAndPuts(options);
  
 
   console.log("stocks: ", stocks);
-  console.log(totalValue);
 
   //------
 
@@ -104,7 +123,7 @@ export default async function Dashboard() {
       }
 
       <section className="space-y-4">
-        <div className="dashboardCard">
+        <div className="bg-white rounded-lg p-5 shadow-md">
           <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
           <p>
             Welcome {user.name}
@@ -122,8 +141,30 @@ export default async function Dashboard() {
             />
           )}
         </div>
+        
+        <div className="bg-white rounded-lg p-5 shadow-md relative">
+          <h1 className="text-lg md:text-xl font-bold text-left">General Portfolio Analysis and Advice</h1>
+
+          <div className="relative">
+            <div className="blur-sm flex flex-col">
+              <p>Your blurred content goes here</p>
+              <p>Your blurred content goes here</p>
+              <p>Your blurred content goes here</p>
+              <p>Your blurred content goes here</p>
+            </div>
+            <div className="absolute flex flex-col top-0 left-0 right-0 bottom-0 bg-white bg-opacity-70 flex justify-center items-center text-black font-bold">
+              Get gold to see your portfolio report and access tailored advice
+              
+              <a href="http://localhost:3000/#pricing" className="btn btn-primary">
+                Get Gold
+              </a>
+            </div>
+          </div>
+        </div>
+
+
         <div className="dashboardPortfolio flex flex-row flex-nowrap gap-4">
-          <div className="dashboardCard w-full flex-col p-1">
+          <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Your holdings
             </h1>
@@ -172,12 +213,12 @@ export default async function Dashboard() {
           </div>
 
 
-          <div className="dashboardCard w-full flex-col p-1">
+          <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Portfolio Report
             </h1>
 
-            <DashboardCollapseValue title="Portfolio Value" units={totalValue.portfolioValue + " " + totalValue.portfolioCurrency}/>
+            <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency}/>
 
             <DashboardCollapseValue title="Sharpe Ratio" units={SharpeRatio}/>
 

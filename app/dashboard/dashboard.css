@@ -2,13 +2,6 @@
   padding: "20px";
 }
 
-.dashboardCard {
-  background-color: #fefefe;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-}
-
 @media (max-width: 1080px) {
   .dashboardWrapper {
     padding: 0;

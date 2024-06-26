@@ -34,17 +34,30 @@ export default async function Dashboard() {
   let stocks = [];
   let options = [];
   let orders = [];
-
-  let SharpeRatio = 0;
+  let holdings = null;
+  let SharpeRatio = 0.8;
+  let connectedBrokers = "";
 
   //retrieve the name of the broker to which we are connected
-  const listAccountsResponse = await listAccounts(userId, userSecret);
-  const connectedBrokers = listAccountsResponse.response.map(account => account.institution_name);
+  if (!userSecret) {
+    console.error("User is not connected to Snaptrade");
+  } else {
+    try{
+      const listAccountsResponse = await listAccounts(userId, userSecret);
+      const connectedBrokers = listAccountsResponse.response.map(account => account.institution_name);
+
+      // Then, fetch all stocks for this account ID
+      holdings = await getHoldings();
+  } catch {
+    console.error("Failed to fetch connected brokers");
+  }
+    }
+    
+  
 
   //save this portfolio account ID to the user
 
-  // Then, fetch all stocks for this account ID
-  const holdings = await getHoldings(userId, userSecret, accountId, user);
+  
 
   if (holdings) {
     balances = holdings.balances;
@@ -129,8 +142,7 @@ export default async function Dashboard() {
             Welcome {user.name}
             {user.email} 👋
           </p>
-          <p>Connected account(s): {connectedBrokers}</p>
-          {/* <p>Positions in your portfolio: {stocks}</p> */}
+          {connectedBrokers && <p>Connected account(s): {connectedBrokers}</p>}
           {
             //If there is no account ID, show the button to import a portfolio
           }
@@ -163,7 +175,9 @@ export default async function Dashboard() {
         </div>
 
 
-        <div className="dashboardPortfolio flex flex-row flex-nowrap gap-4">
+        <div className={`dashboardPortfolio flex flex-row flex-nowrap gap-4  ${!accountId ? 'blur-sm' : ''}`}>
+        
+          
           <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
             <h1 className="text-lg md:text-xl font-bold text-center mb-2">
               Your holdings
@@ -227,6 +241,8 @@ export default async function Dashboard() {
             <DashboardCollapseValue title="YoY Return" units={12}/>
           </div>
         </div>
+
+       
       </section>
     </main>
   );

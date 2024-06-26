@@ -17,21 +17,11 @@ const ButtonSnaptrade = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSnaptrade = async () => {
-    //Create an api route for fetching a value in the database
     //Fetch the snaptrade_user_secret associated to the id of the logged in user
     //if cannot fetch than register user and fetch again
     //store in variable
 
-    const userId = session.user.id;
-    const userSecret = snaptrade_user_secret;
-    console.log("userId: " + userId);
-
-    //Find user in db
-    //const user_in_db = await fetch(`/api/user/${userId}`).then(res => res.json());
-    //const user_secret = user_in_db.snaptrade_user_secret;
-    console.log("user secret: " + userSecret);
-
-    //Check if user is registered with snaptrade.
+        //Check if user is registered with snaptrade.
     if (!snaptrade_user_secret) {
       try {
         await apiClient.post("/snaptrade/register-user", {
@@ -48,6 +38,15 @@ const ButtonSnaptrade = ({
         console.error(e);
       }
     }
+
+    const userId = session.user.id;
+    const userSecret = session.user.snaptrade_user_secret;
+    console.log("userId: " + userId);
+
+    //Find user in db
+    //const user_in_db = await fetch(`/api/user/${userId}`).then(res => res.json());
+    //const user_secret = user_in_db.snaptrade_user_secret;
+    console.log("user secret: " + userSecret);
 
     if (status === "authenticated") {
       try {

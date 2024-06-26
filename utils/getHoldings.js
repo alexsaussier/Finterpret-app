@@ -15,6 +15,11 @@ export async function getHoldings() {
   const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
   //For now, we can automatically fetch the first account, but we will separate the logic once we support multiple accounts
   //I recommend this so that our code is cleaner, specifically the dashboard page file
+  if (!snaptrade_user_secret) {
+    console.error("User is not connected to Snaptrade");
+    return undefined;
+  }
+
   if (!accountId) {
     let accountIdNew = "";
     //Check if there is not account ID in DB-->then list accounts and save the first one

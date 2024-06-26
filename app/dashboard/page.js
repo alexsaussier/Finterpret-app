@@ -137,21 +137,32 @@ export default async function Dashboard() {
 
       <section className="space-y-4">
         <div className="bg-white rounded-lg p-5 shadow-md">
-          <h1 className="text-lg md:text-xl font-bold text-left">Dashboard</h1>
-          <p>
-            Welcome {user.name}
-            {user.email} 👋
+          <h1 className="text-lg md:text-xl font-bold text-left mb-2">Dashboard</h1>
+          <p className="mb-2">Welcome {user.name} {user.email} 👋
           </p>
           {connectedBrokers && <p>Connected account(s): {connectedBrokers}</p>}
           {
             //If there is no account ID, show the button to import a portfolio
           }
+          
           {!accountId && (
-            <ButtonSnaptrade
+            <div className="mb-4">            
+              <p className="mb-2">
+                Start by importing your portfolio👇
+              </p>
+
+              <ButtonSnaptrade
               title="Import a Portfolio"
               snaptrade_user_secret={userSecret}
-            />
+              /> 
+            </div>
+            
           )}
+          
+          
+          {/* Created this as placeholder - maybe can open a modal where user can manage their sotcks (add new stock, edit quantity, remove) */}
+          <button className="btn btn-neutral">Update your holdings</button> 
+
         </div>
         
         <div className="bg-white rounded-lg p-5 shadow-md relative">
@@ -174,24 +185,25 @@ export default async function Dashboard() {
           </div>
         </div>
 
+        <div className="relative">
 
-        <div className={`dashboardPortfolio flex flex-row flex-nowrap gap-4  ${!accountId ? 'blur-sm' : ''}`}>
-        
-          
-          <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
-            <h1 className="text-lg md:text-xl font-bold text-center mb-2">
-              Your holdings
-            </h1>
+          <div className={`dashboardPortfolio flex flex-row flex-nowrap gap-4  ${!accountId ? 'blur-sm' : ''}`}>
+            <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
+              <h1 className="text-lg md:text-xl font-bold text-center mb-2">
+                Your holdings
+              </h1>
 
-            <DashboardCollapse title="Stocks">
-              {stocks.map((stocks, index) => (
-                <AssetLayout
-                  key={stocks.stockName}
-                  title={stocks.stockName}
-                  units={stocks.units}
-                />
-              ))}
-            </DashboardCollapse>
+              <DashboardCollapse title="Stocks">
+                {stocks.map((stocks, index) => (
+                  <AssetLayout
+                    key={stocks.stockName}
+                    title={stocks.stockName}
+                    units={stocks.units}
+                  />
+                ))}
+              </DashboardCollapse>
+            </div>
+
 
 {/* HIDING OPTIONS AND CRYPTO AS WE WILL NOT IMPLEMENT THIS IN MVP
     WE HAVE TO THINK ABOUT CRYPTO AND OPTIONS LATER, BECAUSE THE IMPORTANT METRICS FOR THESE ASSETS ARE DIFFERENT
@@ -224,24 +236,28 @@ export default async function Dashboard() {
               <AssetLayout title="DOGE" units="100" />
             </DashboardCollapse>
 */}
+
+
+            <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
+              <h1 className="text-lg md:text-xl font-bold text-center mb-2">
+                Portfolio Report
+              </h1>
+
+              <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency}/>
+
+              <DashboardCollapseValue title="Sharpe Ratio" units={SharpeRatio}/>
+
+              <DashboardCollapseValue title="Portfolio Beta" units="1.4"/>
+
+              <DashboardCollapseValue title="YoY Return" units={12}/>
+            </div>
           </div>
-
-
-          <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
-            <h1 className="text-lg md:text-xl font-bold text-center mb-2">
-              Portfolio Report
-            </h1>
-
-            <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency}/>
-
-            <DashboardCollapseValue title="Sharpe Ratio" units={SharpeRatio}/>
-
-            <DashboardCollapseValue title="Portfolio Beta" units="1.4"/>
-
-            <DashboardCollapseValue title="YoY Return" units={12}/>
-          </div>
+          {!accountId && (
+            <div className="click-blocker absolute inset-0 z-10"></div>
+          )}
+          
+        
         </div>
-
        
       </section>
     </main>

@@ -49,6 +49,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    portfolio: [{
+      ticker: String,
+      units: Number
+    }]
   },
   {
     timestamps: true,

@@ -11,9 +11,7 @@ import User from "@/models/User";
 export async function POST() {
     await connectMongo();
         
-
     try{
-    
     // update db of current user
     const session = await getServerSession(authOptions);
 

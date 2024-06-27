@@ -154,6 +154,9 @@ export default async function Dashboard() {
           <button className="btn btn-neutral">Update your holdings</button>
         </div>
 
+        <AddToPortfolioSampleComponent />
+
+
         <div className="bg-white rounded-lg p-5 shadow-md relative">
           <h1 className="text-lg md:text-xl font-bold text-left">
             General Portfolio Analysis and Advice
@@ -177,7 +180,6 @@ export default async function Dashboard() {
             </div>
           </div>
         </div>
-        <AddToPortfolioSampleComponent />
 
         <div className="relative">
           <div

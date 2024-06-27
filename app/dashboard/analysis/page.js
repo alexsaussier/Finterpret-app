@@ -35,7 +35,7 @@ export default async function AnalyticsDashboard(req, res) {
   const holdings = await getHoldings();
 
   console.log("Holdings: ");
-  console.log(holdings.response.positions);
+  //console.log(holdings.response.positions);
 
   if (holdings) {
     //balances = holdings.balances;

@@ -16,15 +16,15 @@ export const AddToPortfolioSampleComponent = () => {
         Update your holdings manually
       </h1>
 
-      <div className="mb-2">
-        <StockTickerSearch 
+      <div className="mb-2 flex">
+        <StockTickerSearch
           ticker={ticker}
           setTicker={setTicker}
           units={units}
           setUnits={setUnits}
         />
         
-        <button className="btn btn-neutral" onClick={() => saveToPorftolio()}>
+        <button className="btn btn-neutral ml-2" onClick={() => saveToPorftolio()}>
           Save to portfolio
         </button>
 

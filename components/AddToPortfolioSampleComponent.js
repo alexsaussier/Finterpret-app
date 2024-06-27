@@ -1,0 +1,26 @@
+"use client";
+import { useState } from "react";
+import AddStockModal from "./AddStockModal";
+import { StockTickerSearch } from "./StockTickerSearch";
+
+export const AddToPortfolioSampleComponent = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [ticker, setTicker] = useState();
+  const [units, setUnits] = useState();
+  const saveToPorftolio = () => {
+    //save to mongo
+  };
+  return (
+    <div className="bg-white rounded-lg p-5 shadow-md flex">
+      <StockTickerSearch
+        ticker={ticker}
+        setTicker={setTicker}
+        units={units}
+        setUnits={setUnits}
+      />
+      <button className="btn btn-neutral" onClick={() => saveToPorftolio()}>
+        Save to portfolio
+      </button>
+    </div>
+  );
+};

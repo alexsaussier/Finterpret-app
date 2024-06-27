@@ -16,7 +16,6 @@ export async function POST(req) {
     return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
 
-
   try {
     //Check if this lead is already in the database
     const lead = await Lead.findOne({ email: body.email });

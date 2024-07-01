@@ -5,12 +5,30 @@ import { authOptions } from "@/libs/next-auth";
 import User from "@/models/User";
 
 
-export async function POST(ticker, units) {
+export async function POST(req) {
 
     await connectMongo();
+    const body = await req.json();
+
+    const { ticker, units } = body;
+
 
     //save to mongo
     try{
+        console.log("API ticker saved: " + ticker)
+        console.log("API units saved: " + units)
+
+        // Extract numeric value if units is an object
+        let numericUnits;
+        if (typeof units === 'object' && units !== null && units.value) {
+            numericUnits = Number(units.value);
+        } else {
+            numericUnits = Number(units);
+        }
+
+        if (isNaN(numericUnits)) {
+            throw new Error('Units must be a numeric value');
+        }
     
         // update db of current user
         const session = await getServerSession(authOptions);

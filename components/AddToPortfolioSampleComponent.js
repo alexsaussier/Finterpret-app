@@ -13,6 +13,7 @@ export const AddToPortfolioSampleComponent = () => {
 
   const saveToPorftolio = async () => {
     try {
+      console.log("units: " + units + typeof(units))
       const response = await fetch("/api/user/add-stocks-to-portfolio", {
         method: "POST",
         headers: {

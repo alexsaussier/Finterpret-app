@@ -39,7 +39,7 @@ export const StockTickerSearch = ({ ticker, units, setTicker, setUnits }) => {
           <input
             placeholder="Enter stock units"
             value={units}
-            onChange={(e) => setUnits(e.target.value)}
+            onChange={(e) => setUnits(Number(e.target.value))}
           />
         </div>
       ) : (

@@ -20,15 +20,23 @@ const ButtonSnaptrade = ({
     //Fetch the snaptrade_user_secret associated to the id of the logged in user
     //if cannot fetch than register user and fetch again
     //store in variable
+    const userId = session.user.id;
+    console.log("userId: " + userId);
 
-        //Check if user is registered with snaptrade.
+    //Check if user is registered with snaptrade.
+
+    console.log("user secret: " + snaptrade_user_secret);
+
+
     if (!snaptrade_user_secret) {
       try {
+        console.log("registering user with snaptrade");
         await apiClient.post("/snaptrade/register-user", {
           userId,
         });
       } catch (e) {
         //If user is in fact registered with snaptrade, but there is no snaptrade_user_secret it will get a new one
+        console.error(e);
         if (e.response.status === 404) {
           await apiClient.post("/snaptrade/reset-user-secret", {
             userId,
@@ -39,20 +47,13 @@ const ButtonSnaptrade = ({
       }
     }
 
-    const userId = session.user.id;
-    const userSecret = session.user.snaptrade_user_secret;
-    console.log("userId: " + userId);
 
-    //Find user in db
-    //const user_in_db = await fetch(`/api/user/${userId}`).then(res => res.json());
-    //const user_secret = user_in_db.snaptrade_user_secret;
-    console.log("user secret: " + userSecret);
-
+  
     if (status === "authenticated") {
       try {
         const result = await apiClient.post("/snaptrade/redirect-URI", {
           userId,
-          userSecret,
+          snaptrade_user_secret,
         });
 
         window.location.href = result.redirectURI;

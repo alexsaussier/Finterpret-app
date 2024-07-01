@@ -4,7 +4,7 @@ import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import { listAccounts } from "./listAccounts";
 
-export async function getHoldings() {
+export async function getSnaptradeHoldings() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
@@ -25,9 +25,11 @@ export async function getHoldings() {
     //Check if there is not account ID in DB-->then list accounts and save the first one
 
     const accounts = await listAccounts(userId, snaptrade_user_secret);
-    if (accounts[0]) {
-      accountIdNew = accounts[0].id;
-      user.portfolioAccountId = accounts[0].id;
+    console.log("snaptrade accounts: " + accounts.response[0].id);  
+
+    if (accounts.response[0].id) {
+      accountIdNew = accounts.response[0].id;
+      user.portfolioAccountId = accountIdNew;
       await user.save();
     } else {
       return undefined;

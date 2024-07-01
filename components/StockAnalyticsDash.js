@@ -91,7 +91,7 @@ const StockAnalyticsDash = ({ stocks }) => {
                 selected ={stock.ticker === selectedStock} 
                 percentage={stockStats[stock.ticker]?.changePercent} 
                 price={stockStats[stock.ticker]?.price} 
-                name={stock.stockName} 
+                name={stock.stockName || stock.ticker} 
                 units={stock.units} 
                 currency={stock.currency}
               />

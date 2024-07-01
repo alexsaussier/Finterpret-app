@@ -4,7 +4,7 @@ import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import StockCard from "@/components/StockCard";
 import getStats from "@/utils/getStats";
-import { getHoldings } from "@/utils/getHoldings";
+import { getSnaptradeHoldings } from "@/utils/getSnaptradeHoldings";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import StockAnalyticsCard from "@/components/StockAnalyticsCard";
 import StockAnalyticsDash from "@/components/StockAnalyticsDash";
@@ -27,30 +27,29 @@ export default async function AnalyticsDashboard(req, res) {
   let options = [];
   let orders = [];
   let totalValue = [];
+  let manualHoldings = [];
 
 
   let selectedStock = null; //This will be used to retrieve the right analytics for the selected stock
 
 
-  const holdings = await getHoldings();
+  const snaptradeHoldings = await getSnaptradeHoldings();
+  
+ 
 
-  console.log("Holdings: ");
-  //console.log(holdings.response.positions);
 
-  if (holdings) {
-    //balances = holdings.balances;
-    //stocks = holdings.response.positions;
-    //options = holdings.response.option_positions;
-    //orders = holdings.response.orders;
-    const portfolioValue = holdings.response.total_value.value;
-    const portfolioCurrency = holdings.response.total_value.currency;
+  if (snaptradeHoldings) {
+    //balances = snaptradeHoldings.balances;
+    //stocks = snaptradeHoldings.response.positions;
+    //options = snaptradeHoldings.response.option_positions;
+    //orders = snaptradeHoldings.response.orders;
+    const portfolioValue = snaptradeHoldings.response.total_value.value;
+    const portfolioCurrency = snaptradeHoldings.response.total_value.currency;
 
     totalValue = { portfolioValue, portfolioCurrency };
 
-
-
     //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
-    for (const position of holdings.response.positions) {
+    for (const position of snaptradeHoldings.response.positions) {
       var ticker = position.symbol.symbol.symbol;
       const stockName = position.symbol.symbol.description;
       const units = position.units;
@@ -63,18 +62,40 @@ export default async function AnalyticsDashboard(req, res) {
         //because company just changed name and brokers can use the previous name
       }
       stocks.push({ stockName, ticker, units, price, delta, currency });
-
-
-      
-
-
-
     }
+  }
+
+  if (user.portfolio){
+    console.log("User has manually entered stocks")
+    // Retrieve all tickers
+    manualHoldings = user.portfolio.map(item => ({
+      ticker: item.ticker,
+      units: item.units
+    }));
+
+    for(const position of manualHoldings){
+      let ticker = position.ticker;
+      const units = position.units;
+
+      const stockName = ticker; //to change
+
+    if (ticker === "CGG.PA") {
+      ticker = "VIRI.PA";
+      //because company just changed name and brokers can use the previous name
+    }
+
+    stocks.push({ ticker, units });
+    }
+
+  }
+
+  console.log("stocks in analytics dashboard: ", stocks);
+
 
 
 // OPTIONS
 /*
-    for (const option_position of holdings.response.option_positions) {
+    for (const option_position of snaptradeHoldings.response.option_positions) {
       const ticker = option_position.symbol.symbol.symbol;
       const stockName = option_position.symbol.symbol.description;
       const quantity = option_position.units;
@@ -93,7 +114,7 @@ export default async function AnalyticsDashboard(req, res) {
         optionType,
       });
     }*/
-  }
+
 
   return (
     <main className="flex-1 pb-24">
@@ -102,7 +123,7 @@ export default async function AnalyticsDashboard(req, res) {
           Analysis of your porfolio components
         </h1>
 
-        {holdings ? (
+        {stocks ? (
           <>
             {/* I had to create another custom component, because we need a CLIENT component for setting stock ticker on click */}
             <StockAnalyticsDash stocks={stocks} //userId={userId} userSecret={userSecret} accountId={accountId} user={userProps} 
@@ -111,7 +132,7 @@ export default async function AnalyticsDashboard(req, res) {
         ) : (
           <>
             <p>Uh-oh! Please complete the importing of your portfolio. </p>
-            {!accountId && (
+            {!stocks && (
               <ButtonSnaptrade
                 title="Import a Portfolio"
                 snaptrade_user_secret={userSecret}

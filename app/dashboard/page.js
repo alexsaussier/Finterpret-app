@@ -6,7 +6,7 @@ import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
 import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
-import { getHoldings } from "@/utils/getHoldings";
+import { getSnaptradeHoldings } from "@/utils/getSnaptradeHoldings";
 import { listAccounts } from "@/utils/listAccounts";
 import {
   mockBalances,
@@ -28,7 +28,7 @@ export default async function Dashboard() {
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
   const accountId = user.portfolioAccountId;
-  let portfolioCurrency = "";
+  let portfolioCurrency = "$";
   let portfolioValue = null;
   let balances = [];
   let stocks = [];
@@ -37,28 +37,47 @@ export default async function Dashboard() {
   let holdings = null;
   let SharpeRatio = 0.8;
   let connectedBrokers = "";
+  let manualHoldings = []
+
+  console.log("user portfolio " + user.portfolio)
 
   //retrieve the name of the broker to which we are connected
-  if (!userSecret) {
-    console.error("User is not connected to Snaptrade");
-  } else {
+  if (userSecret) {
     try {
+      console.log("user has holdings")
       const listAccountsResponse = await listAccounts(userId, userSecret);
+      console.log("snaptrade accounts: " + JSON.stringify(listAccountsResponse));
+
       const connectedBrokers = listAccountsResponse.response.map(
         (account) => account.institution_name
       );
 
       // Then, fetch all stocks for this account ID
-      holdings = await getHoldings();
+      holdings = await getSnaptradeHoldings();
+
+      console.log('Snaptrade Holdings:', holdings);
+
     } catch {
       console.error("Failed to fetch connected brokers");
-    }
+    } 
+  } else {
+    console.error("User is not connected to Snaptrade");
   }
 
-  //save this portfolio account ID to the user
+  if (user.portfolio){
+    console.log("User has manually entered stocks")
+    // Retrieve all tickers
+    manualHoldings = user.portfolio.map(item => ({
+      ticker: item.ticker,
+      units: item.units
+    }));
+    
+    console.log('Manual Holdings:', manualHoldings);
 
+  }
+
+// retrieve stocks through snaptrade
   if (holdings) {
-    balances = holdings.balances;
     //stocks = holdings.response.positions;
     //options = holdings.response.option_positions;
     //orders = holdings.response.orders;
@@ -88,8 +107,7 @@ export default async function Dashboard() {
       }
     }
 
-    portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
-    console.log("Portfolio Value: ", portfolioValue);
+   
 
     // OPTIONS
 
@@ -114,9 +132,40 @@ export default async function Dashboard() {
     }  */
   }
 
+  //retrieve manually entered stocks
+  if (manualHoldings){
+    for(const position of manualHoldings){
+      let ticker = position.ticker;
+      const units = position.units;
+
+      const stockName = ticker; //to change
+
+    if (ticker === "CGG.PA") {
+      ticker = "VIRI.PA";
+      //because company just changed name and brokers can use the previous name
+    }
+
+    // TO DO: getStockName for each ticker here
+
+    const response = await getPrice(ticker); // Fetch stock stats
+      if (response && response.data) {
+        const regularMarketPrice = response.data.regularMarketPrice.raw;
+        const currentPrice = regularMarketPrice; // Update the stock object with the current price
+        stocks.push({ stockName, ticker, units, currentPrice });
+      } else {
+        console.error(`Failed to fetch price for ticker: ${ticker}`);
+        stocks.push({ stockName, ticker, units, currentPrice: 0 });
+      }
+
+    }
+  }
+
   //let { calls, puts } = separateCallsAndPuts(options);
 
   console.log("stocks: ", stocks);
+
+  portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
+  console.log("Portfolio Value: ", portfolioValue);
 
   //------
 
@@ -149,9 +198,6 @@ export default async function Dashboard() {
               />
             </div>
           )}
-
-          {/* Created this as placeholder - maybe can open a modal where user can manage their sotcks (add new stock, edit quantity, remove) */}
-          <button className="btn btn-neutral">Update your holdings</button>
         </div>
 
         <AddToPortfolioSampleComponent />
@@ -184,7 +230,7 @@ export default async function Dashboard() {
         <div className="relative">
           <div
             className={`dashboardPortfolio flex flex-row flex-nowrap gap-4  ${
-              !accountId ? "blur-sm" : ""
+              !stocks ? "blur-sm" : ""
             }`}
           >
             <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
@@ -255,7 +301,7 @@ export default async function Dashboard() {
               <DashboardCollapseValue title="YoY Return" units={12} />
             </div>
           </div>
-          {!accountId && (
+          {!stocks && (
             <div className="click-blocker absolute inset-0 z-10"></div>
           )}
         </div>

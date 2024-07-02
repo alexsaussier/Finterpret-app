@@ -18,7 +18,6 @@ export default async function getPrice(ticker) {
 
     try {
         const response = await axios.request(options);
-        console.log("Response from getPrice: ") + response;
         return response;
 
     } catch (e) {

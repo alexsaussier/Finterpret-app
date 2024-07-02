@@ -39,73 +39,107 @@ export default async function Dashboard() {
   let connectedBrokers = "";
   let manualHoldings = []
 
-  console.log("user portfolio " + user.portfolio)
 
-  //retrieve the name of the broker to which we are connected
+  // First, retrieve stock data from snaptrade
   if (userSecret) {
     try {
-      console.log("user has holdings")
+      // Retrieve connected broker accounts
       const listAccountsResponse = await listAccounts(userId, userSecret);
-      console.log("snaptrade accounts: " + JSON.stringify(listAccountsResponse));
 
-      const connectedBrokers = listAccountsResponse.response.map(
+      connectedBrokers = listAccountsResponse.response.map(
         (account) => account.institution_name
       );
 
       // Then, fetch all stocks for this account ID
       holdings = await getSnaptradeHoldings();
 
-      console.log('Snaptrade Holdings:', holdings);
-
     } catch {
-      console.error("Failed to fetch connected brokers");
+      console.error("Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings");
     } 
+
+    // retrieve stocks through snaptrade
+    if (holdings) {
+      //stocks = holdings.response.positions;
+      //options = holdings.response.option_positions;
+      //orders = holdings.response.orders;
+
+      portfolioCurrency = holdings.response.total_value.currency;
+
+      //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
+      for (const position of holdings.response.positions) {
+        let ticker = position.symbol.symbol.symbol;
+        const stockName = position.symbol.symbol.description;
+        const units = position.units;
+
+        if (ticker === "CGG.PA") {
+          ticker = "VIRI.PA";
+          //because company just changed name and brokers can use the previous name
+        }
+
+        // Get the current price for each stock and store in stocks array
+        const response = await getPrice(ticker); 
+
+        if (response && response.data) {
+          const currentPrice = response.data.regularMarketPrice.raw;
+          stocks.push({ stockName, ticker, units, currentPrice });
+
+        } else {
+          console.error(`Failed to fetch price for ticker: ${ticker}`);
+          stocks.push({ stockName, ticker, units, currentPrice: 0 });
+        }
+      }
+    }
+
   } else {
-    console.error("User is not connected to Snaptrade");
+    console.error("User is not connected to Snaptrade - no userSecret");
   }
 
+
+
+  // Retrieve manually entered stocks
   if (user.portfolio){
-    console.log("User has manually entered stocks")
     // Retrieve all tickers
-    manualHoldings = user.portfolio.map(item => ({
+    try{
+      manualHoldings = user.portfolio.map(item => ({
       ticker: item.ticker,
       units: item.units
     }));
+    } catch {
+      console.error("Failed to retrieve manually entered stocks");
+    }
+
+    // If there are manually entered stocks, get the current price for each stock
+    if (manualHoldings){
+      for(const position of manualHoldings){
+        let ticker = position.ticker;
+        const units = position.units;
+  
+        
+        // TO DO: getStockName for each ticker here
+        const stockName = ticker; //to change
+  
+        if (ticker === "CGG.PA") {
+          ticker = "VIRI.PA";
+          //because company just changed name and brokers can use the previous name
+        }
     
-    console.log('Manual Holdings:', manualHoldings);
+  
+        const response = await getPrice(ticker); // Fetch stock stats
+      
+        if (response && response.data) {
+        const currentPrice = response.data.regularMarketPrice.raw;
+        stocks.push({ stockName, ticker, units, currentPrice });
+
+        } else {
+          console.error(`Failed to fetch price for ticker: ${ticker}`);
+          stocks.push({ stockName, ticker, units, currentPrice: 0 });
+        }
+      }
+    }
 
   }
 
-// retrieve stocks through snaptrade
-  if (holdings) {
-    //stocks = holdings.response.positions;
-    //options = holdings.response.option_positions;
-    //orders = holdings.response.orders;
-    portfolioCurrency = holdings.response.total_value.currency;
 
-    //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
-    for (const position of holdings.response.positions) {
-      let ticker = position.symbol.symbol.symbol;
-      const stockName = position.symbol.symbol.description;
-      const units = position.units;
-
-      if (ticker === "CGG.PA") {
-        ticker = "VIRI.PA";
-        //because company just changed name and brokers can use the previous name
-      }
-
-      console.log("ticker: ", ticker);
-
-      const response = await getPrice(ticker); // Fetch stock stats
-      if (response && response.data) {
-        const regularMarketPrice = response.data.regularMarketPrice.raw;
-        const currentPrice = regularMarketPrice; // Update the stock object with the current price
-        stocks.push({ stockName, ticker, units, currentPrice });
-      } else {
-        console.error(`Failed to fetch price for ticker: ${ticker}`);
-        stocks.push({ stockName, ticker, units, currentPrice: 0 });
-      }
-    }
 
    
 
@@ -130,42 +164,19 @@ export default async function Dashboard() {
         optionType,
       });
     }  */
-  }
+  
 
   //retrieve manually entered stocks
-  if (manualHoldings){
-    for(const position of manualHoldings){
-      let ticker = position.ticker;
-      const units = position.units;
-
-      const stockName = ticker; //to change
-
-    if (ticker === "CGG.PA") {
-      ticker = "VIRI.PA";
-      //because company just changed name and brokers can use the previous name
-    }
-
-    // TO DO: getStockName for each ticker here
-
-    const response = await getPrice(ticker); // Fetch stock stats
-      if (response && response.data) {
-        const regularMarketPrice = response.data.regularMarketPrice.raw;
-        const currentPrice = regularMarketPrice; // Update the stock object with the current price
-        stocks.push({ stockName, ticker, units, currentPrice });
-      } else {
-        console.error(`Failed to fetch price for ticker: ${ticker}`);
-        stocks.push({ stockName, ticker, units, currentPrice: 0 });
-      }
-
-    }
-  }
+  
 
   //let { calls, puts } = separateCallsAndPuts(options);
 
-  console.log("stocks: ", stocks);
 
-  portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
-  console.log("Portfolio Value: ", portfolioValue);
+  try {
+    portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
+  } catch (e) {
+    console.error("Failed to fetch portfolio value: ", e);
+  }
 
   //------
 

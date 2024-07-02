@@ -36,23 +36,29 @@ export const StockTickerSearch = ({ ticker, units, setTicker, setUnits }) => {
       {ticker ? (
         <div>
           <p>{ticker}</p>
+          
           <input
             placeholder="Enter stock units"
             value={units}
             onChange={(e) => setUnits(Number(e.target.value))}
+            className="input input-bordered input-primary max-w-xs mr-2 mb-2" 
           />
+
+          
         </div>
       ) : (
         <>
           <input
-            type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Enter stock ticker"
+            placeholder="Search stock ticker"
+            className="input input-bordered input-primary max-w-xs mr-2 mb-2" 
           />
-          <button onClick={handleSearch} className="btn btn-neutral">
+
+          <button onClick={handleSearch} className="btn btn-outline btn-primary">
             Search
           </button>
+
           {loading && <p>Loading...</p>}
           {error && <p style={{ color: "red" }}>{error}</p>}
           <ul>

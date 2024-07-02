@@ -39,7 +39,7 @@ export const AddToPortfolioSampleComponent = () => {
 
 
   return (
-    <div className="bg-white rounded-lg p-5 shadow-md flex flex-col">
+    <div className="bg-white rounded-lg p-5 shadow-md flex flex-col h-full">
       <h1 className="text-lg md:text-xl font-bold text-left mb-2">
         Update your portfolio manually
       </h1>
@@ -52,9 +52,9 @@ export const AddToPortfolioSampleComponent = () => {
           setUnits={setUnits}
         />
         
-        <button className="btn btn-neutral ml-2" onClick={() => saveToPorftolio()}>
-          Save to portfolio
-        </button>
+          <button className="btn btn-neutral ml-2" onClick={() => saveToPorftolio()}>
+            Save to portfolio
+          </button>
 
       </div>
       

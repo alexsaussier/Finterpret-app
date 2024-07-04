@@ -8,18 +8,13 @@ import DashboardCollapseValue from "@/components/DashboardCollapseValue";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import { getSnaptradeHoldings } from "@/utils/getSnaptradeHoldings";
 import { listAccounts } from "@/utils/listAccounts";
-import {
-  mockBalances,
-  mockOption_positions,
-  mockOrders,
-  mockPositions,
-  mockTotalValue,
-} from "@/utils/mockData";
+import getStats from "@/utils/getStats";
 import { separateCallsAndPuts } from "@/utils/separateCallsPuts";
 import "./dashboard.css";
 import getPortfolioData from "@/utils/getPortfolioData";
 import getPrice from "@/utils/getPrice";
 import { AddToPortfolioSampleComponent } from "@/components/AddToPortfolioSampleComponent";
+import Stock from "@/models/Stock";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -38,6 +33,66 @@ export default async function Dashboard() {
   let SharpeRatio = 0.8;
   let connectedBrokers = "";
   let manualHoldings = []
+
+  // This function appends stock metrics to each stock in the stock array
+  async function appendYahooMetrics(stock) {
+    const data = await getStats(stock.ticker);
+    // Get PE ratio and append to stock in array
+    try {
+      stock.peRatio = data.response.trailingPE.raw;
+    } catch (error) {
+      try {
+        stock.peRatio = data.response.forwardPE.raw;
+      } catch (error) {
+        console.log(stock.ticker + " Error: PE Ratio is not correctly loaded.");
+      }
+    }
+  
+    // Get EPS and append to stock in array
+    try {
+      stock.eps = data.response.epsCurrentYear.raw;
+    } catch (error) {
+      try {
+        stock.eps = data.response.epsTrailingTwelveMonths.raw;
+      } catch (error) {
+        console.log(stock.ticker + " Error: EPS is not correctly loaded.");
+      }
+    }
+  
+    // Get Price/EPS and append to stock in array
+    try {
+      stock.priceEPS = data.response.priceEpsCurrentYear.raw;
+    } catch (error) {
+      console.log(stock.ticker + " Error: P/EPS is not correctly loaded.");
+    }
+  
+    // Get Price to Book Value and append to stock in array
+    try {
+      stock.priceToBook = data.response.priceToBook.raw;
+    } catch (error) {
+      console.log(stock.ticker + " Error: Price to Book Value is not correctly loaded.");
+    }
+  
+    // Get Dividend Yield and append to stock in array
+    try {
+      stock.divYield = data.response.dividendYield.raw;
+    } catch (error) {
+      try {
+        stock.divYield = data.response.trailingAnnualDividendYield.raw;
+      } catch (error) {
+        console.log(stock.ticker + " Error: Dividend Yield is not correctly loaded.");
+      }
+    }
+
+    // Append current datetime to stock in array
+    stock.dateTime = new Date();
+
+    // We can add:
+    // stats.quickRatio,
+    // stats.debtToEquity,
+    // stats.grossProfits,
+    // stats.grossMargins
+  }
 
 
   // First, retrieve stock data from snaptrade
@@ -81,23 +136,23 @@ export default async function Dashboard() {
 
         if (response && response.data) {
           const currentPrice = response.data.regularMarketPrice.raw;
-          stocks.push({ stockName, ticker, units, currentPrice });
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: currentPrice });
 
         } else {
           console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ stockName, ticker, units, currentPrice: 0 });
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
         }
       }
     }
 
   } else {
-    console.error("User is not connected to Snaptrade - no userSecret");
+    console.log("User is not connected to Snaptrade - no userSecret");
   }
 
 
 
   // Retrieve manually entered stocks
-  if (user.portfolio){
+  if (user.portfolio.length > 0){
     // Retrieve all tickers
     try{
       manualHoldings = user.portfolio.map(item => ({
@@ -125,23 +180,88 @@ export default async function Dashboard() {
     
   
         const response = await getPrice(ticker); // Fetch stock stats
+        
       
         if (response && response.data) {
         const currentPrice = response.data.regularMarketPrice.raw;
-        stocks.push({ stockName, ticker, units, currentPrice });
+        stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice:currentPrice });
 
         } else {
           console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ stockName, ticker, units, currentPrice: 0 });
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
         }
       }
     }
 
+    
+
+  } 
+  else {
+    console.log("User has no manually entered holdings.");
   }
 
 
+    
+  
+  // ----------------- GET STOCK METRICS -----------------
+  // -----------------------------------------------------
+  if (stocks.length > 0) {
+    
+    // For all items in stocks array, fetch their metrics from the db or from yahoo
 
-   
+    for (var stock of stocks) {
+    
+      // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
+      let stockInDb = null;
+      try{
+        stockInDb = await Stock.findOne({ ticker: stock.ticker });
+      } catch {
+        console.log("Failed to fetch stock from database");
+      }
+      
+      if (stockInDb) {
+        console.log(stock.ticker + " exists in the database, fetching last update datetime...");
+        
+        const lastDateTime = stockInDb.dateTime;
+        const currentDateTime = new Date();
+        const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
+
+        if (diff > 30 || !lastDateTime) {
+          // Data is too old, fetch from yahoo
+          await appendYahooMetrics(stock);
+
+          await stockInDb.updateOne(stock);
+
+          console.log(stock.ticker + `: Data was too old, datetime updated in the database.`);
+
+        } else{
+          // We have recent data in db, no need to fetch from yahoo
+          console.log(stock.ticker + `: Data is recent, no need to fetch from yahoo.`);
+          
+          console.log("Existing stock: ", stockInDb);
+          stock.divYield = stockInDb.divYield;
+          stock.eps = stockInDb.eps;  
+          stock.peRatio = stockInDb.peRatio;
+          stock.priceEPS = stockInDb.priceEPS;
+          stock.priceToBook = stockInDb.priceToBook; 
+          stock.dateTime = stockInDb.dateTime;  
+
+        }
+
+      } else{
+        // Store stock in mongodb using Stock mongoose model
+        const newStock = new Stock(stock);
+        await newStock.save();
+        console.log(stock.ticker + ": Does not exist in db, saved to the database.");
+
+        await appendYahooMetrics(stock);
+
+      }
+      
+    }
+      console.log("Stocks array: ", stocks);
+
+  }
 
     // OPTIONS
 
@@ -164,11 +284,9 @@ export default async function Dashboard() {
         optionType,
       });
     }  */
-  
 
+  
   //retrieve manually entered stocks
-  
-
   //let { calls, puts } = separateCallsAndPuts(options);
 
 

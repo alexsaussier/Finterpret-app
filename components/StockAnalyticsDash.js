@@ -23,7 +23,7 @@ const StockAnalyticsDash = ({ stocks }) => {
     const fetchData = async () => {
       const statsPromises = stocks.map(async (stock) => {
         const response = await getPrice(stock.ticker); // Fetch stock stats
-        console.log("response: ", response);
+        console.log("getPrice response: ", response);
 
         const { regularMarketPrice, regularMarketChangePercent } = response.data;
 
@@ -103,7 +103,6 @@ const StockAnalyticsDash = ({ stocks }) => {
 
       <div className="w-1/2">
         <StockAnalyticsCard ticker={selectedStock} />
-
       </div>
     </div>
   );

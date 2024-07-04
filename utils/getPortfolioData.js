@@ -13,6 +13,8 @@ function calculateTotalPortfolioValue(stocks) {
 // Function to calculate the average P/E value of the portfolio
 function calculateAveragePEValue() {
     // Add your code here
+
+    
 }
 
 // Export the functions to make them accessible from other files

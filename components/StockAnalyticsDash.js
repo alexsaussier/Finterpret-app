@@ -51,33 +51,7 @@ const StockAnalyticsDash = ({ stocks }) => {
   console.log("stockStats: ", stockStats);
   
 
-  //HERE : FETCH THE MAIN STOCK VALUES WITH GETHOLDINGS HERE
-  /*useEffect(() => {
-    const fetchData = async () => {
-      const holdings = await getHoldings(userId, userSecret, accountId, user);
-      setholdings(holdings);
-    };
 
-    fetchData();
-  }, []);
-
-  if (holdings) {
-
-    for (const position of holdings.response.positions) {
-      var ticker = position.symbol.symbol.symbol;
-      const stockName = position.symbol.symbol.description;
-      const units = position.units;
-      const price = position.price;
-      const delta = position.open_pnl;
-      const currency = position.symbol.symbol.currency.code;
-
-      if (ticker === "CGG.PA") {
-        ticker = "VIRI.PA";
-        //because company just changed name and brokers can use the previous name
-      }
-      refreshedStocks.push({ stockName, ticker, units, price, delta, currency });
-    }
-  }*/
 
 
   return (

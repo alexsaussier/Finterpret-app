@@ -15,6 +15,7 @@ import getPortfolioData from "@/utils/getPortfolioData";
 import getPrice from "@/utils/getPrice";
 import { AddToPortfolioSampleComponent } from "@/components/AddToPortfolioSampleComponent";
 import Stock from "@/models/Stock";
+import appendYahooMetrics from "@/utils/appendYahooMetrics";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -25,74 +26,12 @@ export default async function Dashboard() {
   const accountId = user.portfolioAccountId;
   let portfolioCurrency = "$";
   let portfolioValue = null;
-  let balances = [];
   let stocks = [];
   let options = [];
-  let orders = [];
   let holdings = null;
   let SharpeRatio = 0.8;
   let connectedBrokers = "";
   let manualHoldings = []
-
-  // This function appends stock metrics to each stock in the stock array
-  async function appendYahooMetrics(stock) {
-    const data = await getStats(stock.ticker);
-    // Get PE ratio and append to stock in array
-    try {
-      stock.peRatio = data.response.trailingPE.raw;
-    } catch (error) {
-      try {
-        stock.peRatio = data.response.forwardPE.raw;
-      } catch (error) {
-        console.log(stock.ticker + " Error: PE Ratio is not correctly loaded.");
-      }
-    }
-  
-    // Get EPS and append to stock in array
-    try {
-      stock.eps = data.response.epsCurrentYear.raw;
-    } catch (error) {
-      try {
-        stock.eps = data.response.epsTrailingTwelveMonths.raw;
-      } catch (error) {
-        console.log(stock.ticker + " Error: EPS is not correctly loaded.");
-      }
-    }
-  
-    // Get Price/EPS and append to stock in array
-    try {
-      stock.priceEPS = data.response.priceEpsCurrentYear.raw;
-    } catch (error) {
-      console.log(stock.ticker + " Error: P/EPS is not correctly loaded.");
-    }
-  
-    // Get Price to Book Value and append to stock in array
-    try {
-      stock.priceToBook = data.response.priceToBook.raw;
-    } catch (error) {
-      console.log(stock.ticker + " Error: Price to Book Value is not correctly loaded.");
-    }
-  
-    // Get Dividend Yield and append to stock in array
-    try {
-      stock.divYield = data.response.dividendYield.raw;
-    } catch (error) {
-      try {
-        stock.divYield = data.response.trailingAnnualDividendYield.raw;
-      } catch (error) {
-        console.log(stock.ticker + " Error: Dividend Yield is not correctly loaded.");
-      }
-    }
-
-    // Append current datetime to stock in array
-    stock.dateTime = new Date();
-
-    // We can add:
-    // stats.quickRatio,
-    // stats.debtToEquity,
-    // stats.grossProfits,
-    // stats.grossMargins
-  }
 
 
   // First, retrieve stock data from snaptrade
@@ -168,6 +107,8 @@ export default async function Dashboard() {
       for(const position of manualHoldings){
         let ticker = position.ticker;
         const units = position.units;
+
+        stocks.push({ ticker: ticker });
   
         
         // TO DO: getStockName for each ticker here
@@ -192,8 +133,6 @@ export default async function Dashboard() {
         }
       }
     }
-
-    
 
   } 
   else {
@@ -238,7 +177,6 @@ export default async function Dashboard() {
           // We have recent data in db, no need to fetch from yahoo
           console.log(stock.ticker + `: Data is recent, no need to fetch from yahoo.`);
           
-          console.log("Existing stock: ", stockInDb);
           stock.divYield = stockInDb.divYield;
           stock.eps = stockInDb.eps;  
           stock.peRatio = stockInDb.peRatio;

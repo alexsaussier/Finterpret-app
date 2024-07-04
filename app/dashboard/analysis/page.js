@@ -2,14 +2,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
-import StockCard from "@/components/StockCard";
-import getStats from "@/utils/getStats";
 import { getSnaptradeHoldings } from "@/utils/getSnaptradeHoldings";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import StockAnalyticsCard from "@/components/StockAnalyticsCard";
 import StockAnalyticsDash from "@/components/StockAnalyticsDash";
-import { mockPositions } from "@/utils/mockData";
 import { pick } from 'lodash';
+import getPrice from "@/utils/getPrice";  
+import Stock from "@/models/Stock";
+import appendYahooMetrics from "@/utils/appendYahooMetrics";  
 
 
 
@@ -28,92 +28,152 @@ export default async function AnalyticsDashboard(req, res) {
   let orders = [];
   let totalValue = [];
   let manualHoldings = [];
-
-
-  let selectedStock = null; //This will be used to retrieve the right analytics for the selected stock
-
-
-  const snaptradeHoldings = await getSnaptradeHoldings();
+  let holdings = null;
+  let portfolioCurrency = null;
   
  
+  // First, retrieve stock data from snaptrade
+  if (userSecret) {
+    try {
+     
+      // Then, fetch all stocks for this account ID
+      holdings = await getSnaptradeHoldings();
 
+    } catch {
+      console.error("Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings");
+    } 
 
-  if (snaptradeHoldings) {
-    //balances = snaptradeHoldings.balances;
-    //stocks = snaptradeHoldings.response.positions;
-    //options = snaptradeHoldings.response.option_positions;
-    //orders = snaptradeHoldings.response.orders;
-    const portfolioValue = snaptradeHoldings.response.total_value.value;
-    const portfolioCurrency = snaptradeHoldings.response.total_value.currency;
+    // retrieve stocks through snaptrade
+    if (holdings) {
+     
+      //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
+      for (const position of holdings.response.positions) {
+        let ticker = position.symbol.symbol.symbol;
+        const stockName = position.symbol.symbol.description;
+        const units = position.units;
 
-    totalValue = { portfolioValue, portfolioCurrency };
+        if (ticker === "CGG.PA") {
+          ticker = "VIRI.PA";
+          //because company just changed name and brokers can use the previous name
+        }
 
-    //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
-    for (const position of snaptradeHoldings.response.positions) {
-      var ticker = position.symbol.symbol.symbol;
-      const stockName = position.symbol.symbol.description;
-      const units = position.units;
-      const price = position.price;
-      const delta = position.open_pnl;
-      const currency = position.symbol.symbol.currency.code;
+        // Get the current price for each stock and store in stocks array
+        const response = await getPrice(ticker); 
 
-      if (ticker === "CGG.PA") {
-        ticker = "VIRI.PA";
-        //because company just changed name and brokers can use the previous name
+        if (response && response.data) {
+          const currentPrice = response.data.regularMarketPrice.raw;
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: currentPrice });
+
+        } else {
+          console.error(`Failed to fetch price for ticker: ${ticker}`);
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
+        }
       }
-      stocks.push({ stockName, ticker, units, price, delta, currency });
     }
+
+  } else {
+    console.log("User is not connected to Snaptrade - no userSecret");
   }
 
-  if (user.portfolio){
-    console.log("User has manually entered stocks")
+  // Retrieve manually entered stocks
+  if (user.portfolio.length > 0){
     // Retrieve all tickers
-    manualHoldings = user.portfolio.map(item => ({
+    try{
+      manualHoldings = user.portfolio.map(item => ({
       ticker: item.ticker,
       units: item.units
     }));
-
-    for(const position of manualHoldings){
-      let ticker = position.ticker;
-      const units = position.units;
-
-      const stockName = ticker; //to change
-
-    if (ticker === "CGG.PA") {
-      ticker = "VIRI.PA";
-      //because company just changed name and brokers can use the previous name
+    } catch {
+      console.error("Failed to retrieve manually entered stocks");
     }
 
-    stocks.push({ ticker, units });
-    }
+    // If there are manually entered stocks, get the current price for each stock
+    if (manualHoldings){
+      for(const position of manualHoldings){
+        let ticker = position.ticker;
+        const units = position.units;
+        
+        // TO DO: getStockName for each ticker here
+        const stockName = ticker; //to change
+  
+        if (ticker === "CGG.PA") {
+          ticker = "VIRI.PA";
+          //because company just changed name and brokers can use the previous name
+        }
+    
+        const response = await getPrice(ticker); // Fetch stock stats
+        
+        if (response && response.data) {
+        const currentPrice = response.data.regularMarketPrice.raw;
+        stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice:currentPrice });
 
+        } else {
+          console.error(`Failed to fetch price for ticker: ${ticker}`);
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
+        }
+      }
+    }
+  } 
+  else {
+    console.log("User has no manually entered holdings.");
   }
 
-  console.log("stocks in analytics dashboard: ", stocks);
+// ----------------- GET STOCK METRICS -----------------
+  // -----------------------------------------------------
+  if (stocks.length > 0) {
+    
+    // For all items in stocks array, fetch their metrics from the db or from yahoo
+
+    for (var stock of stocks) {
+    
+      // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
+      let stockInDb = null;
+      try{
+        stockInDb = await Stock.findOne({ ticker: stock.ticker });
+      } catch {
+        console.log("Failed to fetch stock from database");
+      }
+      
+      if (stockInDb) {
+        console.log(stock.ticker + " exists in the database, fetching last update datetime...");
+        
+        const lastDateTime = stockInDb.dateTime;
+        const currentDateTime = new Date();
+        const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
+
+        if (diff > 30 || !lastDateTime) {
+          // Data is too old, fetch from yahoo
+          await appendYahooMetrics(stock);
+
+          await stockInDb.updateOne(stock);
+
+          console.log(stock.ticker + `: Data was too old, datetime updated in the database.`);
+
+        } else{
+          // We have recent data in db, no need to fetch from yahoo
+          console.log(stock.ticker + `: Data is recent, no need to fetch from yahoo.`);
+          
+          stock.divYield = stockInDb.divYield;
+          stock.eps = stockInDb.eps;  
+          stock.peRatio = stockInDb.peRatio;
+          stock.priceEPS = stockInDb.priceEPS;
+          stock.priceToBook = stockInDb.priceToBook; 
+          stock.dateTime = stockInDb.dateTime;  
+
+        }
+      } else{
+        // Store stock in mongodb using Stock mongoose model
+        const newStock = new Stock(stock);
+        await newStock.save();
+        console.log(stock.ticker + ": Does not exist in db, saved to the database.");
+
+        await appendYahooMetrics(stock);
+      }
+    }
+      console.log("Stocks array: ", stocks);
+  }
 
 
-
-// OPTIONS
-/*
-    for (const option_position of snaptradeHoldings.response.option_positions) {
-      const ticker = option_position.symbol.symbol.symbol;
-      const stockName = option_position.symbol.symbol.description;
-      const quantity = option_position.units;
-
-      const strikePrice = option_position.symbol.option_symbol.strike_price;
-      const expirationDate =
-        option_position.symbol.option_symbol.expiration_date;
-      const optionType = option_position.symbol.option_symbol.option_type;
-
-      options.push({
-        stockName,
-        ticker,
-        quantity,
-        strikePrice,
-        expirationDate,
-        optionType,
-      });
-    }*/
 
 
   return (
@@ -125,8 +185,7 @@ export default async function AnalyticsDashboard(req, res) {
 
         {stocks ? (
           <>
-            {/* I had to create another custom component, because we need a CLIENT component for setting stock ticker on click */}
-            <StockAnalyticsDash stocks={stocks} //userId={userId} userSecret={userSecret} accountId={accountId} user={userProps} 
+            <StockAnalyticsDash stocks={stocks} 
             />
           </>
         ) : (

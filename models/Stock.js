@@ -20,6 +20,10 @@ const stockSchema = mongoose.Schema(
       type: Number,
     },
 
+    delta: {
+      type: Number,
+    },
+
     peRatio: {
       type: Number,
     },

@@ -47,6 +47,10 @@ const stockSchema = mongoose.Schema(
     dateTime: {
       type: Date,
     },
+
+    totalValue: {
+      type: Number,
+    }
 }
 
 );

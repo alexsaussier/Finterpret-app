@@ -66,6 +66,9 @@ async function appendYahooMetrics(stock) {
     // Append current datetime to stock in array
     stock.dateTime = new Date();
 
+    // append total value of stock to stock in array
+    stock.totalValue = stock.currentPrice * stock.units;
+
     // We can add:
     // statsAPI.quickRatio,
     // statsAPI.debtToEquity,

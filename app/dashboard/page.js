@@ -32,6 +32,7 @@ export default async function Dashboard() {
   let SharpeRatio = 0.8;
   let connectedBrokers = "";
   let manualHoldings = []
+  let averagePeRatio = "N/A";
 
 
   // First, retrieve stock data from snaptrade
@@ -171,28 +172,30 @@ export default async function Dashboard() {
 
           await stockInDb.updateOne(stock);
 
-          console.log(stock.ticker + `: Data was too old, datetime updated in the database.`);
+          console.log(stock.ticker + `: Data was too old, yahoo metrics fetched.`);
 
         } else{
           // We have recent data in db, no need to fetch from yahoo
-          console.log(stock.ticker + `: Data is recent, no need to fetch from yahoo.`);
+          console.log(stock.ticker + `: Data is recent, fetched from db.`);
           
           stock.divYield = stockInDb.divYield;
           stock.eps = stockInDb.eps;  
           stock.peRatio = stockInDb.peRatio;
           stock.priceEPS = stockInDb.priceEPS;
           stock.priceToBook = stockInDb.priceToBook; 
-          stock.dateTime = stockInDb.dateTime;  
+          stock.dateTime = stockInDb.dateTime;
+          stock.totalValue = stockInDb.totalValue;  
 
         }
 
       } else{
         // Store stock in mongodb using Stock mongoose model
+        
+        await appendYahooMetrics(stock);
+        
         const newStock = new Stock(stock);
         await newStock.save();
-        console.log(stock.ticker + ": Does not exist in db, saved to the database.");
-
-        await appendYahooMetrics(stock);
+        console.log(stock.ticker + ": Did not exist in db, saved to the database.");
 
       }
       
@@ -233,6 +236,9 @@ export default async function Dashboard() {
   } catch (e) {
     console.error("Failed to fetch portfolio value: ", e);
   }
+
+  // Calculate portfolio average PE ratio
+  averagePeRatio = getPortfolioData.calculateAveragePeRatio(stocks);
 
   //------
 
@@ -353,19 +359,15 @@ export default async function Dashboard() {
                 Portfolio Report
               </h1>
 
-              <DashboardCollapseValue
-                title="Portfolio Value"
-                units={portfolioValue + " " + portfolioCurrency}
-              />
+              <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency} />
 
-              <DashboardCollapseValue
-                title="Sharpe Ratio"
-                units={SharpeRatio}
-              />
+              <DashboardCollapseValue title="Sharpe Ratio"  units={SharpeRatio} />
 
               <DashboardCollapseValue title="Portfolio Beta" units="1.4" />
 
               <DashboardCollapseValue title="YoY Return" units={12} />
+
+              <DashboardCollapseValue title="Average P/E Ratio" units={averagePeRatio} />
             </div>
           </div>
           {!stocks && (

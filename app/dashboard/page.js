@@ -109,9 +109,6 @@ export default async function Dashboard() {
         let ticker = position.ticker;
         const units = position.units;
 
-        stocks.push({ ticker: ticker });
-  
-        
         // TO DO: getStockName for each ticker here
         const stockName = ticker; //to change
   
@@ -153,6 +150,9 @@ export default async function Dashboard() {
     
       // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
       let stockInDb = null;
+
+      stock.totalValue = stock.currentPrice * stock.units;
+
       try{
         stockInDb = await Stock.findOne({ ticker: stock.ticker });
       } catch {
@@ -165,6 +165,10 @@ export default async function Dashboard() {
         const lastDateTime = stockInDb.dateTime;
         const currentDateTime = new Date();
         const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
+
+        console.log(stock.ticker + ": total value is " + stock.totalValue); 
+
+
 
         if (diff > 30 || !lastDateTime) {
           // Data is too old, fetch from yahoo
@@ -184,7 +188,7 @@ export default async function Dashboard() {
           stock.priceEPS = stockInDb.priceEPS;
           stock.priceToBook = stockInDb.priceToBook; 
           stock.dateTime = stockInDb.dateTime;
-          stock.totalValue = stockInDb.totalValue;  
+          // stock.totalValue = stockInDb.totalValue;  
 
         }
 
@@ -238,7 +242,7 @@ export default async function Dashboard() {
   }
 
   // Calculate portfolio average PE ratio
-  averagePeRatio = getPortfolioData.calculateAveragePeRatio(stocks);
+  averagePeRatio = getPortfolioData.calculateAveragePeRatio(stocks, portfolioValue);
 
   //------
 

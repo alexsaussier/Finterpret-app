@@ -31,7 +31,7 @@ const config = {
         // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
         priceAnchor: 9.99,
         features: [
-          { name: "Import your stock and crypto portfolios" },
+          { name: "Import your portfolio automatically, in real time, with Snaptrade" },
           { name: "Portfolio Metrics" },
           { name: "Tailored Portfolio Reports" },
           { name: "Investment recommendations and optimizations" },

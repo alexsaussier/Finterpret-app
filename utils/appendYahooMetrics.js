@@ -68,6 +68,7 @@ async function appendYahooMetrics(stock) {
 
     // append total value of stock to stock in array
     stock.totalValue = stock.currentPrice * stock.units;
+    console.log(stock.ticker + ": total value is " + stock.totalValue); 
 
     // We can add:
     // statsAPI.quickRatio,

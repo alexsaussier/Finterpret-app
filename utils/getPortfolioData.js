@@ -12,35 +12,45 @@ function calculateTotalPortfolioValue(stocks) {
 }
 
 
-
-
-
-function calculateAveragePeRatio(stocks, portfolioValue) {
-  //Loop through all stocks and calculate the average PE ratio, weighted according to the stock's value in the portfolio
+// To fix: the weights don't add up to 1 because we don't consider the stocks that don't have a metric > 0
+function calculateAverage(metric, stocks, portfolioValue) {
+  
   let weightedAverage = 0;
+  let positiveCounter = 0; // amount of positive metrics that we take into account
 
   for (const stock of stocks) {
     const stockValue = stock.totalValue;
-    const peRatio = stock.peRatio; // replace 'peRatio' with the actual property name that represents the stock's PE ratio
-
-    console.log("Stock value: ", stockValue); 
-
-    const stockWeight = stockValue / portfolioValue;
     
+    
+    if (stock[metric] !== undefined) {
+      const metricValue = stock[metric];
+      
+      const stockWeight = stockValue / portfolioValue;
+      console.log("Weight of " + stock.ticker + ": ", stockWeight);
 
-    // Only consider positive PE ratios
-    if (peRatio > 0 && stockWeight !== undefined) {
-      weightedAverage += stockWeight * peRatio;
-      console.log(stock.ticker + ": Weighted PE ratio: ", weightedAverage);
+
+      // Only consider positive metric values
+      if (metricValue > 0 && stockWeight !== undefined) {
+        weightedAverage += stockWeight * metricValue;
+        console.log("Weighted average of " + stock.ticker + " for " + metric + ": ", weightedAverage);
+      }
     }
+
   }
-
-  console.log("Average PE ratio: ", weightedAverage);
-
   return weightedAverage.toFixed(2);
 }
 
+function countPositives(metric, stocks) {
+  let positiveCounter = 0;
+  const totalStocks = stocks.length;
 
+  for (const stock of stocks) {
+    if (stock[metric] > 0) {
+      positiveCounter++;
+    }
+  }
+  return positiveCounter/totalStocks;
+}
 
 
 
@@ -48,5 +58,5 @@ function calculateAveragePeRatio(stocks, portfolioValue) {
 // Export the functions to make them accessible from other files
 module.exports = {
     calculateTotalPortfolioValue,
-    calculateAveragePeRatio
+    calculateAverage
 };

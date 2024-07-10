@@ -33,6 +33,8 @@ export default async function Dashboard() {
   let connectedBrokers = "";
   let manualHoldings = []
   let averagePeRatio = "N/A";
+  let averageEps = "N/A";
+  let averageDivYield = "N/A";
 
 
   // First, retrieve stock data from snaptrade
@@ -242,7 +244,17 @@ export default async function Dashboard() {
   }
 
   // Calculate portfolio average PE ratio
-  averagePeRatio = getPortfolioData.calculateAveragePeRatio(stocks, portfolioValue);
+  averagePeRatio = getPortfolioData.calculateAverage("peRatio", stocks, portfolioValue);
+  averageEps = getPortfolioData.calculateAverage("eps", stocks, portfolioValue);
+  averageDivYield = getPortfolioData.calculateAverage("divYield", stocks, portfolioValue);
+
+  console.log("Average PE ratio: ", averagePeRatio);
+  console.log("Average EPS: ", averageEps);
+  console.log("Average Dividend Yield: ", averageDivYield);
+
+  // Calculate percentage of profitable companies
+  
+
 
   //------
 
@@ -364,14 +376,26 @@ export default async function Dashboard() {
               </h1>
 
               <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency} />
+              
 
+              <DashboardCollapseValue title="Average P/E Ratio (of profitable companies)" units={averagePeRatio} />
+              <DashboardCollapseValue title="Average Earnings per Share (EPS - of profitable companies)" units={averageEps} />
+
+              <DashboardCollapseValue title="Percentage of your portfolio companies that are unprofitable" units= "N/A" />
+
+              <DashboardCollapseValue title="Average dividend yield" units= {averageDivYield} />
+              <DashboardCollapseValue title="Percentage of your companies that pay dividend" units= "N/A" />
+
+
+
+              {/* 
               <DashboardCollapseValue title="Sharpe Ratio"  units={SharpeRatio} />
 
               <DashboardCollapseValue title="Portfolio Beta" units="1.4" />
 
               <DashboardCollapseValue title="YoY Return" units={12} />
+              */}
 
-              <DashboardCollapseValue title="Average P/E Ratio" units={averagePeRatio} />
             </div>
           </div>
           {!stocks && (

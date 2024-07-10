@@ -24,7 +24,6 @@ const StockAnalyticsDash = ({ stocks }) => {
       const statsPromises = stocks.map(async (stock) => {
         const response = await getPrice(stock.ticker); // Fetch stock stats
         console.log("getPrice response: ", response);
-
         const { regularMarketPrice, regularMarketChangePercent } = response.data;
 
         return { 

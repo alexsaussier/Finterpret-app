@@ -1,3 +1,5 @@
+const { sum } = require("lodash");
+
 // Function to calculate the total portfolio value
 function calculateTotalPortfolioValue(stocks) {
   let totalValue = stocks.reduce((total, { currentPrice, units }) => {
@@ -16,7 +18,8 @@ function calculateTotalPortfolioValue(stocks) {
 function calculateAverage(metric, stocks, portfolioValue) {
   
   let weightedAverage = 0;
-  let positiveCounter = 0; // amount of positive metrics that we take into account
+  const positives = countPositives(metric, stocks);
+  let sumOfWeights_positiveStocks = 0;
 
   for (const stock of stocks) {
     const stockValue = stock.totalValue;
@@ -31,10 +34,15 @@ function calculateAverage(metric, stocks, portfolioValue) {
 
       // Only consider positive metric values
       if (metricValue > 0 && stockWeight !== undefined) {
+        
+        sumOfWeights_positiveStocks += stockWeight;
+
         weightedAverage += stockWeight * metricValue;
         console.log("Weighted average of " + stock.ticker + " for " + metric + ": ", weightedAverage);
       }
     }
+
+    console.log("Sum of weights of positive stocks: ", sumOfWeights_positiveStocks);
 
   }
   return weightedAverage.toFixed(2);
@@ -49,7 +57,9 @@ function countPositives(metric, stocks) {
       positiveCounter++;
     }
   }
-  return positiveCounter/totalStocks;
+
+  // Return as %
+  return parseFloat((positiveCounter/totalStocks)*100).toFixed(2);
 }
 
 
@@ -58,5 +68,6 @@ function countPositives(metric, stocks) {
 // Export the functions to make them accessible from other files
 module.exports = {
     calculateTotalPortfolioValue,
-    calculateAverage
+    calculateAverage,
+    countPositives
 };

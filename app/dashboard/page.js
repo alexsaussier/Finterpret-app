@@ -253,7 +253,8 @@ export default async function Dashboard() {
   console.log("Average Dividend Yield: ", averageDivYield);
 
   // Calculate percentage of profitable companies
-  
+  const percentageProfitable = getPortfolioData.countPositives("peRatio", stocks);
+  const percentageDividend = getPortfolioData.countPositives("divYield", stocks);
 
 
   //------
@@ -381,10 +382,10 @@ export default async function Dashboard() {
               <DashboardCollapseValue title="Average P/E Ratio (of profitable companies)" units={averagePeRatio} />
               <DashboardCollapseValue title="Average Earnings per Share (EPS - of profitable companies)" units={averageEps} />
 
-              <DashboardCollapseValue title="Percentage of your portfolio companies that are unprofitable" units= "N/A" />
+              <DashboardCollapseValue title="Percentage of your portfolio companies that are profitable" units= {percentageProfitable + "%"} />
 
               <DashboardCollapseValue title="Average dividend yield" units= {averageDivYield} />
-              <DashboardCollapseValue title="Percentage of your companies that pay dividend" units= "N/A" />
+              <DashboardCollapseValue title="Percentage of your companies that pay dividend" units= {percentageDividend + "%"} />
 
 
 

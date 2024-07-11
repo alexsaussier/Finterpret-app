@@ -12,8 +12,8 @@ const DashboardCollapseValue = ({ title, units, children }) => {
   " You should sound very confident in your answer, as if you are a financial advisor." +
   " Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance.";
   
-  const gptMessage = "My " + title + " has a value of " + units + ", what does it mean?" +
-  " Define what " + title + "means but focus more on what the value means for me." ;
+  const gptMessage = "My " + title + " of my portfolio has a value of " + units + ", what does it mean?" +
+  " Define what " + title + "means but focus more on what the value means for me.";
 
   const [response, setResponse] = useState(null);
   const [hasMadeApiCall, setHasMadeApiCall] = useState(false);

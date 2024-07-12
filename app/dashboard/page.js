@@ -301,7 +301,12 @@ export default async function Dashboard() {
 
         <AddToPortfolioSampleComponent />
 
-        <PortfolioAnalysis portfolioGeneralData={portfolioGeneralData} />
+        {portfolioGeneralData && stocks.length > 0 ? (
+          <PortfolioAnalysis portfolioGeneralData={portfolioGeneralData} />
+        ) : (
+          <div>Add holdings to your portfolio, so we can generate some insights.</div>
+        )}
+
 
         <div className="relative">
           <div

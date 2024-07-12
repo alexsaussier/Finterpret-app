@@ -26,7 +26,7 @@ function calculateAverage(metric, stocks, portfolioValue) {
     
     
     if (stock[metric] !== undefined) {
-      const metricValue = stock[metric];
+      const metricValue = Math.max(0, stock[metric]);
       
       const stockWeight = stockValue / portfolioValue;
       console.log("Weight of " + stock.ticker + ": ", stockWeight);

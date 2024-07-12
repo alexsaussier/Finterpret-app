@@ -16,6 +16,7 @@ import getPrice from "@/utils/getPrice";
 import { AddToPortfolioSampleComponent } from "@/components/AddToPortfolioSampleComponent";
 import Stock from "@/models/Stock";
 import appendYahooMetrics from "@/utils/appendYahooMetrics";
+import { PortfolioAnalysis } from "@/components/PortfolioAnalysis";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -256,6 +257,14 @@ export default async function Dashboard() {
   const percentageProfitable = getPortfolioData.countPositives("peRatio", stocks);
   const percentageDividend = getPortfolioData.countPositives("divYield", stocks);
 
+  const portfolioGeneralData = {
+    totalValue: portfolioValue,
+    peRatio: averagePeRatio,
+    eps: averageEps,
+    divYield: averageDivYield,
+    profitable: percentageProfitable,
+    dividendPaying: percentageDividend
+  };
 
   //------
 
@@ -292,30 +301,7 @@ export default async function Dashboard() {
 
         <AddToPortfolioSampleComponent />
 
-
-        <div className="bg-white rounded-lg p-5 shadow-md relative">
-          <h1 className="text-lg md:text-xl font-bold text-left">
-            General Portfolio Analysis and Advice
-          </h1>
-
-          <div className="relative">
-            <div className="blur-sm flex flex-col">
-              <p>Your blurred content goes here</p>
-              <p>Your blurred content goes here</p>
-              <p>Your blurred content goes here</p>
-              <p>Your blurred content goes here</p>
-            </div>
-            <div className="absolute flex flex-col top-0 left-0 right-0 bottom-0 bg-white bg-opacity-70 flex justify-center items-center text-black font-bold">
-              Get gold to see your portfolio report and access tailored advice
-              <a
-                href="http://localhost:3000/#pricing"
-                className="btn btn-primary"
-              >
-                Get Gold
-              </a>
-            </div>
-          </div>
-        </div>
+        <PortfolioAnalysis portfolioGeneralData={portfolioGeneralData} />
 
         <div className="relative">
           <div

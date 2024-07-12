@@ -53,6 +53,11 @@ const userSchema = mongoose.Schema(
     portfolio: [{
       ticker: String,
       units: Number
+    }],
+
+    generalAnalysis: [{
+      gptResponse: String,
+      timeStamp: Number
     }]
   },
   {

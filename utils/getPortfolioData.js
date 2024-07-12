@@ -29,7 +29,6 @@ function calculateAverage(metric, stocks, portfolioValue) {
       const metricValue = Math.max(0, stock[metric]);
       
       const stockWeight = stockValue / portfolioValue;
-      console.log("Weight of " + stock.ticker + ": ", stockWeight);
 
 
       // Only consider positive metric values
@@ -38,11 +37,9 @@ function calculateAverage(metric, stocks, portfolioValue) {
         sumOfWeights_positiveStocks += stockWeight;
 
         weightedAverage += stockWeight * metricValue;
-        console.log("Weighted average of " + stock.ticker + " for " + metric + ": ", weightedAverage);
       }
     }
 
-    console.log("Sum of weights of positive stocks: ", sumOfWeights_positiveStocks);
 
   }
   return weightedAverage.toFixed(2);

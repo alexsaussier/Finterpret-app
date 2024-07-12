@@ -38,8 +38,25 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
         try{
             sendOpenAi(guideline, gptMessage, "1", 300).then((data) => {
             setGptResponse(data);
-            console.log(response);
+            console.log(gptResponse);
+        
+            // Update the user in the database using the route
+            fetch('/api/user/set-portfolio-analysis-generated', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ gptResponse: data })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('User updated successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error updating user:', error);
             });
+            });
+           
         }catch(e){
             console.error("Error: " + e);
         } finally {

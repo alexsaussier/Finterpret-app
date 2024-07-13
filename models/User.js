@@ -55,10 +55,10 @@ const userSchema = mongoose.Schema(
       units: Number
     }],
 
-    generalAnalysis: [{
+    generalAnalysis: {
       gptResponse: String,
       timeStamp: Number
-    }]
+    }
   },
   {
     timestamps: true,

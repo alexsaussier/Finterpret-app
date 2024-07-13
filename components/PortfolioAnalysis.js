@@ -30,33 +30,54 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
     "and provide me with some advice on how to improve my portfolio?" + 
     "You should not list all the metrics I provide, just give me an overall overview. "
 
+    
+
 
     const fetchGptResponse = async () => {
         
-        setIsLoading(true); // Start loading
+        setIsLoading(true); // Start loading for displaying the svg icon
+        console.log("General Analysis requested");
 
-        try{
-            sendOpenAi(guideline, gptMessage, "1", 300).then((data) => {
-            setGptResponse(data);
-            console.log(gptResponse);
-        
-            // Update the user in the database using the route
-            fetch('/api/user/set-portfolio-analysis-generated', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ gptResponse: data })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('User updated successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error updating user:', error);
-            });
-            });
-           
+        try {
+            // Step 1: Fetch user data
+            const userDataResponse = await fetch('/api/user/get-user-data');
+            const userData = await userDataResponse.json();
+
+    
+            const currentTime = Date.now();
+            const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    
+            // Step 2: Check if generalAnalysis exists and is not older than 24 hours
+            if (userData.generalAnalysis && currentTime - userData.generalAnalysis.timeStamp < twentyFourHours) {
+                console.log("gpt response in db for this user: " + userData.generalAnalysis);
+                console.log("Portfolio analysis is recent.");
+                setGptResponse(userData.generalAnalysis.gptResponse);
+            } else {
+                // Analysis does not exist or is outdated
+                console.log("General Analysis requested");
+    
+                // Step 3: Perform GPT request
+                sendOpenAi(guideline, gptMessage, "1", 300, 0).then((answer) => {
+                    setGptResponse(answer);
+                    console.log("gptResponse: " + gptResponse);
+    
+                    // Step 4: Update the user in the database
+                    fetch('/api/user/set-portfolio-analysis-generated', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ gptResponse: answer })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('User updated successfully:', answer);
+                    })
+                    .catch(error => {
+                        console.error('Error updating user:', error);
+                    });
+                });
+            }
         }catch(e){
             console.error("Error: " + e);
         } finally {

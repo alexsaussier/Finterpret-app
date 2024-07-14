@@ -13,7 +13,6 @@ function calculateTotalPortfolioValue(stocks) {
     return parseFloat(totalValue.toFixed(2));
 }
 
-
 // To fix: the weights don't add up to 1 because we don't consider the stocks that don't have a metric > 0
 function calculateAverage(metric, stocks, portfolioValue) {
   

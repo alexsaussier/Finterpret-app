@@ -12,7 +12,7 @@ export async function getSnaptradeHoldings() {
   const snaptrade_user_secret = user.snaptrade_user_secret;
   const accountId = user.portfolioAccountId;
 
-  const url = `http://localhost:3000/api/snaptrade/pull-holdings`;
+  const url = process.env.NEXTAUTH_URL + `/api/snaptrade/pull-holdings`;
   //For now, we can automatically fetch the first account, but we will separate the logic once we support multiple accounts
   //I recommend this so that our code is cleaner, specifically the dashboard page file
   if (!snaptrade_user_secret) {

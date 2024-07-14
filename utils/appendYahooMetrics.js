@@ -2,7 +2,7 @@ import getStats from "./getStats";
 import getPrice from "./getPrice";
 
 
-// This function takes an object containing stock statsAPI as input (must have a ticker value) 
+// This function takes an object containing stock stats as input (must have a ticker value) 
 // and appends stock metrics to the stock object
 
 async function appendYahooMetrics(stock) {

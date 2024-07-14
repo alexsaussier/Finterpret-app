@@ -1,5 +1,5 @@
 export async function listAccounts(userId, snaptrade_user_secret) {
-  const url = `http://localhost:3000/api/snaptrade/list-accounts`;
+  const url = process.env.NEXTAUTH_URL + `/api/snaptrade/list-accounts`;
   const data = { userId, snaptrade_user_secret };
   const response = await fetch(url, {
     method: "POST",

@@ -92,8 +92,6 @@ export default async function Dashboard() {
     console.log("User is not connected to Snaptrade - no userSecret");
   }
 
-
-
   // Retrieve manually entered stocks
   if (user.portfolio.length > 0){
     // Retrieve all tickers
@@ -140,8 +138,6 @@ export default async function Dashboard() {
     console.log("User has no manually entered holdings.");
   }
 
-
-    
   
   // ----------------- GET STOCK METRICS -----------------
   // -----------------------------------------------------
@@ -163,15 +159,10 @@ export default async function Dashboard() {
       }
       
       if (stockInDb) {
-        console.log(stock.ticker + " exists in the database, fetching last update datetime...");
         
         const lastDateTime = stockInDb.dateTime;
         const currentDateTime = new Date();
         const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
-
-        console.log(stock.ticker + ": total value is " + stock.totalValue); 
-
-
 
         if (diff > 30 || !lastDateTime) {
           // Data is too old, fetch from yahoo
@@ -179,11 +170,8 @@ export default async function Dashboard() {
 
           await stockInDb.updateOne(stock);
 
-          console.log(stock.ticker + `: Data was too old, yahoo metrics fetched.`);
-
         } else{
           // We have recent data in db, no need to fetch from yahoo
-          console.log(stock.ticker + `: Data is recent, fetched from db.`);
           
           stock.divYield = stockInDb.divYield;
           stock.eps = stockInDb.eps;  
@@ -197,18 +185,14 @@ export default async function Dashboard() {
 
       } else{
         // Store stock in mongodb using Stock mongoose model
-        
+
         await appendYahooMetrics(stock);
         
         const newStock = new Stock(stock);
         await newStock.save();
-        console.log(stock.ticker + ": Did not exist in db, saved to the database.");
 
       }
-      
     }
-      console.log("Stocks array: ", stocks);
-
   }
 
     // OPTIONS
@@ -248,10 +232,6 @@ export default async function Dashboard() {
   averagePeRatio = getPortfolioData.calculateAverage("peRatio", stocks, portfolioValue);
   averageEps = getPortfolioData.calculateAverage("eps", stocks, portfolioValue);
   averageDivYield = getPortfolioData.calculateAverage("divYield", stocks, portfolioValue);
-
-  console.log("Average PE ratio: ", averagePeRatio);
-  console.log("Average EPS: ", averageEps);
-  console.log("Average Dividend Yield: ", averageDivYield);
 
   // Calculate percentage of profitable companies
   const percentageProfitable = getPortfolioData.countPositives("peRatio", stocks);
@@ -368,13 +348,9 @@ export default async function Dashboard() {
               </h1>
 
               <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency} />
-              
-
               <DashboardCollapseValue title="Average P/E Ratio (of profitable companies)" units={averagePeRatio} />
               <DashboardCollapseValue title="Average Earnings per Share (EPS - of profitable companies)" units={averageEps} />
-
               <DashboardCollapseValue title="Percentage of your portfolio companies that are profitable" units= {percentageProfitable + "%"} />
-
               <DashboardCollapseValue title="Average dividend yield" units= {averageDivYield} />
               <DashboardCollapseValue title="Percentage of your companies that pay dividend" units= {percentageDividend + "%"} />
 

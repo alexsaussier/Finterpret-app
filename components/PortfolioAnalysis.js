@@ -1,7 +1,7 @@
 "use client";
 
 import { sendOpenAi } from "@/libs/gpt";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ButtonGlass from "./ButtonGlass";
 
 
@@ -9,6 +9,27 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
 
     const [gptResponse, setGptResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            // Step 1: Fetch user data
+            const userDataResponse = await fetch('/api/user/get-user-data');
+            let userData = await userDataResponse.json();
+            userData = userData.user;
+
+            const currentTime = Date.now();
+            const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+            // Step 2: Check if generalAnalysis exists and is not older than 24 hours
+            if (userData.generalAnalysis && currentTime - userData.generalAnalysis.timeStamp < twentyFourHours) {
+                console.log("gpt response in db for this user - Portfolio analysis is recent.");
+                setGptResponse(userData.generalAnalysis.gptResponse);
+            }
+        };
+
+        fetchUserData();
+    }, []); // Empty dependency array means this effect runs only once when the component mounts
 
 
 
@@ -32,52 +53,29 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
 
     
 
-
     const fetchGptResponse = async () => {
         
         setIsLoading(true); // Start loading for displaying the svg icon
         console.log("General Analysis requested");
 
         try {
-            // Step 1: Fetch user data
-            const userDataResponse = await fetch('/api/user/get-user-data');
-            const userData = await userDataResponse.json();
 
-    
-            const currentTime = Date.now();
-            const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-    
-            // Step 2: Check if generalAnalysis exists and is not older than 24 hours
-            if (userData.generalAnalysis && currentTime - userData.generalAnalysis.timeStamp < twentyFourHours) {
-                console.log("gpt response in db for this user: " + userData.generalAnalysis);
-                console.log("Portfolio analysis is recent.");
-                setGptResponse(userData.generalAnalysis.gptResponse);
-            } else {
-                // Analysis does not exist or is outdated
-                console.log("General Analysis requested");
-    
-                // Step 3: Perform GPT request
-                sendOpenAi(guideline, gptMessage, "1", 300, 0).then((answer) => {
-                    setGptResponse(answer);
-                    console.log("gptResponse: " + gptResponse);
-    
-                    // Step 4: Update the user in the database
-                    fetch('/api/user/set-portfolio-analysis-generated', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ gptResponse: answer })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('User updated successfully:', answer);
-                    })
-                    .catch(error => {
-                        console.error('Error updating user:', error);
-                    });
-                });
-            }
+            // Perform GPT request
+            const answerFromGpt = await sendOpenAi(guideline, gptMessage, "1", 300, 0);
+            setGptResponse(answerFromGpt);
+                
+            // Step 4: Update the user in the database
+            fetch('/api/user/set-portfolio-analysis-generated', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify({ gptAnalysis: answerFromGpt }) // Ensure the body is properly stringified
+            })
+            .then(response => response.json()) // Handle the response from the server
+            .then(data => console.log('User updated successfully:', data))
+            .catch(error => console.error('Error updating user:', error));
+                    
         }catch(e){
             console.error("Error: " + e);
         } finally {

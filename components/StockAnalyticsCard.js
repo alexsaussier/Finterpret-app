@@ -9,7 +9,6 @@ import Modal from "@/components/Modal";
 const StockAnalyticsCard = ({ ticker }) => {
   const [stats, setStats] = useState(null);
   const importantMetrics = [];
-  const mockImportantMetrics = [];
 
   const [isOpen, setIsOpen] = useState(false);
   const [currentMetric, setCurrentMetric] = useState(["", ""]);
@@ -25,12 +24,15 @@ const StockAnalyticsCard = ({ ticker }) => {
     const fetchData = async () => {
       const data = await getStats(ticker);
       setStats(data);
+
+      // TO DO: we can optimize here, by checking if the stock is in db first, and only fetch from yahoo if it is not, or it is too old
+      // and then update the db
     };
 
     fetchData();
   }, [ticker]);
 
-  //console.log("Stats: " + JSON.stringify(stats, null, 2));
+  console.log("Stats: " + JSON.stringify(stats, null, 2));
 
   if (!stats) {
     return (
@@ -133,6 +135,7 @@ const StockAnalyticsCard = ({ ticker }) => {
   // stats.debtToEquity,
   // stats.grossProfits,
   // stats.grossMargins
+  // average analyst rating
 
   console.log(
     "Important metrics: " + JSON.stringify(importantMetrics, null, 2)

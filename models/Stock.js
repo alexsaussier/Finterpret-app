@@ -20,10 +20,6 @@ const stockSchema = mongoose.Schema(
       type: Number,
     },
 
-    delta: {
-      type: Number,
-    },
-
     peRatio: {
       type: Number,
     },
@@ -50,7 +46,15 @@ const stockSchema = mongoose.Schema(
 
     totalValue: {
       type: Number,
-    }
+    },
+
+    percentChange: {
+      type: Number,
+    },  
+
+    currency: {
+      type: String,
+    },
 }
 
 );

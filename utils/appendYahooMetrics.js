@@ -11,9 +11,10 @@ async function appendYahooMetrics(stock) {
 
     try{
       stock.currentPrice = priceAPI.data.regularMarketPrice.raw;
-      stock.delta = priceAPI.data.regularMarketChangePercent.raw;       
+      stock.percentChange = priceAPI.data.regularMarketChangePercent.raw;
+      stock.currency = priceAPI.data.currency;       
     } catch (error) {
-      console.log(stock.ticker + " Error: price of %change is not correctly loaded.");
+      console.log(stock.ticker + " Error: price or %change is not correctly loaded.");
     }
 
     // Get PE ratio and append to stock in array
@@ -68,7 +69,6 @@ async function appendYahooMetrics(stock) {
 
     // append total value of stock to stock in array
     stock.totalValue = stock.currentPrice * stock.units;
-    console.log(stock.ticker + ": total value is " + stock.totalValue); 
 
     // We can add:
     // statsAPI.quickRatio,

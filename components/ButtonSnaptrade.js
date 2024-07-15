@@ -74,7 +74,8 @@ const ButtonSnaptrade = ({
 
   return (
     <button
-      className="btn btn-gradient animate-shimmer"
+      className="btn btn-disable"
+      disabled="disabled"
       onClick={handleSnaptrade}
     >
       {title}

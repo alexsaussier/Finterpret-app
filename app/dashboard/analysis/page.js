@@ -13,8 +13,7 @@ import appendYahooMetrics from "@/utils/appendYahooMetrics";
 
 
 
-export default async function AnalyticsDashboard(req, res) {
-
+export default async function AnalyticsDashboard() {
 
   await connectMongo();
   const session = await getServerSession(authOptions);
@@ -56,19 +55,10 @@ export default async function AnalyticsDashboard(req, res) {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
+       
+        stocks.push({ ticker: ticker, stockName: stockName, units: units });
 
-        // Get the current price for each stock and store in stocks array
-        const response = await getPrice(ticker); 
-
-        if (response && response.data) {
-          const currentPrice = response.data.regularMarketPrice.raw;
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: currentPrice });
-
-        } else {
-          console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
-        }
-      }
+      } 
     }
 
   } else {
@@ -100,17 +90,9 @@ export default async function AnalyticsDashboard(req, res) {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
-    
-        const response = await getPrice(ticker); // Fetch stock stats
-        
-        if (response && response.data) {
-        const currentPrice = response.data.regularMarketPrice.raw;
-        stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice:currentPrice });
 
-        } else {
-          console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
-        }
+        stocks.push({ ticker: ticker, stockName: stockName, units: units});
+
       }
     }
   } 
@@ -126,7 +108,7 @@ export default async function AnalyticsDashboard(req, res) {
 
     for (var stock of stocks) {
     
-      // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
+      // Check if stock is in db and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
       let stockInDb = null;
       try{
         stockInDb = await Stock.findOne({ ticker: stock.ticker });
@@ -134,9 +116,7 @@ export default async function AnalyticsDashboard(req, res) {
         console.log("Failed to fetch stock from database");
       }
       
-      if (stockInDb) {
-        console.log(stock.ticker + " exists in the database, fetching last update datetime...");
-        
+      if (stockInDb) {        
         const lastDateTime = stockInDb.dateTime;
         const currentDateTime = new Date();
         const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
@@ -151,23 +131,24 @@ export default async function AnalyticsDashboard(req, res) {
 
         } else{
           // We have recent data in db, no need to fetch from yahoo
-          console.log(stock.ticker + `: Data is recent, no need to fetch from yahoo.`);
-          
+          stock.currentPrice = stockInDb.currentPrice;
+          stock.percentChange = stockInDb.percentChange;
           stock.divYield = stockInDb.divYield;
           stock.eps = stockInDb.eps;  
           stock.peRatio = stockInDb.peRatio;
           stock.priceEPS = stockInDb.priceEPS;
           stock.priceToBook = stockInDb.priceToBook; 
           stock.dateTime = stockInDb.dateTime;  
+          stock.currency = stockInDb.currency;
 
         }
       } else{
         // Store stock in mongodb using Stock mongoose model
+        await appendYahooMetrics(stock);
+
         const newStock = new Stock(stock);
         await newStock.save();
-        console.log(stock.ticker + ": Does not exist in db, saved to the database.");
 
-        await appendYahooMetrics(stock);
       }
     }
       console.log("Stocks array: ", stocks);

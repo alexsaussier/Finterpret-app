@@ -84,11 +84,12 @@ export default async function Dashboard() {
 
         if (response && response.data) {
           const currentPrice = response.data.regularMarketPrice.raw;
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: currentPrice });
+          const percentChange = response.data.regularMarketChangePercent.raw;
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: currentPrice, percentChange: percentChange });
 
         } else {
           console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
+          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0, percentChange: "n/a"});
         }
       }
     }
@@ -129,7 +130,8 @@ export default async function Dashboard() {
       
         if (response && response.data) {
         const currentPrice = response.data.regularMarketPrice.raw;
-        stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice:currentPrice });
+        const percentChange = response.data.regularMarketChangePercent.raw;
+        stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice:currentPrice, percentChange: percentChange });
 
         } else {
           console.error(`Failed to fetch price for ticker: ${ticker}`);
@@ -282,7 +284,12 @@ export default async function Dashboard() {
           
           {!userSecret && (
             <div className="mb-4">
-              <p className="mb-2">Start by importing your portfolio👇</p>
+              <div className="flex flex-row gap-1">
+                <p className="mb-2 font-semibold">Coming soon for premium users: </p><p>Update your portfolio automatically in real time using </p>
+                <a href="https://snaptrade.com/brokerage-integrations" target="_blank" rel="noreferrer" class="text-blue-500 hover:text-blue-700 underline">
+                  <p className="font-semibold">Snaptrade integrations</p>
+                </a>
+              </div>
 
               <ButtonSnaptrade
                 title="Import a Portfolio"

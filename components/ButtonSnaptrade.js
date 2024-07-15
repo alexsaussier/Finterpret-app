@@ -22,18 +22,21 @@ const ButtonSnaptrade = ({
     //store in variable
     const userId = session.user.id;
     console.log("userId: " + userId);
+    let snaptradeUserSecret = snaptrade_user_secret;
 
     //Check if user is registered with snaptrade.
 
     console.log("user secret: " + snaptrade_user_secret);
 
 
-    if (!snaptrade_user_secret) {
+    if (!snaptrade_user_secret || snaptrade_user_secret.length < 1) {
       try {
         console.log("registering user with snaptrade");
-        await apiClient.post("/snaptrade/register-user", {
+        const response = await apiClient.post("/snaptrade/register-user", {
           userId,
         });
+        snaptradeUserSecret = response.response.userSecret;
+        console.log("snaptradeUserSecret: " + JSON.stringify(snaptradeUserSecret));
       } catch (e) {
         //If user is in fact registered with snaptrade, but there is no snaptrade_user_secret it will get a new one
         console.error(e);
@@ -53,7 +56,7 @@ const ButtonSnaptrade = ({
       try {
         const result = await apiClient.post("/snaptrade/redirect-URI", {
           userId,
-          snaptrade_user_secret,
+          snaptradeUserSecret,
         });
 
         window.location.href = result.redirectURI;

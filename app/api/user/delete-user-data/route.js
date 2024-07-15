@@ -6,16 +6,28 @@ import { authOptions } from "@/libs/next-auth";
 import User from "@/models/User";
 
 
-// This route is to get user data from db
+// This route is to delete user data in the db 
+// just deletes snaptrade data for now
 
-export async function GET() {
+export async function POST() {
+
     await connectMongo();
+
         
     try{
     // update db of current user
     const session = await getServerSession(authOptions);
 
     const user = await User.findById(session?.user?.id);
+
+    //delete the snaptrade_user_secret from the user in the database
+    user.snaptrade_user_secret = null;
+    user.portfolioAccountId = null;
+    user.importedWallet = false;
+    await user.save();
+
+    console.log("Snaptrade user data deleted successfully");
+    
 
     return NextResponse.json({ user: user });
 

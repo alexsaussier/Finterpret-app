@@ -40,8 +40,6 @@ export async function POST(req) {
     user.snaptrade_user_secret = response.data.userSecret;
     await user.save();
 
-    // For me: f74447fd-af2a-4df8-9dbe-89eeb375a23d
-
     console.log(response.data);
 
     return NextResponse.json({ response: response.data });

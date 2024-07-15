@@ -17,6 +17,7 @@ import { AddToPortfolioSampleComponent } from "@/components/AddToPortfolioSample
 import Stock from "@/models/Stock";
 import appendYahooMetrics from "@/utils/appendYahooMetrics";
 import { PortfolioAnalysis } from "@/components/PortfolioAnalysis";
+import ButtonSnaptradeDelete from "@/components/ButtonSnaptradeDelete";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -61,7 +62,11 @@ export default async function Dashboard() {
       //options = holdings.response.option_positions;
       //orders = holdings.response.orders;
 
-      portfolioCurrency = holdings.response.total_value.currency;
+      try{
+        portfolioCurrency = holdings.response.total_value.currency;
+      } catch {
+        portfolioCurrency = "$";
+      } 
 
       //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
       for (const position of holdings.response.positions) {
@@ -259,15 +264,23 @@ export default async function Dashboard() {
           <h1 className="text-lg md:text-xl font-bold text-left mb-2">
             Dashboard
           </h1>
-          <p className="mb-2">
-            Welcome {user.name} {user.email} 👋
-          </p>
-          {connectedBrokers && <p>Connected account(s): {connectedBrokers}</p>}
-          {
-            //If there is no account ID, show the button to import a portfolio
-          }
-
-          {!accountId && (
+          
+          <div className="flex flex-row gap-2">
+            <p className="mb-2">
+              Welcome {user.name} {user.email} 👋
+            </p>          
+            
+            <div className="flex flex-col gap-2">
+              {connectedBrokers && <p>Connected account(s): {connectedBrokers}</p>}
+              {userSecret && (
+                <div className="mb-4">
+                  <ButtonSnaptradeDelete/>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {!userSecret && (
             <div className="mb-4">
               <p className="mb-2">Start by importing your portfolio👇</p>
 
@@ -277,6 +290,8 @@ export default async function Dashboard() {
               />
             </div>
           )}
+
+          
         </div>
 
         <AddToPortfolioSampleComponent />

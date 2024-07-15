@@ -10,8 +10,8 @@ async function appendYahooMetrics(stock) {
     const priceAPI = await getPrice(stock.ticker);
 
     try{
-      stock.currentPrice = priceAPI.data.regularMarketPrice.raw;
-      stock.percentChange = priceAPI.data.regularMarketChangePercent.raw;
+      stock.currentPrice = priceAPI.response.regularMarketPrice.raw;
+      stock.percentChange = priceAPI.response.regularMarketChangePercent.fmt;
       stock.currency = priceAPI.data.currency;       
     } catch (error) {
       console.log(stock.ticker + " Error: price or %change is not correctly loaded.");

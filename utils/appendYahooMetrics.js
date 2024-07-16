@@ -11,7 +11,7 @@ async function appendYahooMetrics(stock) {
 
     try{
       stock.currentPrice = priceAPI.response.regularMarketPrice.raw;
-      stock.percentChange = priceAPI.response.regularMarketChangePercent.fmt;
+      stock.percentChange = parseFloat(priceAPI.response.regularMarketChangePercent.fmt.toFixed(2));
       stock.currency = priceAPI.data.currency;       
     } catch (error) {
       console.log(stock.ticker + " Error: price or %change is not correctly loaded.");
@@ -68,6 +68,7 @@ async function appendYahooMetrics(stock) {
     stock.dateTime = new Date();
 
     // append total value of stock to stock in array
+    
     stock.totalValue = stock.currentPrice * stock.units;
 
     // We can add:

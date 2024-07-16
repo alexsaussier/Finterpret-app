@@ -125,7 +125,11 @@ export default async function AnalyticsDashboard() {
           // Data is too old, fetch from yahoo
           await appendYahooMetrics(stock);
 
-          await stockInDb.updateOne(stock);
+          try{
+            await stockInDb.updateOne(stock);
+          } catch {
+            console.log("operation failed, please go to  main dashboard and try again");
+          }
 
           console.log(stock.ticker + `: Data was too old, datetime updated in the database.`);
 

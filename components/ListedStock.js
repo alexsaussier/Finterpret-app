@@ -8,6 +8,10 @@ const ListedStock = ({ selected= false, changePercent, price, name, units, curre
   const [isOpen, setIsOpen] = useState(false);
   const isNegative = (changePercent ?? "").toString().startsWith("-") ? true : false;
 
+  if (!currency){
+    currency = "USD";
+  }
+
   return (
     <div className={`listedStock min-w-56 hover:bg-teal-300/50 ${selected ? "bg-teal-300/50 " : ""}`} >
       <p className="stockName">{name}</p>

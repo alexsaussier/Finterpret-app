@@ -22,14 +22,23 @@ const StockAnalyticsCard = ({ ticker }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getStats(ticker);
-      setStats(data);
-
-      // TO DO: we can optimize here, by checking if the stock is in db first, and only fetch from yahoo if it is not, or it is too old
-      // and then update the db
+      try {
+        const data = await getStats(ticker);
+        if (data) {
+          setStats(data);
+        } else {
+          console.error("No data returned for ticker:", ticker);
+        }
+      } catch (error) {
+        console.error("Failed to fetch stats for ticker:", ticker, error);
+      }
     };
-
-    fetchData();
+  
+    if (ticker) {
+      fetchData();
+    } else {
+      console.log("Ticker is undefined or not set");
+    }
   }, [ticker]);
 
   console.log("Stats: " + JSON.stringify(stats, null, 2));

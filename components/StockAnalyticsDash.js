@@ -13,6 +13,7 @@ import getPrice from "@/utils/getPrice";
 const StockAnalyticsDash = ({ stocks }) => {
   
   const [selectedStock, setSelectedStock] = useState(stocks[0]);
+  console.log("Selected Stock: " + JSON.stringify(selectedStock, null, 2));
   // Initialize state to hold stock stats
   
 
@@ -22,10 +23,10 @@ const StockAnalyticsDash = ({ stocks }) => {
       <div className="w-1/2">
         {stocks.map((stock) => (
           <div className={`mt-4`} key={stock.stockName}>
-            <button onClick={() => setSelectedStock(stock.ticker)}>
+            <button onClick={() => setSelectedStock(stock)}>
               <ListedStock
                 selected ={stock.ticker === selectedStock.ticker} 
-                changePercent={stock.changePercent} 
+                changePercent={stock.percentChange} 
                 price={stock.currentPrice} 
                 name={stock.stockName || stock.ticker} 
                 units={stock.units} 

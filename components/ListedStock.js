@@ -8,6 +8,9 @@ const ListedStock = ({ selected= false, changePercent, price, name, units, curre
   const [isOpen, setIsOpen] = useState(false);
   const isNegative = (changePercent ?? "").toString().startsWith("-") ? true : false;
 
+  changePercent = parseFloat(changePercent).toFixed(2) + "%";
+  price = parseFloat(price).toFixed(2);
+
   if (!currency){
     currency = "USD";
   }

@@ -39,7 +39,7 @@ const StockAnalyticsDash = ({ stocks }) => {
       </div>
 
       <div className="w-1/2">
-        <StockAnalyticsCard ticker={selectedStock.ticker}/> { /* TODO: PASS THE STOCK ARRAY, SO NO NEED TO FETCH DATA AFTER */ }
+        <StockAnalyticsCard ticker={selectedStock.ticker} stock={selectedStock}/> { /* TODO: PASS THE STOCK ARRAY, SO NO NEED TO FETCH DATA AFTER */ }
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ async function appendYahooMetrics(stock) {
 
     try{
       stock.currentPrice = priceAPI.response.regularMarketPrice.raw;
-      stock.percentChange = parseFloat(priceAPI.response.regularMarketChangePercent.fmt.toFixed(2));
+      stock.percentChange = priceAPI.response.regularMarketChangePercent.fmt;
       stock.currency = priceAPI.data.currency;       
     } catch (error) {
       console.log(stock.ticker + " Error: price or %change is not correctly loaded.");
@@ -27,6 +27,13 @@ async function appendYahooMetrics(stock) {
         console.log(stock.ticker + " Error: PE Ratio is not correctly loaded.");
       }
     }
+
+    try {
+      stock.sharesOutstanding = statsAPI.response.sharesOutstanding.raw;
+    } catch (error) {
+      console.log(stock.ticker + " Error: PE Ratio is not correctly loaded.");
+    }
+    
   
     // Get EPS and append to stock in array
     try {
@@ -45,6 +52,13 @@ async function appendYahooMetrics(stock) {
     } catch (error) {
       console.log(stock.ticker + " Error: P/EPS is not correctly loaded.");
     }
+
+    try{
+      stock.bookValue = statsAPI.response.bookValue.raw;
+    }catch(error){
+      console.log(stock.ticker + " Error: Book Value is not correctly loaded.");
+    }
+
   
     // Get Price to Book Value and append to stock in array
     try {

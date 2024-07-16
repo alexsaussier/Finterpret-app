@@ -6,9 +6,10 @@ import Modal from "@/components/Modal";
 // TO DO:
 //    - Ensure data is cached so we do not make multiple calls to the API if we click on the stock cards multiple times
 
-const StockAnalyticsCard = ({ ticker }) => {
+const StockAnalyticsCard = ({ stock }) => {
   const [stats, setStats] = useState(null);
   const importantMetrics = [];
+  let importantMetricsStock = [];
 
   const [isOpen, setIsOpen] = useState(false);
   const [currentMetric, setCurrentMetric] = useState(["", ""]);
@@ -18,32 +19,27 @@ const StockAnalyticsCard = ({ ticker }) => {
     setIsOpen(true);
   };
 
-  //We should fetch data here on initial render of the component and store it as state
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getStats(ticker);
-        if (data) {
-          setStats(data);
-        } else {
-          console.error("No data returned for ticker:", ticker);
-        }
-      } catch (error) {
-        console.error("Failed to fetch stats for ticker:", ticker, error);
-      }
-    };
+  //-------------LOAD IMPORTANT METRICS -------------
+
+  try {
+    importantMetrics.push(
+      ["PE Ratio", stock.peRatio],
+      ["Shares Outstanding", stock.sharesOutstanding],
+      ["Earnings Per Share", stock.eps],
+      ["Price/EPS", stock.priceEPS],
+      ["Book Value", stock.bookValue],
+      ["Price to Book", stock.priceToBook],
+      ["Dividend Yield", stock.divYield + "%"],
+    );
+
+  } catch (error) {
+    console.log("Error: Stock metrics are not correctly loaded." + error);
+  }
+
+
   
-    if (ticker) {
-      fetchData();
-    } else {
-      console.log("Ticker is undefined or not set");
-    }
-  }, [ticker]);
-
-  console.log("Stats: " + JSON.stringify(stats, null, 2));
-
-  if (!stats) {
+  if (!importantMetrics) {
     return (
       <div className="flex items-center space-x-3">
         <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -55,90 +51,6 @@ const StockAnalyticsCard = ({ ticker }) => {
     );
   }
 
-  //-------------LOAD IMPORTANT METRICS -------------
-
-  //PE ratio:
-  try {
-    importantMetrics.push(["PE Ratio", stats.response.trailingPE.raw]);
-  } catch (error) {
-    try {
-      importantMetrics.push(["PE Ratio", stats.response.forwardPE.raw]);
-    } catch (error) {
-      console.log("Error: PE Ratio is not correctly loaded.");
-    }
-  }
-
-  //Shares Outstanding:
-  try {
-    importantMetrics.push([
-      "Shares Outstanding",
-      stats.response.sharesOutstanding.raw,
-    ]);
-  } catch (error) {
-    console.log("Error: Shares Outstanding is not correctly loaded.");
-  }
-
-  //EPS:
-  try {
-    importantMetrics.push([
-      "Earnings Per Share",
-      stats.response.epsCurrentYear.raw,
-    ]);
-  } catch (error) {
-    try {
-      importantMetrics.push([
-        "Earnings Per Share",
-        stats.response.epsTrailingTwelveMonths.raw,
-      ]);
-    } catch (error) {
-      console.log("Error: EPS is not correctly loaded.");
-    }
-  }
-
-  // P/EPS ratio
-  try {
-    importantMetrics.push([
-      "Price/EPS ratio",
-      stats.response.priceEpsCurrentYear.raw,
-    ]);
-  } catch (error) {
-    console.log("Error: P/E ratio is not correctly loaded.");
-  }
-
-  //Book Value
-  try {
-    importantMetrics.push(["Book Value", stats.response.bookValue.raw]);
-  } catch (error) {
-    console.log("Error: Book Value is not correctly loaded.");
-  }
-
-  //Price to Book Value
-  try {
-    importantMetrics.push([
-      "Price to Book Value",
-      stats.response.priceToBook.raw,
-    ]);
-  } catch (error) {
-    console.log("Error: Price to Book Value is not correctly loaded.");
-  }
-
-  //Dividend Yield:
-  try {
-    importantMetrics.push([
-      "Dividend Yield",
-      stats.response.dividendYield.raw + "%",
-    ]);
-  } catch (error) {
-    try {
-      importantMetrics.push([
-        "Dividend Yield",
-        stats.response.trailingAnnualDividendYield.raw + "%",
-      ]);
-    } catch (error) {
-      console.log("Error: Dividend Yield is not correctly loaded.");
-    }
-  }
-
   // We can add:
   // stats.quickRatio,
   // stats.debtToEquity,
@@ -146,9 +58,6 @@ const StockAnalyticsCard = ({ ticker }) => {
   // stats.grossMargins
   // average analyst rating
 
-  console.log(
-    "Important metrics: " + JSON.stringify(importantMetrics, null, 2)
-  );
 
   
   return (
@@ -167,18 +76,20 @@ const StockAnalyticsCard = ({ ticker }) => {
       </div>
       ) : (
         <div>
+          
           <div className="flex-row">
-            {importantMetrics.map((metric, index) => (
-              <button onClick={() => openModal(metric)} key={metric[0]}>
-                <div className="stats shadow mt-4">
-                  <div className="stat">
-                    <div className="stat-title">{metric[0]}</div>
-                    <div className="stat-value">{metric[1]}</div>
-                  </div>
+          {importantMetrics.map((stockItem, index) => (
+            <button onClick={() => openModal(stockItem)} key={index}>
+              <div className="stats shadow mt-4">
+                <div className="stat">
+                  <div className="stat-title">{stockItem[0]}</div>
+                  <div className="stat-value">{stockItem[1]}</div>
+                  {/* Add more details as needed */}
                 </div>
-              </button>
-            ))}
-          </div>
+              </div>
+            </button>
+          ))}
+        </div>
           
           {isOpen && (
             <Modal

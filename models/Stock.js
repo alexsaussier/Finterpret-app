@@ -55,7 +55,15 @@ const stockSchema = mongoose.Schema(
     currency: {
       type: String,
     },
-}
+
+    sharesOutstanding: {
+      type: Number,
+    },  
+
+    bookValue: {
+      type: Number,
+    },  
+  }
 
 );
 

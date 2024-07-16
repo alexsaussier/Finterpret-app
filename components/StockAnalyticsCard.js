@@ -142,7 +142,6 @@ const StockAnalyticsCard = ({ ticker }) => {
   );
 
   
-
   return (
     <>
       {/* 

@@ -74,7 +74,7 @@ const ButtonSnaptrade = ({
 
   return (
     <button
-      className="btn btn-disable"
+      className="btn btn-disabled"
       disabled="disabled"
       onClick={handleSnaptrade}
     >

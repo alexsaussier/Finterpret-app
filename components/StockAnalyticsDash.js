@@ -12,27 +12,9 @@ import getPrice from "@/utils/getPrice";
 
 const StockAnalyticsDash = ({ stocks }) => {
   
-  const [selectedStock, setSelectedStock] = useState(stocks[0].ticker);
+  const [selectedStock, setSelectedStock] = useState(stocks[0]);
   // Initialize state to hold stock stats
-  const [stockStats, setStockStats] = useState({});
-
-  let regularMarketPrice = 0;
-  let regularMarketChangePercent = 0;
-
-  // get the price and delta for the stock cards once the component mounts
-  useEffect(() => {
-    const fetchData = async () => {
-      
-    };
-
-    fetchData();
-  }, [stocks]);
-
-
   
-  console.log("stockStats: ", stockStats);
-  
-
 
   return (
     <div
@@ -42,7 +24,7 @@ const StockAnalyticsDash = ({ stocks }) => {
           <div className={`mt-4`} key={stock.stockName}>
             <button onClick={() => setSelectedStock(stock.ticker)}>
               <ListedStock
-                selected ={stock.ticker === selectedStock} 
+                selected ={stock.ticker === selectedStock.ticker} 
                 changePercent={stock.changePercent} 
                 price={stock.currentPrice} 
                 name={stock.stockName || stock.ticker} 
@@ -56,7 +38,7 @@ const StockAnalyticsDash = ({ stocks }) => {
       </div>
 
       <div className="w-1/2">
-        <StockAnalyticsCard ticker={selectedStock} />
+        <StockAnalyticsCard ticker={selectedStock.ticker}/> { /* TODO: PASS THE STOCK ARRAY, SO NO NEED TO FETCH DATA AFTER */ }
       </div>
     </div>
   );

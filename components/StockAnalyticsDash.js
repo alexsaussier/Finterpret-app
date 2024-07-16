@@ -16,6 +16,7 @@ const StockAnalyticsDash = ({ stocks }) => {
   console.log("Selected Stock: " + JSON.stringify(selectedStock, null, 2));
   // Initialize state to hold stock stats
   
+  
 
   return (
     <div

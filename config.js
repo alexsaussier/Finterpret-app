@@ -75,7 +75,7 @@ const config = {
     // REQUIRED — Email 'From' field to be used when sending other emails, like abandoned carts, updates etc..
     fromAdmin: "Alex at Finterpret <hello@alexandresaussier.com>",
     // Email shown to customer if need support. Leave empty if not needed => if empty, set up Crisp above, otherwise you won't be able to offer customer support."
-    supportEmail: "asaussier99@gmail.com ",
+    supportEmail: "alex@mail.finterpret.co ",
     // When someone replies to supportEmail sent by the app, forward it to the email below (otherwise it's lost). If you set supportEmail to empty, this will be ignored.
     forwardRepliesTo: "asaussier99@gmail.com",
   },

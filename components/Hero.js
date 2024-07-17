@@ -23,6 +23,7 @@ const Hero = () => {
       </div>
       <div className="w-full max-w-xl mx-auto">
         <Image
+          unoptimized
           src={HeroImage}
           alt="Product Demo"
           className="w-full"

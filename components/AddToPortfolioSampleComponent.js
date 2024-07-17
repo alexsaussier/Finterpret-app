@@ -3,40 +3,12 @@ import { useState } from "react";
 import AddStockModal from "./AddStockModal";
 import { StockTickerSearch } from "./StockTickerSearch";
 
-
-
 export const AddToPortfolioSampleComponent = () => {
   const [openModal, setOpenModal] = useState(false);
   const [ticker, setTicker] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState([]);
   const [units, setUnits] = useState();
-
-
-  const saveToPorftolio = async () => {
-    try {
-      console.log("units: " + units + typeof(units))
-      const response = await fetch("/api/user/add-stocks-to-portfolio", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ticker,
-          units,
-        }),
-      });
-
-      if (response.ok) {
-        // Handle success
-        console.log("Data saved to portfolio");
-      } else {
-        // Handle error
-        console.error("Failed to save data to portfolio");
-      }
-    } catch (error) {
-      console.error("An error occurred while saving data to portfolio:", error);
-    }
-  };
-
 
   return (
     <div className="bg-white rounded-lg p-5 shadow-md flex flex-col h-full">
@@ -46,20 +18,16 @@ export const AddToPortfolioSampleComponent = () => {
 
       <div className="mb-2 flex">
         <StockTickerSearch
+          results={results}
+          setResults={setResults}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           ticker={ticker}
           setTicker={setTicker}
           units={units}
           setUnits={setUnits}
         />
-        
-          <button className="btn btn-neutral ml-2" onClick={() => saveToPorftolio()}>
-            Save to portfolio
-          </button>
-
       </div>
-      
-
-      
     </div>
   );
 };

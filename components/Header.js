@@ -7,6 +7,7 @@ import Image from "next/image";
 import ButtonSignin from "./ButtonSignin";
 import logo from "@/app/icon.png";
 import config from "@/config";
+import Logo from "@/public/images/LogoWide.png";
 
 const links = [
   {
@@ -38,7 +39,6 @@ const Header = () => {
         className="container flex items-center justify-between px-8 py-4 mx-auto"
         aria-label="Global"
       >
-      
         {/* Your logo/name on large screens */}
         <div className="flex lg:flex-1">
           <Link
@@ -46,12 +46,16 @@ const Header = () => {
             href="/"
             title={`${config.appName} homepage`}
           >
-            <span className="text-2xl lg:text-3xl" style={{ color: "#285A5D" }}>
-              {config.appName}
-            </span>
+            <Image
+              src={Logo}
+              className="w-30 md:w-25 lg:w-50"
+              alt="Logo"
+              priority={true}
+              width={200}
+            />
           </Link>
         </div>
-        
+
         {/* Burger button to open menu on mobile */}
         <div className="flex lg:hidden">
           <button

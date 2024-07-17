@@ -33,8 +33,6 @@ const features = [
         />
       </svg>
     ),
-  
-  
   },
   {
     title: "Portfolio Analysis",
@@ -196,12 +194,12 @@ const FeaturesAccordion = () => {
   const [featureSelected, setFeatureSelected] = useState(0);
 
   return (
-    <section className="backgroundImage py-24 md:py-32 space-y-24 md:space-y-32 mx-auto bg-base-100 px-20 py-8  md:pt-20">
+    <section className="backgroundImage py-8 md:py-32 space-y-12 md:space-y-32 mx-auto bg-base-100 px-6 md:px-20 md:pt-20">
       <div className="container px-8">
         <h2 className="font-extrabold text-4xl lg:text-6xl tracking-tight mb-12 md:mb-24">
           Use data to optimize your portfolio
           <span
-            className="px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-nowrap"
+            className="px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-breakspaces"
             style={{ backgroundColor: "#c2e8e4" }}
           >
             and start investing like a pro.

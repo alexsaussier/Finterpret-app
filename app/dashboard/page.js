@@ -18,6 +18,7 @@ import Stock from "@/models/Stock";
 import appendYahooMetrics from "@/utils/appendYahooMetrics";
 import { PortfolioAnalysis } from "@/components/PortfolioAnalysis";
 import ButtonSnaptradeDelete from "@/components/ButtonSnaptradeDelete";
+import DashboardCollapseStock from "@/components/DashboardCollapseStock";
 
 export default async function Dashboard() {
   await connectMongo();
@@ -33,11 +34,10 @@ export default async function Dashboard() {
   let holdings = null;
   let SharpeRatio = 0.8;
   let connectedBrokers = "";
-  let manualHoldings = []
+  let manualHoldings = [];
   let averagePeRatio = "N/A";
   let averageEps = "N/A";
   let averageDivYield = "N/A";
-
 
   // First, retrieve stock data from snaptrade
   if (userSecret) {
@@ -51,10 +51,11 @@ export default async function Dashboard() {
 
       // Then, fetch all stocks for this account ID
       holdings = await getSnaptradeHoldings();
-
     } catch {
-      console.error("Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings");
-    } 
+      console.error(
+        "Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings"
+      );
+    }
 
     // retrieve stocks through snaptrade
     if (holdings) {
@@ -62,11 +63,11 @@ export default async function Dashboard() {
       //options = holdings.response.option_positions;
       //orders = holdings.response.orders;
 
-      try{
+      try {
         portfolioCurrency = holdings.response.total_value.currency;
       } catch {
         portfolioCurrency = "$";
-      } 
+      }
 
       //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
       for (const position of holdings.response.positions) {
@@ -80,93 +81,105 @@ export default async function Dashboard() {
         }
 
         // Get the current price for each stock and store in stocks array
-        const response = await getPrice(ticker); 
+        const response = await getPrice(ticker);
 
         if (response && response.data) {
           const currentPrice = response.data.regularMarketPrice.raw;
           const percentChange = response.data.regularMarketChangePercent.raw;
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: currentPrice, percentChange: percentChange });
-
+          stocks.push({
+            ticker: ticker,
+            stockName: stockName,
+            units: units,
+            currentPrice: currentPrice,
+            percentChange: percentChange,
+          });
         } else {
           console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0, percentChange: "n/a"});
+          stocks.push({
+            ticker: ticker,
+            stockName: stockName,
+            units: units,
+            currentPrice: 0,
+            percentChange: "n/a",
+          });
         }
       }
     }
-
   } else {
     console.log("User is not connected to Snaptrade - no userSecret");
   }
 
   // Retrieve manually entered stocks
-  if (user.portfolio.length > 0){
+  if (user.portfolio.length > 0) {
     // Retrieve all tickers
-    try{
-      manualHoldings = user.portfolio.map(item => ({
-      ticker: item.ticker,
-      units: item.units
-    }));
+    try {
+      manualHoldings = user.portfolio.map((item) => ({
+        ticker: item.ticker,
+        units: item.units,
+      }));
     } catch {
       console.error("Failed to retrieve manually entered stocks");
     }
 
     // If there are manually entered stocks, get the current price for each stock
-    if (manualHoldings){
-      for(const position of manualHoldings){
+    if (manualHoldings) {
+      for (const position of manualHoldings) {
         let ticker = position.ticker;
         const units = position.units;
 
         // TO DO: getStockName for each ticker here
         const stockName = ticker; //to change
-  
+
         if (ticker === "CGG.PA") {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
-    
-  
-        const response = await getPrice(ticker); // Fetch stock stats
-        
-      
-        if (response && response.data) {
-        const currentPrice = response.data.regularMarketPrice.raw;
-        const percentChange = response.data.regularMarketChangePercent.raw;
-        stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice:currentPrice, percentChange: percentChange });
 
+        const response = await getPrice(ticker); // Fetch stock stats
+
+        if (response && response.data) {
+          const currentPrice = response.data.regularMarketPrice.raw;
+          const percentChange = response.data.regularMarketChangePercent.raw;
+          stocks.push({
+            ticker: ticker,
+            stockName: stockName,
+            units: units,
+            currentPrice: currentPrice,
+            percentChange: percentChange,
+          });
         } else {
           console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({ ticker: ticker, stockName: stockName, units: units, currentPrice: 0 });
+          stocks.push({
+            ticker: ticker,
+            stockName: stockName,
+            units: units,
+            currentPrice: 0,
+          });
         }
       }
     }
-
-  } 
-  else {
+  } else {
     console.log("User has no manually entered holdings.");
   }
 
-  
   // ----------------- GET STOCK METRICS -----------------
   // -----------------------------------------------------
   if (stocks.length > 0) {
-    
     // For all items in stocks array, fetch their metrics from the db or from yahoo
 
     for (var stock of stocks) {
-    
       // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
       let stockInDb = null;
 
       stock.totalValue = stock.currentPrice * stock.units;
 
-      try{
+      try {
         stockInDb = await Stock.findOne({ ticker: stock.ticker });
       } catch {
         console.log("Failed to fetch stock from database");
       }
-      
+
       if (stockInDb) {
-        
         const lastDateTime = stockInDb.dateTime;
         const currentDateTime = new Date();
         const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
@@ -176,35 +189,31 @@ export default async function Dashboard() {
           await appendYahooMetrics(stock);
 
           await stockInDb.updateOne(stock);
-
-        } else{
+        } else {
           // We have recent data in db, no need to fetch from yahoo
-          
+
           stock.divYield = stockInDb.divYield;
-          stock.eps = stockInDb.eps;  
+          stock.eps = stockInDb.eps;
           stock.peRatio = stockInDb.peRatio;
           stock.priceEPS = stockInDb.priceEPS;
-          stock.priceToBook = stockInDb.priceToBook; 
+          stock.priceToBook = stockInDb.priceToBook;
           stock.dateTime = stockInDb.dateTime;
-          // stock.totalValue = stockInDb.totalValue;  
-
+          // stock.totalValue = stockInDb.totalValue;
         }
-
-      } else{
+      } else {
         // Store stock in mongodb using Stock mongoose model
 
         await appendYahooMetrics(stock);
-        
+
         const newStock = new Stock(stock);
         await newStock.save();
-
       }
     }
   }
 
-    // OPTIONS
+  // OPTIONS
 
-    /*for (const option_position of holdings.response.option_positions) {
+  /*for (const option_position of holdings.response.option_positions) {
       const ticker = option_position.symbol.symbol.raw_symbol;
       const stockName = option_position.symbol.symbol.description;
       const quantity = option_position.units;
@@ -224,10 +233,8 @@ export default async function Dashboard() {
       });
     }  */
 
-  
   //retrieve manually entered stocks
   //let { calls, puts } = separateCallsAndPuts(options);
-
 
   try {
     portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
@@ -236,13 +243,27 @@ export default async function Dashboard() {
   }
 
   // Calculate portfolio average PE ratio
-  averagePeRatio = getPortfolioData.calculateAverage("peRatio", stocks, portfolioValue);
+  averagePeRatio = getPortfolioData.calculateAverage(
+    "peRatio",
+    stocks,
+    portfolioValue
+  );
   averageEps = getPortfolioData.calculateAverage("eps", stocks, portfolioValue);
-  averageDivYield = getPortfolioData.calculateAverage("divYield", stocks, portfolioValue);
+  averageDivYield = getPortfolioData.calculateAverage(
+    "divYield",
+    stocks,
+    portfolioValue
+  );
 
   // Calculate percentage of profitable companies
-  const percentageProfitable = getPortfolioData.countPositives("peRatio", stocks);
-  const percentageDividend = getPortfolioData.countPositives("divYield", stocks);
+  const percentageProfitable = getPortfolioData.countPositives(
+    "peRatio",
+    stocks
+  );
+  const percentageDividend = getPortfolioData.countPositives(
+    "divYield",
+    stocks
+  );
 
   const portfolioGeneralData = {
     totalValue: portfolioValue,
@@ -250,7 +271,7 @@ export default async function Dashboard() {
     eps: averageEps,
     divYield: averageDivYield,
     profitable: percentageProfitable,
-    dividendPaying: percentageDividend
+    dividendPaying: percentageDividend,
   };
 
   //------
@@ -266,27 +287,37 @@ export default async function Dashboard() {
           <h1 className="text-lg md:text-xl font-bold text-left mb-2">
             Dashboard
           </h1>
-          
+
           <div className="flex flex-row gap-2">
             <p className="mb-2">
               Welcome {user.name} {user.email} 👋
-            </p>          
-            
+            </p>
+
             <div className="flex flex-col gap-2">
-              {connectedBrokers && <p>Connected account(s): {connectedBrokers}</p>}
+              {connectedBrokers && (
+                <p>Connected account(s): {connectedBrokers}</p>
+              )}
               {userSecret && (
                 <div className="mb-4">
-                  <ButtonSnaptradeDelete/>
+                  <ButtonSnaptradeDelete />
                 </div>
               )}
             </div>
           </div>
-          
+
           {!userSecret && (
             <div className="mb-4">
               <div className="flex flex-row gap-1">
-                <p className="mb-2 font-semibold">Coming soon for premium users: </p><p>Update your portfolio automatically in real time using </p>
-                <a href="https://snaptrade.com/brokerage-integrations" target="_blank" rel="noreferrer" class="text-blue-500 hover:text-blue-700 underline">
+                <p className="mb-2 font-semibold">
+                  Coming soon for premium users:{" "}
+                </p>
+                <p>Update your portfolio automatically in real time using </p>
+                <a
+                  href="https://snaptrade.com/brokerage-integrations"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="text-blue-500 hover:text-blue-700 underline"
+                >
                   <p className="font-semibold">Snaptrade integrations</p>
                 </a>
               </div>
@@ -297,8 +328,6 @@ export default async function Dashboard() {
               />
             </div>
           )}
-
-          
         </div>
 
         <AddToPortfolioSampleComponent />
@@ -306,9 +335,10 @@ export default async function Dashboard() {
         {portfolioGeneralData && stocks.length > 0 ? (
           <PortfolioAnalysis portfolioGeneralData={portfolioGeneralData} />
         ) : (
-          <div>Add holdings to your portfolio, so we can generate some insights.</div>
+          <div>
+            Add holdings to your portfolio, so we can generate some insights.
+          </div>
         )}
-
 
         <div className="relative">
           <div
@@ -321,15 +351,13 @@ export default async function Dashboard() {
                 Your holdings
               </h1>
 
-              <DashboardCollapse title="Stocks">
-                {stocks.map((stocks, index) => (
-                  <AssetLayout
-                    key={stocks.stockName}
-                    title={stocks.stockName}
-                    units={stocks.units}
-                  />
-                ))}
-              </DashboardCollapse>
+              {stocks.map((stocks, index) => (
+                <DashboardCollapseStock
+                  key={stocks.stockName}
+                  title={stocks.stockName}
+                  units={stocks.units}
+                />
+              ))}
             </div>
 
             {/* HIDING OPTIONS AND CRYPTO AS WE WILL NOT IMPLEMENT THIS IN MVP
@@ -369,14 +397,30 @@ export default async function Dashboard() {
                 Portfolio Report
               </h1>
 
-              <DashboardCollapseValue title="Portfolio Value" units={portfolioValue + " " + portfolioCurrency} />
-              <DashboardCollapseValue title="Average P/E Ratio (of profitable companies)" units={averagePeRatio} />
-              <DashboardCollapseValue title="Average Earnings per Share (EPS - of profitable companies)" units={averageEps} />
-              <DashboardCollapseValue title="Percentage of your portfolio companies that are profitable" units= {percentageProfitable + "%"} />
-              <DashboardCollapseValue title="Average dividend yield" units= {averageDivYield} />
-              <DashboardCollapseValue title="Percentage of your companies that pay dividend" units= {percentageDividend + "%"} />
-
-
+              <DashboardCollapseValue
+                title="Portfolio Value"
+                units={portfolioValue + " " + portfolioCurrency}
+              />
+              <DashboardCollapseValue
+                title="Average P/E Ratio (of profitable companies)"
+                units={averagePeRatio}
+              />
+              <DashboardCollapseValue
+                title="Average Earnings per Share (EPS - of profitable companies)"
+                units={averageEps}
+              />
+              <DashboardCollapseValue
+                title="Percentage of your portfolio companies that are profitable"
+                units={percentageProfitable + "%"}
+              />
+              <DashboardCollapseValue
+                title="Average dividend yield"
+                units={averageDivYield}
+              />
+              <DashboardCollapseValue
+                title="Percentage of your companies that pay dividend"
+                units={percentageDividend + "%"}
+              />
 
               {/* 
               <DashboardCollapseValue title="Sharpe Ratio"  units={SharpeRatio} />
@@ -385,7 +429,6 @@ export default async function Dashboard() {
 
               <DashboardCollapseValue title="YoY Return" units={12} />
               */}
-
             </div>
           </div>
           {!stocks && (

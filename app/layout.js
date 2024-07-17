@@ -26,6 +26,14 @@ export default function RootLayout({ children }) {
         <head>
           <Analytics />
           <PlausibleProvider domain={config.domainName} />
+          <meta
+            property="og:image"
+            content="https://www.finterpret.co/images/LogoLogin.png"
+          ></meta>
+          <meta
+            name="twitter:image"
+            content="https://www.finterpret.co/images/LogoLogin.png"
+          />
         </head>
       )}
       <body>

@@ -28,11 +28,11 @@ export default function RootLayout({ children }) {
           <PlausibleProvider domain={config.domainName} />
           <meta
             property="og:image"
-            content="https://www.finterpret.co/images/LogoLogin.png"
+            content="https://www.finterpret.co/images/Logo.png"
           ></meta>
           <meta
             name="twitter:image"
-            content="https://www.finterpret.co/images/LogoLogin.png"
+            content="https://www.finterpret.co/images/Logo.png"
           />
         </head>
       )}

@@ -2,7 +2,9 @@ const { sum } = require("lodash");
 
 // Function to calculate the total portfolio value
 function calculateTotalPortfolioValue(stocks) {
-  let totalValue = stocks.reduce((total, { currentPrice, units }) => {
+  
+  try{
+    let totalValue = stocks.reduce((total, { currentPrice, units }) => {
       // Only add to total if currentPrice is available
       if (currentPrice !== undefined && typeof units === 'number') {
         return total + (currentPrice * units);
@@ -11,6 +13,9 @@ function calculateTotalPortfolioValue(stocks) {
     }, 0);
   
     return parseFloat(totalValue.toFixed(2));
+  }catch (e){
+    console.log("could not calculate totalValue of portfolio.")
+  }
 }
 
 // To fix: the weights don't add up to 1 because we don't consider the stocks that don't have a metric > 0

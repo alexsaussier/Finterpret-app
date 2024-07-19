@@ -13,11 +13,11 @@ import clsx from "clsx";
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   {
-    name: "Overview",
+    name: "Portfolio Analysis",
     href: "/dashboard" /* add icon: HomeIcon at the end after you import icons*/,
   },
   {
-    name: "Portfolio Analysis",
+    name: "Holdings Analysis",
     href: "/dashboard/analysis",
     /* icon: DocumentDuplicateIcon, */
   },

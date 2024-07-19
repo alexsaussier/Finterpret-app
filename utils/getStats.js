@@ -2,7 +2,7 @@ export default async function getStats(ticker) {
   // API CALL to retrieve stock metrics
   // BETA, EPS, P/E, ...
   
-  const url = "/api/yahoo-finance/key-statistics";
+  const url = process.env.NEXTAUTH_URL + "/api/yahoo-finance/key-statistics";
  
   try{
     const response = await fetch(url, {

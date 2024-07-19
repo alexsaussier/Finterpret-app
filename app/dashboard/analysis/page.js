@@ -144,6 +144,9 @@ export default async function AnalyticsDashboard() {
           stock.priceToBook = stockInDb.priceToBook; 
           stock.dateTime = stockInDb.dateTime;  
           stock.currency = stockInDb.currency;
+          stock.totalValue = stockInDb.totalValue;
+          stock.sharesOutstanding = stockInDb.sharesOutstanding;
+
 
         }
       } else{

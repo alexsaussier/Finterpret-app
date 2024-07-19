@@ -1,6 +1,3 @@
-import { NextResponse } from "next/server";
-
-
 export default async function getPrice(ticker) {
     // API CALL to retrieve price and delta 
 
@@ -24,7 +21,7 @@ export default async function getPrice(ticker) {
         if (e.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            console.error("Server responded with an error:", e.response.status, e.response.data);
+            console.error("getPrice: Server responded with an error:", e.response.status, e.response.data);
         } else if (e.request) {
             // The request was made but no response was received
             console.error("No response received for the request:", e.request);

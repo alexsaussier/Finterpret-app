@@ -58,17 +58,9 @@ export default async function Dashboard() {
     }
 
     // retrieve stocks through snaptrade
+    // retrieve stocks through snaptrade
     if (holdings) {
-      //stocks = holdings.response.positions;
-      //options = holdings.response.option_positions;
-      //orders = holdings.response.orders;
-
-      try {
-        portfolioCurrency = holdings.response.total_value.currency;
-      } catch {
-        portfolioCurrency = "$";
-      }
-
+     
       //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
       for (const position of holdings.response.positions) {
         let ticker = position.symbol.symbol.symbol;
@@ -79,32 +71,12 @@ export default async function Dashboard() {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
+       
+        stocks.push({ ticker: ticker, stockName: stockName, units: units });
 
-        // Get the current price for each stock and store in stocks array
-        const response = await getPrice(ticker);
-
-        if (response && response.data) {
-          const currentPrice = response.data.regularMarketPrice.raw;
-          const percentChange = response.data.regularMarketChangePercent.raw;
-          stocks.push({
-            ticker: ticker,
-            stockName: stockName,
-            units: units,
-            currentPrice: currentPrice,
-            percentChange: percentChange,
-          });
-        } else {
-          console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({
-            ticker: ticker,
-            stockName: stockName,
-            units: units,
-            currentPrice: 0,
-            percentChange: "n/a",
-          });
-        }
-      }
+      } 
     }
+
   } else {
     console.log("User is not connected to Snaptrade - no userSecret");
   }
@@ -122,46 +94,33 @@ export default async function Dashboard() {
     }
 
     // If there are manually entered stocks, get the current price for each stock
-    if (manualHoldings) {
-      for (const position of manualHoldings) {
+    if (manualHoldings){
+      for(const position of manualHoldings){
         let ticker = position.ticker;
-        const units = position.units;
 
+        if (ticker.endsWith(".PAR")) {
+          ticker = ticker.slice(0, -1);
+        }
+        const units = position.units;
+        
         // TO DO: getStockName for each ticker here
         const stockName = ticker; //to change
-
+  
         if (ticker === "CGG.PA") {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
 
-        const response = await getPrice(ticker); // Fetch stock stats
+        stocks.push({ ticker: ticker, stockName: stockName, units: units});
 
-        if (response && response.data) {
-          const currentPrice = response.data.regularMarketPrice.raw;
-          const percentChange = response.data.regularMarketChangePercent.raw;
-          stocks.push({
-            ticker: ticker,
-            stockName: stockName,
-            units: units,
-            currentPrice: currentPrice,
-            percentChange: percentChange,
-          });
-        } else {
-          console.error(`Failed to fetch price for ticker: ${ticker}`);
-          stocks.push({
-            ticker: ticker,
-            stockName: stockName,
-            units: units,
-            currentPrice: 0,
-          });
-        }
       }
     }
-  } else {
+  } 
+  else {
     console.log("User has no manually entered holdings.");
   }
 
+  
   // ----------------- GET STOCK METRICS -----------------
   // -----------------------------------------------------
   if (stocks.length > 0) {
@@ -171,12 +130,10 @@ export default async function Dashboard() {
       // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
       let stockInDb = null;
 
-      stock.totalValue = stock.currentPrice * stock.units;
-
       try {
         stockInDb = await Stock.findOne({ ticker: stock.ticker });
       } catch {
-        console.log("Failed to fetch stock from database");
+        console.log("Failed to fetch stock from database: " + stock.ticker);
       }
 
       if (stockInDb) {
@@ -188,17 +145,23 @@ export default async function Dashboard() {
           // Data is too old, fetch from yahoo
           await appendYahooMetrics(stock);
 
+          console.log("Refetching stock data" + stock.ticker);
+
           await stockInDb.updateOne(stock);
         } else {
           // We have recent data in db, no need to fetch from yahoo
 
+          stock.currentPrice = stockInDb.currentPrice;
+          stock.percentChange = stockInDb.percentChange;
           stock.divYield = stockInDb.divYield;
-          stock.eps = stockInDb.eps;
+          stock.eps = stockInDb.eps;  
           stock.peRatio = stockInDb.peRatio;
           stock.priceEPS = stockInDb.priceEPS;
-          stock.priceToBook = stockInDb.priceToBook;
-          stock.dateTime = stockInDb.dateTime;
-          // stock.totalValue = stockInDb.totalValue;
+          stock.priceToBook = stockInDb.priceToBook; 
+          stock.dateTime = stockInDb.dateTime;  
+          stock.currency = stockInDb.currency;
+          stock.totalValue = stockInDb.totalValue;
+          stock.sharesOutstanding = stockInDb.sharesOutstanding;
         }
       } else {
         // Store stock in mongodb using Stock mongoose model
@@ -236,6 +199,8 @@ export default async function Dashboard() {
   //retrieve manually entered stocks
   //let { calls, puts } = separateCallsAndPuts(options);
 
+  console.log(stocks)
+
   try {
     portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
   } catch (e) {
@@ -243,11 +208,16 @@ export default async function Dashboard() {
   }
 
   // Calculate portfolio average PE ratio
-  averagePeRatio = getPortfolioData.calculateAverage(
+  try{
+    averagePeRatio = getPortfolioData.calculateAverage(
     "peRatio",
     stocks,
     portfolioValue
   );
+  } catch(e){
+    console.log("Failed to calculate average PE ratio: " + e)
+  }
+  
   averageEps = getPortfolioData.calculateAverage("eps", stocks, portfolioValue);
   averageDivYield = getPortfolioData.calculateAverage(
     "divYield",
@@ -273,6 +243,8 @@ export default async function Dashboard() {
     profitable: percentageProfitable,
     dividendPaying: percentageDividend,
   };
+  
+  console.log(portfolioGeneralData);
 
   //------
 
@@ -316,7 +288,7 @@ export default async function Dashboard() {
                   href="https://snaptrade.com/brokerage-integrations"
                   target="_blank"
                   rel="noreferrer"
-                  class="text-blue-500 hover:text-blue-700 underline"
+                  className="text-blue-500 hover:text-blue-700 underline"
                 >
                   <p className="font-semibold">Snaptrade integrations</p>
                 </a>

@@ -7,23 +7,15 @@ const DashboardCollapseStock = ({ title, units, children }) => {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [editUnits, setEditUnits] = useState(units);
-  /* 
+  
   const guideline =
-    "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly" +
-    " Answer in HTML format. Use 1 <br> tags between each paragraph." +
-    " Use <b> tags to put the important statements in bold. " +
-    " You should sound very confident in your answer, as if you are a financial advisor." +
-    " Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance.";
+    "You are an expert in publicly listed companies. I will be asking you questions about some publicly listed companies. " +
+    "Your tone should be serious but friendly. Answer in HTML format. Use 1 <br> tags between each paragraph. ";
 
   const gptMessage =
-    "My " +
-    title +
-    " of my portfolio has a value of " +
-    units +
-    ", what does it mean?" +
-    " Define what " +
-    title +
-    "means but focus more on what the value means for me.";
+    "Can you provide me with a description of the following company: " + title + "?" + 
+    "Give me a short rundown of what the company does, what it is known for, and any insights about its historical financial performance" +
+    "Do not include a title in your response";
 
   const [response, setResponse] = useState(null);
   const [hasMadeApiCall, setHasMadeApiCall] = useState(false);
@@ -35,22 +27,21 @@ const DashboardCollapseStock = ({ title, units, children }) => {
       setResponse(res);
       setHasMadeApiCall(true);
     }
-  };*/
-
-  const handleOpen = () => {
-    return null;
   };
+
+ 
 
   return (
     <div className="collapse bg-base-200 hover:bg-primary-content mb-2">
       <input type="checkbox" onChange={handleOpen} />
+
       <div className="collapse-title font-bold flex justify-between items-center p-4">
         <div className="">{title}</div>
         {!editing && <div className="">{units}</div>}
       </div>
 
-      <div className="collapse-content flex items-center justify-between space-y-4">
-        <div>GPT CONTENT</div>
+      <div className="collapse-content flex flex-col items-center justify-between space-y-4">
+
         <div className="flex space-x-2">
           {editing ? (
             <>
@@ -95,6 +86,37 @@ const DashboardCollapseStock = ({ title, units, children }) => {
             </>
           )}
         </div>
+
+        {//Chat gpt response
+        }
+
+          {response === null ? (
+            <div className="flex items-center space-x-3">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Our Intelligent Advisor is looking for information about {title} ...
+            </div>
+          ) : (
+            <section dangerouslySetInnerHTML={{ __html: response }} />
+          )}
       </div>
     </div>
   );

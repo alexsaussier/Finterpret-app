@@ -5,7 +5,7 @@ export const sendOpenAi = async (guideline, request, userId, max, temp = 1) => {
   const url = "https://api.openai.com/v1/chat/completions";
 
   const body = JSON.stringify({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o-mini",
     messages: [{"role": "system", "content": guideline}, 
     {"role": "user", "content": request}],
     max_tokens: max,

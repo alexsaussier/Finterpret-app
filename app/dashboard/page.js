@@ -325,8 +325,8 @@ export default async function Dashboard() {
 
               {stocks.map((stocks, index) => (
                 <DashboardCollapseStock
-                  key={stocks.stockName}
-                  title={stocks.stockName}
+                  key={stocks.ticker}
+                  title={stocks.ticker}
                   units={stocks.units}
                 />
               ))}

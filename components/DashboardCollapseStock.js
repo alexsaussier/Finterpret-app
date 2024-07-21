@@ -29,6 +29,65 @@ const DashboardCollapseStock = ({ title, units, children }) => {
     }
   };
 
+  // Handle editing of stock units
+
+  const handleEdit = async () => {
+    const ticker = title;
+    const newUnits = editUnits;
+
+    try {
+      const response = await fetch('/api/user/edit-user-portfolio', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ticker, newUnits }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(title + ' Stock unit updated successfully:', result);
+      // Optionally, update the UI or give user feedback
+    } catch (error) {
+      console.error('Error updating stock unit:', error);
+    }
+  };
+
+
+
+  const handleDelete = async () => {
+    setDeleting(false)
+
+    const ticker = title;
+    const newUnits = 0;
+
+    // when units is 0, this api route removes the stock from the portfolio
+    try {
+      const response = await fetch('/api/user/edit-user-portfolio', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ticker, newUnits }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log(title + ' Stock unit updated successfully:', result);
+      // Optionally, update the UI or give user feedback
+    } catch (error) {
+      console.error('Error updating stock unit:', error);
+    }
+  };
+
+
+
  
 
   return (
@@ -57,8 +116,16 @@ const DashboardCollapseStock = ({ title, units, children }) => {
               >
                 Cancel
               </button>
-              <button className="btn btn-primary">Save</button>
+
+              <button 
+                className="btn btn-primary"
+                onClick={() => handleEdit()}
+              >
+                Save
+              </button>
+
             </>
+
           ) : deleting ? (
             <>
               <button
@@ -67,7 +134,13 @@ const DashboardCollapseStock = ({ title, units, children }) => {
               >
                 Cancel
               </button>
-              <button className="btn btn-primary">Confirm</button>
+
+              <button 
+                className="btn btn-primary"
+                onClick={() => handleDelete()}
+              >
+                Confirm
+              </button>
             </>
           ) : (
             <>

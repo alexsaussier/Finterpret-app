@@ -32,6 +32,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
   // Handle editing of stock units
 
   const handleEdit = async () => {
+    setEditing(false);
     const ticker = title;
     const newUnits = editUnits;
 

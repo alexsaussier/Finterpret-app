@@ -21,7 +21,7 @@ const config = {
         priceId:
           process.env.NODE_ENV === "development"
             ? "price_1P7z4TAvu92XwZMPBN6jl9FC"
-            : "price_456",
+            : "price_1P7ypQAvu92XwZMPY09r01oX",
         //  REQUIRED - Name of the plan, displayed on the pricing page
         name: "Monthly Subscription",
         // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
@@ -32,9 +32,11 @@ const config = {
         priceAnchor: 9.99,
         features: [
           { name: "Import your portfolio automatically, in real time, with Snaptrade" },
-          { name: "Portfolio Metrics" },
-          { name: "Tailored Portfolio Reports" },
-          { name: "Investment recommendations and optimizations" },
+          { name: "Unlimited Portfolio Metrics and insights" },
+          { name: "Generate unlimited reports on your entire portfolio" },
+          { name: "Your insights are created with the latest generative AI models" },
+          { name: "Prime access to all incoming features: crypto and options, integrate with your broker, tailored market news, 'chat with your portfolio'" },
+          { name: "24/7 support" },
         ],
         mode: "subscription",
       },
@@ -43,18 +45,18 @@ const config = {
         isFeatured: true,
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1P82UFAvu92XwZMPzUMvubpj"
-            : "price_456",
-        name: "Lifetime Access",
-        description: "Pay once, have it forever.",
-        price: 49.99,
+            ? "price_1PfQPcAvu92XwZMPb9JGgROQ"
+            : "price_1PfQATAvu92XwZMPs097bs1u",
+        name: "1-year Access",
+        description: "Get 1 year of access to all premium features. Best value for money.",
+        price: 39.99,
         priceAnchor: 79.99,
         features: [
-          { name: "Import your stock and crypto portfolios" },
-          { name: "Portfolio Metrics" },
-          { name: "Tailored Portfolio Reports" },
-          { name: "Investment recommendations and optimizations" },
-          { name: "Lifetime access" },
+          { name: "Import your portfolio automatically, in real time, with Snaptrade" },
+          { name: "Unlimited Portfolio Metrics and insights" },
+          { name: "Generate unlimited reports on your entire portfolio" },
+          { name: "Your insights are created with the latest generative AI models" },
+          { name: "Prime access to all incoming features: crypto and options, integrate with your broker, tailored market news, 'chat with your portfolio'" },
           { name: "24/7 support" },
         ],
         mode: "payment",

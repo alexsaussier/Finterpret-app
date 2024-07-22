@@ -59,7 +59,7 @@ const config = {
           { name: "Prime access to all incoming features: crypto and options, integrate with your broker, tailored market news, 'chat with your portfolio'" },
           { name: "24/7 support" },
         ],
-        mode: "payment",
+        mode: "subscription",
       },
     ],
   },

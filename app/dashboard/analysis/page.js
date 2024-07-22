@@ -81,6 +81,11 @@ export default async function AnalyticsDashboard() {
     if (manualHoldings){
       for(const position of manualHoldings){
         let ticker = position.ticker;
+
+        if (ticker.endsWith(".PAR")) {
+          ticker = ticker.slice(0, -1);
+        }
+        
         const units = position.units;
         
         // TO DO: getStockName for each ticker here

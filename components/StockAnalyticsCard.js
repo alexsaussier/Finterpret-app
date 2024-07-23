@@ -71,6 +71,8 @@ const StockAnalyticsCard = ({ stock }) => {
   const allMetricsEmpty = importantMetrics.every(
     (metric) => metric[1] === null || metric[1] === undefined
   );
+
+
   return (
     <>
       {/* 
@@ -104,7 +106,7 @@ const StockAnalyticsCard = ({ stock }) => {
       ) : (
         <div>
           
-          <div className="flex-row">
+          <div className="flex flex-col">
           {importantMetrics.map((stockItem, index) => (
             <button onClick={() => openModal(stockItem)} key={index}>
               <div className="stats shadow mt-4">

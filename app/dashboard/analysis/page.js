@@ -6,15 +6,12 @@ import { getSnaptradeHoldings } from "@/utils/getSnaptradeHoldings";
 import ButtonSnaptrade from "@/components/ButtonSnaptrade";
 import StockAnalyticsCard from "@/components/StockAnalyticsCard";
 import StockAnalyticsDash from "@/components/StockAnalyticsDash";
-import { pick } from 'lodash';
-import getPrice from "@/utils/getPrice";  
+import { pick } from "lodash";
+import getPrice from "@/utils/getPrice";
 import Stock from "@/models/Stock";
-import appendYahooMetrics from "@/utils/appendYahooMetrics";  
-
-
+import appendYahooMetrics from "@/utils/appendYahooMetrics";
 
 export default async function AnalyticsDashboard() {
-
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
@@ -29,22 +26,20 @@ export default async function AnalyticsDashboard() {
   let manualHoldings = [];
   let holdings = null;
   let portfolioCurrency = null;
-  
- 
+
   // First, retrieve stock data from snaptrade
   if (userSecret) {
     try {
-     
       // Then, fetch all stocks for this account ID
       holdings = await getSnaptradeHoldings();
-
     } catch {
-      console.error("Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings");
-    } 
+      console.error(
+        "Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings"
+      );
+    }
 
     // retrieve stocks through snaptrade
     if (holdings) {
-     
       //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
       for (const position of holdings.response.positions) {
         let ticker = position.symbol.symbol.symbol;
@@ -55,31 +50,29 @@ export default async function AnalyticsDashboard() {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
-       
+
         stocks.push({ ticker: ticker, stockName: stockName, units: units });
-
-      } 
+      }
     }
-
   } else {
     console.log("User is not connected to Snaptrade - no userSecret");
   }
 
   // Retrieve manually entered stocks
-  if (user.portfolio.length > 0){
+  if (user.portfolio.length > 0) {
     // Retrieve all tickers
-    try{
-      manualHoldings = user.portfolio.map(item => ({
-      ticker: item.ticker,
-      units: item.units
-    }));
+    try {
+      manualHoldings = user.portfolio.map((item) => ({
+        ticker: item.ticker,
+        units: item.units,
+      }));
     } catch {
       console.error("Failed to retrieve manually entered stocks");
     }
 
     // If there are manually entered stocks, get the current price for each stock
-    if (manualHoldings){
-      for(const position of manualHoldings){
+    if (manualHoldings) {
+      for (const position of manualHoldings) {
         let ticker = position.ticker;
 
         if (ticker.endsWith(".PAR")) {
@@ -87,41 +80,37 @@ export default async function AnalyticsDashboard() {
         }
 
         const units = position.units;
-        
+
         // TO DO: getStockName for each ticker here
         const stockName = ticker; //to change
-  
+
         if (ticker === "CGG.PA") {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
 
-        stocks.push({ ticker: ticker, stockName: stockName, units: units});
-
+        stocks.push({ ticker: ticker, stockName: stockName, units: units });
       }
     }
-  } 
-  else {
+  } else {
     console.log("User has no manually entered holdings.");
   }
 
-// ----------------- GET STOCK METRICS -----------------
+  // ----------------- GET STOCK METRICS -----------------
   // -----------------------------------------------------
   if (stocks.length > 0) {
-    
     // For all items in stocks array, fetch their metrics from the db or from yahoo
 
     for (var stock of stocks) {
-    
       // Check if stock is in db and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
       let stockInDb = null;
-      try{
+      try {
         stockInDb = await Stock.findOne({ ticker: stock.ticker });
       } catch {
         console.log("Failed to fetch stock from database");
       }
-      
-      if (stockInDb) {        
+
+      if (stockInDb) {
         const lastDateTime = stockInDb.dateTime;
         const currentDateTime = new Date();
         const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
@@ -130,24 +119,28 @@ export default async function AnalyticsDashboard() {
           // Data is too old, fetch from yahoo
           await appendYahooMetrics(stock);
 
-          try{
+          try {
             await stockInDb.updateOne(stock);
           } catch {
-            console.log("operation failed, please go to  main dashboard and try again");
+            console.log(
+              "operation failed, please go to  main dashboard and try again"
+            );
           }
 
-          console.log(stock.ticker + `: Data was too old, datetime updated in the database.`);
-
-        } else{
+          console.log(
+            stock.ticker +
+              `: Data was too old, datetime updated in the database.`
+          );
+        } else {
           // We have recent data in db, no need to fetch from yahoo
           stock.currentPrice = stockInDb.currentPrice;
           stock.percentChange = stockInDb.percentChange;
           stock.divYield = stockInDb.divYield;
-          stock.eps = stockInDb.eps;  
+          stock.eps = stockInDb.eps;
           stock.peRatio = stockInDb.peRatio;
           stock.priceEPS = stockInDb.priceEPS;
-          stock.priceToBook = stockInDb.priceToBook; 
-          stock.dateTime = stockInDb.dateTime;  
+          stock.priceToBook = stockInDb.priceToBook;
+          stock.dateTime = stockInDb.dateTime;
           stock.currency = stockInDb.currency;
           stock.totalValue = stockInDb.totalValue;
           stock.sharesOutstanding = stockInDb.sharesOutstanding; 
@@ -155,20 +148,16 @@ export default async function AnalyticsDashboard() {
 
 
         }
-      } else{
+      } else {
         // Store stock in mongodb using Stock mongoose model
         await appendYahooMetrics(stock);
 
         const newStock = new Stock(stock);
         await newStock.save();
-
       }
     }
-      console.log("Stocks array: ", stocks);
+    console.log("Stocks array: ", stocks);
   }
-
-
-
 
   return (
     <main className="flex-1 pb-24">

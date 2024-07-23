@@ -60,7 +60,6 @@ export default async function Dashboard() {
     // retrieve stocks through snaptrade
     // retrieve stocks through snaptrade
     if (holdings) {
-     
       //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
       for (const position of holdings.response.positions) {
         let ticker = position.symbol.symbol.symbol;
@@ -71,12 +70,10 @@ export default async function Dashboard() {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
-       
+
         stocks.push({ ticker: ticker, stockName: stockName, units: units });
-
-      } 
+      }
     }
-
   } else {
     console.log("User is not connected to Snaptrade - no userSecret");
   }
@@ -94,33 +91,30 @@ export default async function Dashboard() {
     }
 
     // If there are manually entered stocks, get the current price for each stock
-    if (manualHoldings){
-      for(const position of manualHoldings){
+    if (manualHoldings) {
+      for (const position of manualHoldings) {
         let ticker = position.ticker;
 
         if (ticker.endsWith(".PAR")) {
           ticker = ticker.slice(0, -1);
         }
         const units = position.units;
-        
+
         // TO DO: getStockName for each ticker here
         const stockName = ticker; //to change
-  
+
         if (ticker === "CGG.PA") {
           ticker = "VIRI.PA";
           //because company just changed name and brokers can use the previous name
         }
 
-        stocks.push({ ticker: ticker, stockName: stockName, units: units});
-
+        stocks.push({ ticker: ticker, stockName: stockName, units: units });
       }
     }
-  } 
-  else {
+  } else {
     console.log("User has no manually entered holdings.");
   }
 
-  
   // ----------------- GET STOCK METRICS -----------------
   // -----------------------------------------------------
   if (stocks.length > 0) {
@@ -147,18 +141,22 @@ export default async function Dashboard() {
 
           console.log("Refetching stock data" + stock.ticker);
 
-          await stockInDb.updateOne(stock);
+          if (isNaN(stock.totalValue)) {
+            await stockInDb.updateOne({ ...stock, totalValue: 0 });
+          } else {
+            await stockInDb.updateOne(stock);
+          }
         } else {
           // We have recent data in db, no need to fetch from yahoo
 
           stock.currentPrice = stockInDb.currentPrice;
           stock.percentChange = stockInDb.percentChange;
           stock.divYield = stockInDb.divYield;
-          stock.eps = stockInDb.eps;  
+          stock.eps = stockInDb.eps;
           stock.peRatio = stockInDb.peRatio;
           stock.priceEPS = stockInDb.priceEPS;
-          stock.priceToBook = stockInDb.priceToBook; 
-          stock.dateTime = stockInDb.dateTime;  
+          stock.priceToBook = stockInDb.priceToBook;
+          stock.dateTime = stockInDb.dateTime;
           stock.currency = stockInDb.currency;
           stock.totalValue = stockInDb.totalValue;
           stock.sharesOutstanding = stockInDb.sharesOutstanding;
@@ -201,7 +199,7 @@ export default async function Dashboard() {
   //retrieve manually entered stocks
   //let { calls, puts } = separateCallsAndPuts(options);
 
-  console.log(stocks)
+  console.log(stocks);
 
   try {
     portfolioValue = getPortfolioData.calculateTotalPortfolioValue(stocks);
@@ -210,16 +208,16 @@ export default async function Dashboard() {
   }
 
   // Calculate portfolio average PE ratio
-  try{
+  try {
     averagePeRatio = getPortfolioData.calculateAverage(
-    "peRatio",
-    stocks,
-    portfolioValue
-  );
-  } catch(e){
-    console.log("Failed to calculate average PE ratio: " + e)
+      "peRatio",
+      stocks,
+      portfolioValue
+    );
+  } catch (e) {
+    console.log("Failed to calculate average PE ratio: " + e);
   }
-  
+
   averageEps = getPortfolioData.calculateAverage("eps", stocks, portfolioValue);
   averageDivYield = getPortfolioData.calculateAverage(
     "divYield",
@@ -245,7 +243,7 @@ export default async function Dashboard() {
     profitable: percentageProfitable,
     dividendPaying: percentageDividend,
   };
-  
+
   console.log(portfolioGeneralData);
 
   //------

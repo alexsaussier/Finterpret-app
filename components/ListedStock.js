@@ -4,26 +4,45 @@ import { useState } from "react";
 import "./ListedStock.css";
 import Modal from "./Modal";
 
-const ListedStock = ({ selected= false, changePercent, price, name, units, currency }) => {
+const ListedStock = ({
+  selected = false,
+  changePercent,
+  price,
+  name,
+  units,
+  currency,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isNegative = (changePercent ?? "").toString().startsWith("-") ? true : false;
+  const isNegative = (changePercent ?? "").toString().startsWith("-")
+    ? true
+    : false;
 
-  changePercent = parseFloat(changePercent).toFixed(2) + "%";
+  changePercent = isNaN(changePercent) ? null : changePercent.toFixed(2) + "%";
   price = parseFloat(price).toFixed(2);
 
-  if (!currency){
+  if (!currency) {
     currency = "USD";
   }
 
   return (
-    <div className={`listedStock min-w-56 hover:bg-teal-300/50 ${selected ? "bg-teal-300/50 " : ""}`} >
+    <div
+      className={`listedStock min-w-56 hover:bg-teal-300/50 ${
+        selected ? "bg-teal-300/50 " : ""
+      }`}
+    >
       <p className="stockName">{name}</p>
       <p className="stockAmount">{units} units</p>
       <div className="priceMetrics space-x-4">
-        <p className="stockPrice">{price} {currency} </p>
+        <p className="stockPrice">
+          {price} {currency}{" "}
+        </p>
         <p style={{ color: isNegative ? "red" : "green" }}>
-          {isNegative ? "" : "+"}
-          {changePercent}
+          {changePercent && (
+            <>
+              {isNegative ? "" : "+"}
+              {changePercent}
+            </>
+          )}
         </p>
       </div>
       {/*<Modal isModalOpen={isOpen} setIsModalOpen={setIsOpen}/> */}

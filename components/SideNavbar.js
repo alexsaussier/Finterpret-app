@@ -99,6 +99,7 @@ export default function SideNav() {
                 </svg>
               </button>
             </div>
+            
             <Link
               className="mb-2 flex h-10 items-center justify-center gap-2"
               style={{ backgroundColor: "#fff", color: "#285A5D" }}
@@ -115,6 +116,7 @@ export default function SideNav() {
               <ButtonAccount />
               <NavLinks setIsOpen={setIsOpen} />
             </div>
+
             <div className="mt-4">
               <form>
                 <button

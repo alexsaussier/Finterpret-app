@@ -37,7 +37,16 @@ const DashboardCollapseStock = ({ title, units, children }) => {
 
   const handleEdit = async () => {
     setEditing(false);
-    const ticker = title;
+    let ticker = title;
+    // We need to re-add the character that we stripped off when we added the stock to the portfolio
+    if (ticker.endsWith(".PA")) {
+      ticker += "R";
+      console.log("ticker to delete:", ticker);
+    }
+    if (ticker.endsWith(".DE")) {
+      ticker += "X";
+    }
+
     const newUnits = editUnits;
 
     try {
@@ -54,7 +63,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
       }
 
       const result = await response.json();
-      console.log(title + " Stock unit updated successfully:", result);
+      console.log(ticker + " Stock unit updated successfully:", result);
       router.refresh();
       // Optionally, update the UI or give user feedback
     } catch (error) {
@@ -65,8 +74,17 @@ const DashboardCollapseStock = ({ title, units, children }) => {
   const handleDelete = async () => {
     setDeleting(false);
 
-    const ticker = title;
+    let ticker = title;
     const newUnits = 0;
+
+    // We need to re-add the character that we stripped off when we added the stock to the portfolio
+    if (ticker.endsWith(".PA")) {
+      ticker += "R";
+      console.log("ticker to delete:", ticker);
+    }
+    if (ticker.endsWith(".DE")) {
+      ticker += "X";
+    }
 
     // when units is 0, this api route removes the stock from the portfolio
     try {

@@ -24,12 +24,12 @@ const StockAnalyticsCard = ({ stock }) => {
 
   try {
     importantMetrics.push(
-      ["PE Ratio", stock.peRatio],
+      ["PE Ratio", parseFloat(stock.peRatio).toFixed(2)],
       ["Shares Outstanding", stock.sharesOutstanding],
-      ["Earnings Per Share", stock.eps],
-      ["Price/EPS", stock.priceEPS],
-      ["Book Value", stock.bookValue],
-      ["Price to Book", stock.priceToBook],
+      ["Earnings Per Share", parseFloat(stock.eps).toFixed(2)],
+      ["Price/EPS", parseFloat(stock.priceEPS).toFixed(2)],
+      ["Book Value", parseFloat(stock.bookValue).toFixed(2)],
+      ["Price to Book", parseFloat(stock.priceToBook).toFixed(2)],
       ["Dividend Yield", stock.divYield + "%"],
     );
 
@@ -77,7 +77,7 @@ const StockAnalyticsCard = ({ stock }) => {
       ) : (
         <div>
           
-          <div className="flex-row">
+          <div className="flex flex-col">
           {importantMetrics.map((stockItem, index) => (
             <button onClick={() => openModal(stockItem)} key={index}>
               <div className="stats shadow mt-4">

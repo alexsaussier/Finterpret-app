@@ -85,7 +85,7 @@ export default async function AnalyticsDashboard() {
         if (ticker.endsWith(".PAR")) {
           ticker = ticker.slice(0, -1);
         }
-        
+
         const units = position.units;
         
         // TO DO: getStockName for each ticker here
@@ -150,7 +150,8 @@ export default async function AnalyticsDashboard() {
           stock.dateTime = stockInDb.dateTime;  
           stock.currency = stockInDb.currency;
           stock.totalValue = stockInDb.totalValue;
-          stock.sharesOutstanding = stockInDb.sharesOutstanding;
+          stock.sharesOutstanding = stockInDb.sharesOutstanding; 
+          stock.bookValue = stockInDb.bookValue;
 
 
         }
@@ -178,8 +179,7 @@ export default async function AnalyticsDashboard() {
 
         {stocks ? (
           <>
-            <StockAnalyticsDash stocks={stocks} 
-            />
+            <StockAnalyticsDash stocks={stocks} />
           </>
         ) : (
           <>

@@ -15,8 +15,6 @@ const StockAnalyticsDash = ({ stocks }) => {
   const [selectedStock, setSelectedStock] = useState(stocks[0]);
   console.log("Selected Stock: " + JSON.stringify(selectedStock, null, 2));
   // Initialize state to hold stock stats
-  
-  
 
   return (
     <div
@@ -40,6 +38,7 @@ const StockAnalyticsDash = ({ stocks }) => {
       </div>
 
       <div className="w-1/2">
+      <p> Click on a value to get some insights 👇</p>
         <StockAnalyticsCard ticker={selectedStock.ticker} stock={selectedStock}/> { /* TODO: PASS THE STOCK ARRAY, SO NO NEED TO FETCH DATA AFTER */ }
       </div>
     </div>

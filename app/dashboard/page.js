@@ -162,6 +162,8 @@ export default async function Dashboard() {
           stock.currency = stockInDb.currency;
           stock.totalValue = stockInDb.totalValue;
           stock.sharesOutstanding = stockInDb.sharesOutstanding;
+          stock.bookValue = stockInDb.bookValue;
+
         }
       } else {
         // Store stock in mongodb using Stock mongoose model

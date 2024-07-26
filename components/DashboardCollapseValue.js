@@ -16,10 +16,8 @@ const DashboardCollapseValue = ({ title, units, children }) => {
     title +
     " of my portfolio has a value of " +
     units +
-    ", what does it mean?" +
-    " Define what " +
-    title +
-    "means but focus more on what the value means for me.";
+    ". Please explain to me very concisely what this metric means, as if I did not know anything about finance." +
+    " Also please explain very concisely what this value means for my portfolio. " ;
 
   const [response, setResponse] = useState(null);
   const [hasMadeApiCall, setHasMadeApiCall] = useState(false);

@@ -62,7 +62,7 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
     "\n" +
     "Can you explain to me the risks associated to the metrics of my portfolio? " +
     "and provide me with some advice on how to improve my portfolio?" +
-    "You should not list all the metrics I provide, just give me an overall overview. ";
+    "You should not list all the metrics I provide, just give me an overall overview. Do not start with an introduction sentence, and be very concise. ";
 
   const fetchGptResponse = async () => {
     setIsLoading(true); // Start loading for displaying the svg icon

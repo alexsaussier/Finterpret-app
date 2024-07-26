@@ -18,8 +18,9 @@ const DashboardCollapseStock = ({ title, units, children }) => {
     "Can you provide me with a description of the following company: " +
     title +
     "?" +
-    "Give me a short rundown of what the company does, what it is known for, and any insights about its historical financial performance" +
-    "Do not include a title in your response";
+    "Give me a short rundown of what the company does, what it is known for, and any insights about its historical financial performance. " +
+    "Also tell me about the future prospects of the company." + 
+    "Do not include a title in your response. Be very concise, write in short bullet points.";
 
   const [response, setResponse] = useState(null);
   const [hasMadeApiCall, setHasMadeApiCall] = useState(false);

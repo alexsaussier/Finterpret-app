@@ -3,12 +3,21 @@ import Link from "next/link";
 import NavLinks from "@/components/NavLinks";
 import config from "@/config";
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import "./SideNavbar.css";
 import { LogoutIcon } from "@/utils/svgIcons";
 import ButtonAccount from "./ButtonAccount";
+import ButtonSignOut from "./ButtonSignOut";
 
 export default function SideNav() {
+
+  const { data: session, status } = useSession();
+
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/" });
+  };
 
   return (
     <div style={{ height: "100%", position: "relative" }}>
@@ -59,15 +68,7 @@ export default function SideNav() {
           </div>
         </div>
         <div className="flex-none">
-          <form>
-            <button
-              className="flex h-[48px] w-full items-center justify-center gap-2 rounded-md bg-base-200 p-3 text-sm font-medium md:justify-start md:p-2 md:px-3"
-              style={{ backgroundColor: "#fff" }}
-            >
-              <LogoutIcon />
-              <div className="hidden md:block">Sign Out</div>
-            </button>
-          </form>
+          <ButtonSignOut />
         </div>
       </div>
 
@@ -117,16 +118,8 @@ export default function SideNav() {
               <NavLinks setIsOpen={setIsOpen} />
             </div>
 
-            <div className="mt-4">
-              <form>
-                <button
-                  className="flex h-[48px] w-full items-center justify-center gap-2 rounded-md bg-base-200 p-3 text-sm font-medium"
-                  style={{ backgroundColor: "#fff" }}
-                >
-                  <LogoutIcon />
-                  <div>Sign Out</div>
-                </button>
-              </form>
+            <div className="mt-4">        
+              <ButtonSignOut />
             </div>
           </div>
         </div>

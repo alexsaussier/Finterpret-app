@@ -28,7 +28,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
   const handleOpen = async (event) => {
     if (event.target.checked && !hasMadeApiCall) {
       // The component is being opened, send a request to OpenAI
-      const res = await sendOpenAi(guideline, gptMessage, "1", 300);
+      const res = await sendOpenAi(guideline, gptMessage, "1", 500);
       setResponse(res);
       setHasMadeApiCall(true);
     }

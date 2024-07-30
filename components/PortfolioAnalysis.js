@@ -36,7 +36,6 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
   const guideline =
     "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly" +
     " Answer in HTML format. Use 1 <br> tags between each paragraph." +
-    " Use <b> tags to put the important statements in bold. " +
     " You should sound very confident in your answer, as if you are a financial advisor." +
     " Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance.";
 
@@ -74,7 +73,7 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
         guideline,
         gptMessage,
         "1",
-        300,
+        400,
         0
       );
       setGptResponse(answerFromGpt);

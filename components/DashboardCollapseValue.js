@@ -7,14 +7,13 @@ const DashboardCollapseValue = ({ title, units, children }) => {
   const guideline =
     "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly" +
     " Answer in HTML format. Use 1 <br> tags between each paragraph." +
-    " Use <b> tags to put the important statements in bold. " +
     " You should sound very confident in your answer, as if you are a financial advisor." +
     " Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance.";
 
   const gptMessage =
-    "My " +
+    "For the following metric: '" +
     title +
-    " of my portfolio has a value of " +
+    "', my portfolio has a value of " +
     units +
     ". Please explain to me very concisely what this metric means, as if I did not know anything about finance." +
     " Also please explain very concisely what this value means for my portfolio. " ;

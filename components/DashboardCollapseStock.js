@@ -2,12 +2,16 @@
 import { sendOpenAi } from "@/libs/gpt";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/utils/svgIcons";
 
 //For when you want to display a value on the title
 const DashboardCollapseStock = ({ title, units, children }) => {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [editUnits, setEditUnits] = useState(units);
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState(null);
+  const [hasMadeApiCall, setHasMadeApiCall] = useState(false);
   const router = useRouter();
 
   const guideline =
@@ -22,8 +26,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
     "Also tell me about the future prospects of the company." + 
     "Do not include a title in your response. Be very concise, write in short bullet points.";
 
-  const [response, setResponse] = useState(null);
-  const [hasMadeApiCall, setHasMadeApiCall] = useState(false);
+  
 
   const handleOpen = async (event) => {
     if (event.target.checked && !hasMadeApiCall) {
@@ -37,6 +40,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
   // Handle editing of stock units
 
   const handleEdit = async () => {
+    setLoading(true);
     setEditing(false);
     let ticker = title;
     // We need to re-add the character that we stripped off when we added the stock to the portfolio
@@ -69,10 +73,13 @@ const DashboardCollapseStock = ({ title, units, children }) => {
       // Optionally, update the UI or give user feedback
     } catch (error) {
       console.error("Error updating stock unit:", error);
+    } finally { 
+      setLoading(false);
     }
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     setDeleting(false);
 
     let ticker = title;
@@ -107,6 +114,8 @@ const DashboardCollapseStock = ({ title, units, children }) => {
       // Optionally, update the UI or give user feedback
     } catch (error) {
       console.error("Error updating stock unit:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,6 +148,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
               <button className="btn btn-primary" onClick={() => handleEdit()}>
                 Save
               </button>
+              
             </>
           ) : deleting ? (
             <>
@@ -155,6 +165,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
               >
                 Confirm
               </button>
+              
             </>
           ) : (
             <>
@@ -170,6 +181,9 @@ const DashboardCollapseStock = ({ title, units, children }) => {
               >
                 Delete
               </button>
+              
+              {loading && <LoadingSpinner />} 
+
             </>
           )}
         </div>

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/utils/svgIcons";
+
 export const StockTickerSearch = ({
   ticker,
   units,
@@ -41,7 +43,7 @@ export const StockTickerSearch = ({
 
   const saveToPortfolio = async () => {
     try {
-      console.log("units: " + units + typeof units);
+      setLoading(true);
       const response = await fetch("/api/user/add-stocks-to-portfolio", {
         method: "POST",
         headers: {
@@ -67,11 +69,14 @@ export const StockTickerSearch = ({
       }
     } catch (error) {
       console.error("An error occurred while saving data to portfolio:", error);
-    }
+    } finally {
+      setLoading(false);
+    } 
   };
 
   return (
     <div>
+      
       {ticker ? (
         <>
           <p>{ticker}</p>
@@ -80,6 +85,11 @@ export const StockTickerSearch = ({
               placeholder="Enter stock units"
               value={units}
               onChange={(e) => setUnits(Number(e.target.value))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  saveToPortfolio();
+                }
+              }}
               className="input input-bordered input-primary max-w-xs mr-2 mb-2"
             />
             <button
@@ -88,6 +98,8 @@ export const StockTickerSearch = ({
             >
               Save to portfolio
             </button>
+            {loading && <LoadingSpinner />} \
+
           </div>
         </>
       ) : (
@@ -95,6 +107,11 @@ export const StockTickerSearch = ({
           <input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
             placeholder="Search stock ticker"
             className="input input-bordered input-primary max-w-xs mr-2 mb-2"
           />

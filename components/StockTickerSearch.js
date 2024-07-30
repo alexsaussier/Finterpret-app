@@ -98,7 +98,7 @@ export const StockTickerSearch = ({
             >
               Save to portfolio
             </button>
-            {loading && <LoadingSpinner />} \
+            {loading && <LoadingSpinner />}
 
           </div>
         </>

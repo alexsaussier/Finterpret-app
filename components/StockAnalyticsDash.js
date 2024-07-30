@@ -12,7 +12,13 @@ import getPrice from "@/utils/getPrice";
 const StockAnalyticsDash = ({ stocks }) => {
   const [selectedStock, setSelectedStock] = useState(stocks[0]);
   console.log("Selected Stock: " + JSON.stringify(selectedStock, null, 2));
-  // Initialize state to hold stock stats
+
+   // Check if stocks is undefined, null, or an empty array
+   if (!stocks || stocks.length === 0) {
+    return <div className="flex justify-center items-center" style={{ minHeight: "500px" }}>
+      Go to Portfolio Analysis and add stocks to your portfolio. 
+    </div>;
+  }
 
   return (
     <div className="flex" style={{ minHeight: "500px" }}>
@@ -38,6 +44,7 @@ const StockAnalyticsDash = ({ stocks }) => {
         <StockAnalyticsCard ticker={selectedStock.ticker} stock={selectedStock}/> { /* TODO: PASS THE STOCK ARRAY, SO NO NEED TO FETCH DATA AFTER */ }
       </div>
     </div>
+ 
   );
 };
 

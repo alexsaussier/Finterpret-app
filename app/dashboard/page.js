@@ -307,9 +307,7 @@ export default async function Dashboard() {
         {portfolioGeneralData && stocks.length > 0 ? (
           <PortfolioAnalysis portfolioGeneralData={portfolioGeneralData} />
         ) : (
-          <div>
-            Add holdings to your portfolio, so we can generate some insights.
-          </div>
+          <div></div>
         )}
 
         <div className="relative">
@@ -323,13 +321,20 @@ export default async function Dashboard() {
                 Your holdings
               </h1>
 
-              {stocks.map((stocks, index) => (
-                <DashboardCollapseStock
-                  key={stocks.ticker}
-                  title={stocks.ticker}
-                  units={stocks.units}
-                />
-              ))}
+              {stocks.length > 0 ? (
+
+                stocks.map((stocks, index) => (
+                  <DashboardCollapseStock
+                    key={stocks.ticker}
+                    title={stocks.ticker}
+                    units={stocks.units}
+                  />
+                ))
+              ) : (
+                <div className="flex justify-center align-top" style={{ minHeight: "500px" }}>
+                  Your stocks will be displayed here. 
+                </div>
+              )}
             </div>
 
             {/* HIDING OPTIONS AND CRYPTO AS WE WILL NOT IMPLEMENT THIS IN MVP

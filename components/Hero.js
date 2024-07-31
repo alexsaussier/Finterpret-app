@@ -4,11 +4,13 @@ import config from "@/config";
 import ButtonLead from "@/components/ButtonLead";
 import HeroImage from "@/public/images/HeroImage.jpg";
 import "./Hero.css";
+import ButtonSignin from "./ButtonSignin";
+
 
 const Hero = () => {
   return (
     <section className="hero1-background min-h-screen bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-20 px-6 md:px-16 lg:px-20 py-8 md:py-16 lg:py-20">
-      <div className="flex flex-col gap-10 lg:gap-14 items-center justify-center text-center lg:text-left lg:items-start w-full max-w-xl mx-auto">
+      <div className="flex flex-col gap-10 lg:gap-10 items-center justify-center text-center lg:text-left lg:items-start w-full max-w-xl mx-auto">
         <h1
           className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4"
           style={{ lineHeight: "1.2" }}
@@ -20,8 +22,13 @@ const Hero = () => {
           Connect your investment accounts to {config.appName}, and retrieve
           AI-augmented insights on your portfolio.
         </p>
+        <div className="items-center justify-center ">
+          <ButtonSignin/>
+        </div>
+        
+        
       </div>
-      <div className="w-full max-w-xl mx-auto">
+      <div className="w-full max-w-xl mx-auto relative">
         <Image
           unoptimized
           src={HeroImage}
@@ -31,6 +38,8 @@ const Hero = () => {
           width={600}
           height={600}
         />
+        
+        
       </div>
       {/* For the Hero & CTA use this 👇 */}
       {/* 

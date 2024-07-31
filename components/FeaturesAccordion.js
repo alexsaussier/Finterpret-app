@@ -12,9 +12,9 @@ import Image from "next/image";
 // - alt: The alt text of the image (if type is 'image')
 const features = [
   {
-    title: "Financial Metrics",
+    title: "Analysis of your portfolio metrics",
     description:
-      "Understand what is the Beta of your portfolio, your Sharpe ratio, detailed ROI, Sortino ratio, etc.",
+      "Understand the critical metrics of your overall portfolio, thanks to our AI advisor who will explain them to you.",
     type: "video",
     path: "",
     format: "",
@@ -35,9 +35,9 @@ const features = [
     ),
   },
   {
-    title: "Portfolio Analysis",
+    title: "AI-Generated Portfolio Reports",
     description:
-      "Retrieve complete reports on your portfolio to understand your risks and how you can improve its resilience",
+      "Retrieve complete reports on your portfolio to highlight overall risks and spot mitigation opportunities.",
     type: "image",
     path: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80",
     alt: "A computer",
@@ -59,9 +59,9 @@ const features = [
     ),
   },
   {
-    title: "Tailored recommendations",
+    title: "Stock-by-stock analysis",
     description:
-      "Let the AI engine make recommendations that are based on your portfolio metrics",
+      "Let the AI advisor analyze your holdings individually and explain what the company metrics mean for you. ",
     svg: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@ const features = [
   {
     title: "Easy to undertand interpretations",
     description:
-      "Let our tool explain in plain English what all those metrics mean",
+      "The AI tool can explain in simple terms what all those fluffy metrics mean",
     svg: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +197,7 @@ const FeaturesAccordion = () => {
     <section className="backgroundImage py-8 md:py-32 space-y-12 md:space-y-32 mx-auto bg-base-100 px-6 md:px-20 md:pt-20">
       <div className="container px-8">
         <h2 className="font-extrabold text-4xl lg:text-6xl tracking-tight mb-12 md:mb-24">
-          Use data to optimize your portfolio
+          Use AI to optimize your portfolio
           <span
             className="px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-breakspaces"
             style={{ backgroundColor: "#c2e8e4" }}

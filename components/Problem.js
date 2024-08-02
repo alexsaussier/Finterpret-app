@@ -70,7 +70,7 @@ const Problem = () => {
 
           <Arrow extraStyle="md:-scale-x-100 md:-rotate-90" />
 
-          <Step emoji="📈" text="Your Finterpret advisor suggests a tailored strategy" />
+          <Step emoji="📈" text="Your Finterpret advisor suggests how you can mitigate risks." />
         </div>
       </div>
     </section>

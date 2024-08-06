@@ -15,7 +15,7 @@ const Hero = () => {
           className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4"
           style={{ lineHeight: "1.2" }}
         >
-          Invest smartly{"\n "}
+          Make smarter investment decisions{"\n "}
           <span style={{ color: "#05d8be" }}> using AI.</span>
         </h1>
         <p className="text-lg opacity-80 leading-relaxed">

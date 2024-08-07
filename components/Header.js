@@ -53,6 +53,9 @@ const Header = () => {
               priority={true}
               width={200}
             />
+            <p className="text-sm text-[#05d8be] border border-[#05d8be] rounded-xl p-1">
+              BETA
+            </p>
           </Link>
         </div>
 

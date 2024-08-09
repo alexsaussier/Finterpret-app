@@ -10,7 +10,6 @@ import ButtonAccount from "./ButtonAccount";
 import ButtonSignOut from "./ButtonSignOut";
 
 export default function SideNav() {
-
   const { data: session, status } = useSession();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -55,13 +54,18 @@ export default function SideNav() {
       {/* Desktop SideNav */}
       <div className="desktopSidebar hidden md:flex h-full flex-col px-3 py-4">
         <div>
-          <Link
-            className="mb-2 flex h-10 items-center justify-center gap-2"
-            style={{ backgroundColor: "#fff", color: "#285A5D" }}
-            href="/dashboard"
-          >
-            <span className="font-extrabold text-lg">{config.appName}</span>
-          </Link>
+          <div className="mb-2 flex items-center justify-center gap-2">
+            <Link
+              className="flex h-10 items-center justify-center gap-2"
+              style={{ backgroundColor: "#fff", color: "#285A5D" }}
+              href="/dashboard"
+            >
+              <span className="font-extrabold text-lg">{config.appName}</span>
+            </Link>
+            <p className="text-sm text-[#05d8be] border border-[#05d8be] rounded-xl p-1">
+              BETA
+            </p>
+          </div>
           <ButtonAccount />
           <div className="flex grow flex-col space-y-2">
             <NavLinks setIsOpen={setIsOpen} />
@@ -100,7 +104,7 @@ export default function SideNav() {
                 </svg>
               </button>
             </div>
-            
+
             <Link
               className="mb-2 flex h-10 items-center justify-center gap-2"
               style={{ backgroundColor: "#fff", color: "#285A5D" }}
@@ -118,7 +122,7 @@ export default function SideNav() {
               <NavLinks setIsOpen={setIsOpen} />
             </div>
 
-            <div className="mt-4">        
+            <div className="mt-4">
               <ButtonSignOut />
             </div>
           </div>

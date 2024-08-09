@@ -10,7 +10,21 @@ import ButtonSignin from "./ButtonSignin";
 const Hero = () => {
   return (
     <section className="hero1-background min-h-screen bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-20 px-6 md:px-16 lg:px-20 py-8 md:py-16 lg:py-20">
+      
+      
+
       <div className="flex flex-col gap-10 lg:gap-10 items-center justify-center text-center lg:text-left lg:items-start w-full max-w-xl mx-auto">
+        
+        <a href="https://www.producthunt.com/posts/finterpret?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-finterpret" target="_blank">
+          <img 
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=478329&theme=light" 
+            alt="Finterpret - LLM&#0045;Powered&#0032;Analytics&#0032;for&#0032;retail&#0032;investors&#0046; | Product Hunt" 
+            style={{ width: "250px", height: "54px" }} 
+            width="250" 
+            height="54" 
+          />      
+        </a>
+        
         <h1
           className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4"
           style={{ lineHeight: "1.2" }}

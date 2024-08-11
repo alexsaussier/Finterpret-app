@@ -57,51 +57,59 @@ const PrivacyPolicy = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: 2023-08-25
+          {`Effective Date: 11. 8. 2024
 
-Thank you for visiting ShipFast ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our website located at https://shipfa.st (the "Website").
-
-By accessing or using the Website, you agree to the terms of this Privacy Policy. If you do not agree with the practices described in this policy, please do not use the Website.
+Finterpret ("the App") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and share information about you when you use the App, and your rights under the General Data Protection Regulation (GDPR) if you are located in the European Economic Area (EEA).
 
 1. Information We Collect
+Personal Information: We collect personal information when you sign up for the App, including your name, email address, and profile image.
+Stock Data: We collect data related to the stocks you enter, including ticker symbols and the number of units.
+General Analysis Data: The App generates and stores LLM-powered explanations about your stocks.
 
-1.1 Personal Data
+2. How We Use Your Information
+To Provide Services: We use your information to provide the features and functionality of the App, including generating stock analyses and managing your portfolio.
+To Improve the App: We may use aggregated data to understand how users interact with the App and to make improvements.
+Legal Compliance: We may process your personal data to comply with legal obligations, or to protect your vital interests or those of another person.
 
-We collect the following personal information from you:
+3. Legal Basis for Processing (for users in the EEA)
+If you are located in the EEA, we process your personal data based on the following legal grounds:
 
-Name: We collect your name to personalize your experience and communicate with you effectively.
-Email: We collect your email address to send you important information regarding your orders, updates, and communication.
-Payment Information: We collect payment details to process your orders securely. However, we do not store your payment information on our servers. Payments are processed by trusted third-party payment processors.
+Consent: By signing up for the App, you consent to the processing of your personal data as described in this Privacy Policy.
+Performance of a Contract: Processing your data is necessary to provide the App’s services under the terms of service.
+Legitimate Interests: We may process your data for legitimate business interests, such as improving the App, provided that these interests do not override your rights and freedoms.
 
-1.2 Non-Personal Data
+4. Data Storage
+All data is securely stored in a MongoDB database. We implement reasonable security measures to protect your information, but we cannot guarantee its absolute security.
 
-We may use web cookies and similar technologies to collect non-personal information such as your IP address, browser type, device information, and browsing patterns. This information helps us to enhance your browsing experience, analyze trends, and improve our services.
+5. Sharing Your Information
+We do not share your personal information with third parties except as necessary to operate the App or as required by law.
 
-2. Purpose of Data Collection
+6. Data Retention
+We retain your personal information for as long as necessary to provide the App and fulfill the purposes described in this Privacy Policy. We may also retain and use your information to comply with our legal obligations, resolve disputes, and enforce our agreements.
 
-We collect and use your personal data for the sole purpose of order processing. This includes processing your orders, sending order confirmations, providing customer support, and keeping you updated about the status of your orders.
+7. Your Rights Under GDPR
+If you are located in the EEA, you have the following rights regarding your personal data:
 
-3. Data Sharing
+Access: You have the right to request access to the personal data we hold about you.
+Rectification: You have the right to request that we correct any inaccuracies in your personal data.
+Erasure: You have the right to request the deletion of your personal data ("right to be forgotten").
+Restriction: You have the right to request that we limit the processing of your personal data.
+Portability: You have the right to receive your personal data in a structured, commonly used, and machine-readable format, and to transmit that data to another controller.
+Objection: You have the right to object to the processing of your personal data under certain circumstances.
+Withdrawal of Consent: Where we rely on your consent to process your personal data, you have the right to withdraw your consent at any time.
+To exercise any of these rights, please contact us at [Your Email Address]. We will respond to your request within one month of receipt.
 
-We do not share your personal data with any third parties except as required for order processing (e.g., sharing your information with payment processors). We do not sell, trade, or rent your personal information to others.
+8. International Data Transfers
+Your personal data may be transferred to, and processed in, countries other than the country in which you are resident. These countries may have data protection laws that are different from those of your country. We take appropriate safeguards to ensure that your personal data remains protected in accordance with this Privacy Policy when transferred internationally.
 
-4. Children's Privacy
+9. Children's Privacy
+The App is not intended for use by children under the age of 13, and we do not knowingly collect personal information from children under 13.
 
-ShipFast is not intended for children under the age of 13. We do not knowingly collect personal information from children. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us at the email address provided below.
+10. Changes to the Privacy Policy
+We may update this Privacy Policy from time to time. If we make significant changes, we will notify you via email or through the App.
 
-5. Updates to the Privacy Policy
-
-We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Any updates will be posted on this page, and we may notify you via email about significant changes.
-
-6. Contact Information
-
-If you have any questions, concerns, or requests related to this Privacy Policy, you can contact us at:
-
-Email: marc@shipfa.st
-
-For all other inquiries, please visit our Contact Us page on the Website.
-
-By using ShipFast, you consent to the terms of this Privacy Policy.`}
+11. Contact Information
+If you have any questions or concerns about this Privacy Policy, or if you wish to exercise your rights under GDPR, please contact us at [Your Email Address].`}
         </pre>
       </div>
     </main>

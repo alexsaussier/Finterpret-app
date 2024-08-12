@@ -36,9 +36,15 @@ const Hero = () => {
           Connect your investment accounts to {config.appName}, and retrieve
           AI-augmented insights on your portfolio.
         </p>
+
         <div className="items-center justify-center ">
           <ButtonSignin/>
         </div>
+
+        <p className="text-s opacity-80 leading-relaxed">
+          As part of our Product Hunt launch, Finterpret is entirely free for you to try it!
+        </p>
+        
         
         
       </div>

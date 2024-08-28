@@ -12,9 +12,12 @@ export const AddToPortfolioSampleComponent = () => {
 
   return (
     <div className="bg-white rounded-lg p-5 shadow-md flex flex-col h-full">
-      <h1 className="text-lg md:text-xl font-bold text-left mb-2">
-        Add stocks to your portfolio
-      </h1>
+      <div className="flex items-center gap-2 mb-2">
+        <h1 className="text-lg md:text-xl font-bold">
+          Add stocks to your portfolio
+        </h1>
+        <div className="badge badge-neutral badge-outline">Enter ticker, then quantity</div>
+      </div>
 
       <div className="mb-2 flex">
         <StockTickerSearch

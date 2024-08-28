@@ -79,7 +79,7 @@ export const StockTickerSearch = ({
       
       {ticker ? (
         <>
-          <p>{ticker}</p>
+          <p className="text-lg font-bold mb-2">{ticker}</p>
           <div>
             <input
               placeholder="Enter stock units"

@@ -1,7 +1,6 @@
 import Image from "next/image";
 //import TestimonialsAvatars from "./TestimonialsAvatars";
 import config from "@/config";
-import ButtonLead from "@/components/ButtonLead";
 import HeroImage from "@/public/images/HeroImage.jpg";
 import "./Hero.css";
 import ButtonSignin from "./ButtonSignin";

@@ -19,6 +19,7 @@ import appendYahooMetrics from "@/utils/appendYahooMetrics";
 import { PortfolioAnalysis } from "@/components/PortfolioAnalysis";
 import ButtonSnaptradeDelete from "@/components/ButtonSnaptradeDelete";
 import DashboardCollapseStock from "@/components/DashboardCollapseStock";
+import Link from 'next/link';
 
 export default async function Dashboard() {
   await connectMongo();
@@ -317,17 +318,35 @@ export default async function Dashboard() {
             }`}
           >
             <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
-              <h1 className="text-lg md:text-xl font-bold text-center mb-2">
-                Your holdings
-              </h1>
+              <div className="flex justify-between items-center mb-1">
+                <h1 className="text-lg md:text-xl font-bold">
+                  Your holdings
+                </h1>
+
+                <div className="flex justify-between items-center">
+                  <div>{/* empty div to push to the  */}</div> 
+                  <div className="badge badge-neutral badge-outline">Click on a stock to discover more</div>
+                </div>
+                
+                
+              </div>
+              
+              <div className="mb-4">
+                <Link href="/dashboard/analysis" passHref>
+                  <button className="btn btn-xs btn-primary">
+                    View individual stock analysis
+                  </button>
+                </Link>`
+              </div>
+              
+             
 
               {stocks.length > 0 ? (
-
-                stocks.map((stocks, index) => (
+                stocks.map((stock, index) => (
                   <DashboardCollapseStock
-                    key={stocks.ticker}
-                    title={stocks.ticker}
-                    units={stocks.units}
+                    key={stock.ticker}
+                    title={stock.ticker}
+                    units={stock.units}
                   />
                 ))
               ) : (
@@ -370,9 +389,10 @@ export default async function Dashboard() {
 */}
 
             <div className="bg-white rounded-lg p-5 shadow-md w-full flex-col p-1">
-              <h1 className="text-lg md:text-xl font-bold text-center mb-2">
-                Portfolio Report
-              </h1>
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-lg md:text-xl font-bold">Portfolio Report</h1>
+                <div className="badge badge-neutral badge-outline">Click on a metric to get insights</div>
+              </div>
 
               <DashboardCollapseValue
                 title="Portfolio Value"

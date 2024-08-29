@@ -336,7 +336,7 @@ export default async function Dashboard() {
                   <button className="btn btn-xs btn-primary">
                     View individual stock analysis
                   </button>
-                </Link>`
+                </Link>
               </div>
               
              

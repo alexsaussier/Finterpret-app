@@ -21,7 +21,15 @@ const links = [
     href: "/dashboard/analysis",
     /* icon: DocumentDuplicateIcon, */
   },
-  { name: "Cash Flow", href: "/dashboard/cashflow" /* icon: UserGroupIcon */ },
+  {
+    name: "Market Insights",
+    href: "/dashboard/market",
+  },
+  { 
+    name: "Cash Flow", 
+    href: "/dashboard/cashflow" /* icon: UserGroupIcon */ 
+  }
+  
 ];
 
 export default function NavLinks({ setIsOpen }) {

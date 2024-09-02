@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import getStats from "@/utils/getStats";
 import Modal from "@/components/Modal";
 
 // TO DO:

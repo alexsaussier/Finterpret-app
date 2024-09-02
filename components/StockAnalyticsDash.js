@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import StockCard from "./StockCard";
 import ListedStock from "./ListedStock";
 import StockAnalyticsCard from "./StockAnalyticsCard";
-import getStats from "@/utils/getStats";
-import getPrice from "@/utils/getPrice";
 
 //import { getHoldings } from "@/utils/getHoldings";
 

@@ -2,24 +2,27 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
 import Tile from "@/components/Tile";
+import getMarketMetrics from "@/utils/getMarketMetrics";
 
 export default async function MarketDashboard() {
 	await connectMongo();
 	const session = await getServerSession(authOptions);
 
-	let marketMetrics = null;
-    // Make a call to the API to get the market metrics
-    // To do: call if from a utils file and store in db
-    // only call the endpoint if the data is older than 1 day in the db
+	let interestRate = null;
+	let marketSentiment = null;
+	let volatilityIndex = null;
+	let sp500Growth = null;
 
+	// To do: call if from a utils file and store in db
+    // only call the endpoint if the data is older than 1 day in the db
 	try {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/market-metrics`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		marketMetrics = await response.json();
+		const marketMetrics = await getMarketMetrics();
+		
+		interestRate = marketMetrics.interestRate;
+		marketSentiment = marketMetrics.marketSentiment;
+		volatilityIndex = marketMetrics.VIX;
+		sp500Growth = marketMetrics.SP500Growth;
+
 	} catch (error) {
 		console.error("Failed to fetch market metrics", error);
 	}
@@ -31,40 +34,20 @@ export default async function MarketDashboard() {
 					General Stock Market Data
 				</h1>
 
-                <div role="alert" className="alert shadow-lg">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        className="stroke-info h-6 w-6 shrink-0">
-                        <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <div>
-                        <h3 className="font-bold">Coming soon in a future release!</h3>
-                        <div className="text-xs">We aim to display here metrics like interest rates, market sentiment, volatility index and macro economic indicators. </div>
-                        <div className="text-xs">This will give you more context when making investment decisions. </div>
-
-                    </div>
-                    </div>
-
-				{marketMetrics?.interestRates && (
-					<Tile title="Interest Rates" content={JSON.stringify(marketMetrics.interestRates)} />
+				{interestRate !== null && (
+					<Tile title="Interest Rates" content={`${interestRate}%`} />
 				)}
 
-				{marketMetrics?.marketSentiment && (
-					<Tile title="Market Sentiment" content={JSON.stringify(marketMetrics.marketSentiment)} />
+				{marketSentiment && (
+					<Tile title="Market Sentiment" content={marketSentiment} />
 				)}
 
-				{marketMetrics?.volatilityIndex && (
-					<Tile title="Volatility Index" content={JSON.stringify(marketMetrics.volatilityIndex)} />
+				{volatilityIndex !== null && (
+					<Tile title="Volatility Index (VIX)" content={volatilityIndex.toFixed(2)} />
 				)}
 
-				{marketMetrics?.macroEconomic && (
-					<Tile title="Macro Economic" content={JSON.stringify(marketMetrics.macroEconomic)} />
+				{sp500Growth !== null && (
+					<Tile title="S&P 500 Growth (1 Year)" content={`${sp500Growth}%`} />
 				)}
 			</section>
 		</main>

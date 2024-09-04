@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import re
 from openai import OpenAI
+import json
 
 def slugify(text):
     text = text.lower()
@@ -26,33 +27,46 @@ def generate_blog_post(keyword):
     )
     return response.choices[0].message.content
 
-def create_blog_post_file(title, content):
+def add_article_to_content_js(title, content, keyword):
+    file_path = "app/blog/_assets/content.js"
+    with open(file_path, 'r') as file:
+        content_js = file.read()
+
     slug = slugify(title)
-    directory = f"app/blog/{slug}"
-    os.makedirs(directory, exist_ok=True)
-    
-    file_path = f"{directory}/page.js"
-    with open(file_path, 'w') as file:
-        file.write(f"""
-import React from 'react';
+    today = datetime.now().strftime("%Y-%m-%d")
 
-export const metadata = {{
+    new_article = f"""
+  {{
+    slug: "{slug}",
     title: "{title}",
-    description: "Blog post about {title}",
-}};
+    description: "Blog post about {keyword}",
+    categories: [
+      categories.find((category) => category.slug === categorySlugs.articles),
+    ],
+    author: authors.find((author) => author.slug === authorSlugs.alex),
+    publishedAt: "{today}",
+    
+    content: (
+      <>
+        {content}
+      </>
+    ),
+  }},
+"""
 
-export default function BlogPost() {{
-    return (
-        <article className="blog-post">
-            {content}
-        </article>
-    );
-}}
-""")
-    print(f"Blog post created: {file_path}")
+    # Find the position to insert the new article
+    articles_start = content_js.find("export const articles = [")
+    insert_position = content_js.find("[", articles_start) + 1
+
+    # Insert the new article
+    updated_content_js = content_js[:insert_position] + new_article + content_js[insert_position:]
+
+    with open(file_path, 'w') as file:
+        file.write(updated_content_js)
+
+    print(f"Article added to content.js: {title}")
 
 def main():
-
     keywords_file = "utils/SEOKeywords.txt"
     keywords = read_keywords(keywords_file)
     
@@ -70,7 +84,7 @@ def main():
     title_end = blog_post.find("</h1>")
     title = blog_post[title_start:title_end].strip()
     
-    create_blog_post_file(title, blog_post)
+    add_article_to_content_js(title, blog_post, keyword)
 
 if __name__ == "__main__":
     main()

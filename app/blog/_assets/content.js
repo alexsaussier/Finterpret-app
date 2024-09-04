@@ -23,9 +23,9 @@ export const categories = [
     titleShort: "Features",
     // The description of the category to display in the category page. Up to 160 characters.
     description:
-      "Here are the latest features we've added to ShipFast. I'm constantly improving our product to help you ship faster.",
+      "Here are the latest features we've added to Finterpret. We are constantly improving our product to help you make smarter investment decisions.",
     // A short version of the description above, only displayed in the <Header /> on mobile. Up to 60 characters.
-    descriptionShort: "Latest features added to ShipFast.",
+    descriptionShort: "Latest features added to Finterpret.",
   },
   {
     slug: categorySlugs.tutorial,
@@ -35,6 +35,15 @@ export const categories = [
       "Learn how to use ShipFast with these step-by-step tutorials. I'll show you how to ship faster and save time.",
     descriptionShort:
       "Learn how to use ShipFast with these step-by-step tutorials.",
+  },
+  {
+    slug: categorySlugs.articles,
+    title: "Blog Articles about Personal Finance",
+    titleShort: "Articles",
+    description:
+      "Learn about personal finance through various topics.",
+    descriptionShort:
+      "Learn about personal finance through various topics.",
   },
 ];
 
@@ -95,39 +104,39 @@ const socialIcons = {
 
 // These slugs are used to generate pages in the /blog/author/[authorId].js. It's a way to show all articles from an author.
 const authorSlugs = {
-  marc: "marc",
+  alex: "alex",
 };
 
 // All the blog authors data display in the /blog/author/[authorId].js pages.
 export const authors = [
   {
     // The slug to use in the URL, from the authorSlugs object above.
-    slug: authorSlugs.marc,
+    slug: authorSlugs.alex,
     // The name to display in the author's bio. Up to 60 characters.
-    name: "Marc Lou",
+    name: "Alexandre Saussier",
     // The job to display in the author's bio. Up to 60 characters.
-    job: "Maker of ByeDispute",
+    job: "Co-founder of Finterpret",
     // The description of the author to display in the author's bio. Up to 160 characters.
     description:
-      "Marc is a developer and an entrepreneur. He's built 20 startups in the last 3 years. 6 were profitable and 3 were acquired. He's currently building ByeDispute, the #1 Stripe Chargebacks Protection tool.",
+      "Alex is a developer and an entrepreneur, who is building Finterpret, the AI-powered investment advisor.",
     // The avatar of the author to display in the author's bio and avatar badge. It's better to use a local image, but you can also use an external image (https://...)
-    avatar: marcImg,
+    // avatar: marcImg,
     // A list of social links to display in the author's bio.
     socials: [
       {
         name: socialIcons.twitter.name,
         icon: socialIcons.twitter.svg,
-        url: "https://twitter.com/marc_louvion",
+        url: "https://x.com/AlexandreSauss1",
       },
       {
         name: socialIcons.linkedin.name,
         icon: socialIcons.linkedin.svg,
-        url: "https://www.linkedin.com/in/marclouvion/",
+        url: "https://www.linkedin.com/in/alexandre-saussier-171b0b152/",
       },
       {
         name: socialIcons.github.name,
         icon: socialIcons.github.svg,
-        url: "https://github.com/Marc-Lou-Org/ship-fast",
+        url: "https://github.com/alexsaussier",
       },
     ],
   },
@@ -154,90 +163,62 @@ const styles = {
 export const articles = [
   {
     // The unique slug to use in the URL. It's also used to generate the canonical URL.
-    slug: "introducing-supabase",
+    slug: "maximize-your-investments-essential-stock-market-tools-for-investors",
+
     // The title to display in the article page (h1). Less than 60 characters. It's also used to generate the meta title.
-    title: "Introducing Supabase to ShipFast",
+    title: "Maximize Your Investments: Essential Stock Market Tools for Investors",
     // The description of the article to display in the article page. Up to 160 characters. It's also used to generate the meta description.
-    description:
-      "Supabase is an open-source Firebase alternative. It's a great tool for building a backend for your app. It's now integrated with ShipFast!",
+    description: "Blog post about Stock market tools for investors",
     // An array of categories of the article. It's used to generate the category badges, the category filter, and more.
     categories: [
-      categories.find((category) => category.slug === categorySlugs.feature),
+      categories.find((category) => category.slug === categorySlugs.articles),
     ],
     // The author of the article. It's used to generate a link to the author's bio page.
-    author: authors.find((author) => author.slug === authorSlugs.marc),
+    author: authors.find((author) => author.slug === authorSlugs.alex),
     // The date of the article. It's used to generate the meta date.
-    publishedAt: "2023-11-20",
-    image: {
-      // The image to display in <CardArticle /> components.
+    publishedAt: "2024-09-04",
+    // The image to display in <CardArticle /> components.
+    /*image: {
       src: introducingSupabaseImg,
-      // The relative URL of the same image to use in the Open Graph meta tags & the Schema Markup JSON-LD.
-      urlRelative: "/blog/introducing-supabase/header.jpg",
-      alt: "Supabase and ShipFast logo combined",
-    },
+      urlRelative: "/blog/{slug}/header.jpg",
+      alt: "{title}",
+    },*/
     // The actual content of the article that will be shown under the <h1> title in the article page.
     content: (
       <>
-        <Image
-          src={introducingSupabaseImg}
-          alt="Supabase and ShipFast logo combined"
-          width={700}
-          height={500}
-          priority={true}
-          className="rounded-box"
-          placeholder="blur"
-        />
-        <section>
-          <h2 className={styles.h2}>Introduction</h2>
-          <p className={styles.p}>
-            Supabase is an open-source Firebase alternative. It&apos;s a great
-            tool for building a backend for your app. It&apos;s now integrated
-            with ShipFast!
-          </p>
-        </section>
+        <h1>Maximize Your Investments: Essential Stock Market Tools for Investors</h1>
+<p>
+    Investing in the stock market can be a lucrative opportunity for growing your wealth over time. However, in order to make informed investment decisions and optimize your portfolio, it&apos;s essential to utilize the right tools and resources. Here are some essential stock market tools that every investor should consider incorporating into their investment strategy:
+</p>
 
-        <section>
-          <h3 className={styles.h3}>1. Create a supabase account</h3>
-          <p className={styles.p}>
-            First, go to{" "}
-            <a href="https://supabase.com/" className="link link-primary">
-              Supabase
-            </a>{" "}
-            and create an account. It&apos;s free for up to 10,000 rows per
-            table.
-            <br />
-            Then create a new project and a new table. You can use the following
-            SQL schema:
-          </p>
+<h2>1. Stock Screener</h2>
+<p>
+    A stock screener is a powerful tool that allows investors to filter stocks based on specific criteria such as price, market capitalization, dividend yield, and more. By using a stock screener, investors can identify potential investment opportunities that meet their specific requirements and investment goals.
+</p>
 
-          <pre className={styles.code}>
-            <code>
-              {`CREATE TABLE public.users (
-  id bigint NOT NULL DEFAULT nextval('users_id_seq'::regclass),
-  email text NOT NULL,
-  password text NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT users_pkey PRIMARY KEY (id)
-);`}
-            </code>
-          </pre>
-        </section>
+<h2>2. Investment Research Platforms</h2>
+<p>
+    Research platforms provide investors with access to in-depth analysis, financial data, and market research reports on individual stocks, sectors, and industries. These platforms can help investors make informed decisions by providing valuable insights and information to guide their investment strategies.
+</p>
 
-        <section>
-          <h3 className={styles.h3}>2. Add your credentials to ShipFast</h3>
-          <p className={styles.p}>
-            Copy the <span className={styles.codeInline}>API URL</span> and{" "}
-            <span className={styles.codeInline}>API Key</span> from your
-            Supabase project settings and add them to your ShipFast project
-            settings. Add these files to your project:
-          </p>
+<h2>3. Portfolio Management Tools</h2>
+<p>
+    Portfolio management tools enable investors to track and manage their investments in a centralized platform. These tools allow investors to monitor the performance of their portfolio, analyze asset allocation, and identify areas for improvement or rebalancing to optimize returns and manage risk effectively.
+</p>
 
-          <ul className={styles.ul}>
-            <li className={styles.li}>.env.local</li>
-            <li className={styles.li}>.env.production</li>
-          </ul>
-        </section>
+<h2>4. Technical Analysis Tools</h2>
+<p>
+    Technical analysis tools help investors analyze historical price trends, patterns, and indicators to make informed investment decisions. These tools can provide valuable insights into market trends, price movements, and potential entry and exit points for trades.
+</p>
+
+<h2>5. Financial News and Market Data Platforms</h2>
+<p>
+    Staying informed about the latest financial news, market trends, and economic indicators is crucial for making informed investment decisions. Financial news and market data platforms provide investors with real-time updates, analysis, and commentary to help them stay ahead of market developments and understand the impact on their investments.
+</p>
+
+<p>
+    By incorporating these essential stock market tools into your investment strategy, you can maximize your investments, make informed decisions, and navigate the complexities of the stock market with confidence.
+</p>
       </>
     ),
   },

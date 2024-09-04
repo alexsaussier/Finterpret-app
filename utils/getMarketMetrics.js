@@ -31,10 +31,11 @@ export default async function getMarketMetrics() {
             }
         });
 
-        if (response.data && response.data.sentiment) {
+        if (response.data && response.data.sentiment) {            
             marketSentiment = response.data.sentiment;
         } else {
-            console.error('Unexpected response structure for market sentiment');
+            console.error('Unexpected response structure for market sentiment:');
+            console.log(response.data);
         }
     } catch (error) {
         console.error('Error fetching market sentiment:', error);
@@ -54,12 +55,13 @@ export default async function getMarketMetrics() {
             VIX = parseFloat(response.data['Global Quote']['05. price']);
         } else {
             console.error('Unexpected response structure for VIX index');
+            console.log(response.data);
+
         }
     } catch (error) {
         console.error('Error fetching VIX index:', error);
     }
 
-    // S&P 500 Index growth over last year
     // S&P 500 Index growth over last year
     try {
         const response = await axios.get('https://www.alphavantage.co/query', {

@@ -35,7 +35,7 @@ export default async function MarketDashboard() {
 				</h1>
 
 				{interestRate !== null && (
-					<Tile title="Interest Rates" content={`${interestRate}%`} />
+					<Tile title="Interest Rates (Federal Funds Rate)" content={`${interestRate}%`} />
 				)}
 
 				{marketSentiment && (

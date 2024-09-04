@@ -1,0 +1,6 @@
+{
+  "crons": [{
+    "path": "app/api/automations/generateBlogPost",
+    "schedule": "0 0 * * *"
+  }]
+}

@@ -1,7 +1,8 @@
-import { getServerSession, getSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
+import { processStockData } from "@/utils/processStockData";
 import AssetLayout from "@/components/AssetLayout";
 import DashboardCollapse from "@/components/DashboardCollapse";
 import DashboardCollapseValue from "@/components/DashboardCollapseValue";
@@ -25,12 +26,14 @@ export default async function Dashboard() {
   await connectMongo();
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
+
+  const stocks = await processStockData(user);
+
   const userId = user.id;
   const userSecret = user.snaptrade_user_secret;
   const accountId = user.portfolioAccountId;
   let portfolioCurrency = "$";
   let portfolioValue = null;
-  let stocks = [];
   let options = [];
   let holdings = null;
   let SharpeRatio = 0.8;
@@ -40,183 +43,17 @@ export default async function Dashboard() {
   let averageEps = "N/A";
   let averageDivYield = "N/A";
 
-  // First, retrieve stock data from snaptrade
+  // Retrieve connected broker accounts
   if (userSecret) {
     try {
-      // Retrieve connected broker accounts
       const listAccountsResponse = await listAccounts(userId, userSecret);
-
       connectedBrokers = listAccountsResponse.response.map(
         (account) => account.institution_name
       );
-
-      // Then, fetch all stocks for this account ID
-      holdings = await getSnaptradeHoldings();
-    } catch {
-      console.error(
-        "Snaptrade fetching Failure: User has a userSecret for Snaptrade but failed to fetch either accounts or holdings"
-      );
-    }
-
-    // retrieve stocks through snaptrade
-    // retrieve stocks through snaptrade
-    if (holdings) {
-      //Get the ticker (the 3-letter symbol of the stock) of each stock in my portfolio + the quantity
-      for (const position of holdings.response.positions) {
-        let ticker = position.symbol.symbol.symbol;
-        const stockName = position.symbol.symbol.description;
-        const units = position.units;
-
-        if (ticker === "CGG.PA") {
-          ticker = "VIRI.PA";
-          //because company just changed name and brokers can use the previous name
-        }
-
-        stocks.push({ ticker: ticker, stockName: stockName, units: units });
-      }
-    }
-  } else {
-    console.log("User is not connected to Snaptrade - no userSecret");
-  }
-
-  // Retrieve manually entered stocks
-  if (user.portfolio.length > 0) {
-    // Retrieve all tickers
-    try {
-      manualHoldings = user.portfolio.map((item) => ({
-        ticker: item.ticker,
-        units: item.units,
-      }));
-    } catch {
-      console.error("Failed to retrieve manually entered stocks");
-    }
-
-    // If there are manually entered stocks, get the current price for each stock
-    if (manualHoldings) {
-      for (const position of manualHoldings) {
-        let ticker = position.ticker;
-
-       
-        //if the ticker ends with ".XXX", strip out the last char so it fits the yahoo finance api that only takes 2 letters after the .
-        if (ticker.match(/\.[A-Z]{3}$/)) {
-          ticker = ticker.slice(0, -1);
-        }
-
-
-        const units = position.units;
-
-        // TO DO: getStockName for each ticker here
-        const stockName = ticker; //to change
-
-        if (ticker === "CGG.PA") {
-          ticker = "VIRI.PA";
-          //because company just changed name and brokers can use the previous name
-        }
-
-        stocks.push({ ticker: ticker, stockName: stockName, units: units });
-      }
-    }
-  } else {
-    console.log("User has no manually entered holdings.");
-  }
-
-  // ----------------- GET STOCK METRICS -----------------
-  // -----------------------------------------------------
-  if (stocks.length > 0) {
-    // For all items in stocks array, fetch their metrics from the db or from yahoo
-
-    for (var stock of stocks) {
-      // Check if stock is in db  and if current datetime and last datetime is more than 30 minutes, update the stock metrics in db
-      let stockInDb = null;
-
-      try {
-        stockInDb = await Stock.findOne({ ticker: stock.ticker });
-      } catch {
-        console.log("Failed to fetch stock from database: " + stock.ticker);
-      }
-
-      if (stockInDb) {
-        const lastDateTime = stockInDb.dateTime;
-        const currentDateTime = new Date();
-        const diff = Math.abs(currentDateTime - lastDateTime) / 60000; // difference in minutes
-
-        if (diff > 30 || !lastDateTime) {
-          // Data is too old, fetch from yahoo
-          await appendYahooMetrics(stock);
-
-          console.log("Refetching stock data" + stock.ticker);
-
-          // Handle NaN values
-          const updatedStock = {
-            ...stock,
-            totalValue: isNaN(stock.totalValue) ? 0 : stock.totalValue,
-            currentPrice: isNaN(stock.currentPrice) ? 0 : stock.currentPrice,
-            percentChange: isNaN(stock.percentChange) ? 0 : stock.percentChange,
-            // Add other fields that might be NaN
-          };
-
-          await stockInDb.updateOne(updatedStock);
-        } else {
-          // We have recent data in db, no need to fetch from yahoo
-
-          stock.currentPrice = stockInDb.currentPrice;
-          stock.percentChange = stockInDb.percentChange;
-          stock.divYield = stockInDb.divYield;
-          stock.eps = stockInDb.eps;
-          stock.peRatio = stockInDb.peRatio;
-          stock.priceEPS = stockInDb.priceEPS;
-          stock.priceToBook = stockInDb.priceToBook;
-          stock.dateTime = stockInDb.dateTime;
-          stock.currency = stockInDb.currency;
-          stock.totalValue = stockInDb.totalValue;
-          stock.sharesOutstanding = stockInDb.sharesOutstanding;
-          stock.bookValue = stockInDb.bookValue;
-
-        }
-      } else {
-        // Store stock in mongodb using Stock mongoose model
-
-        await appendYahooMetrics(stock);
-
-        // Handle NaN values before saving
-        const newStockData = {
-          ...stock,
-          totalValue: isNaN(stock.totalValue) ? 0 : stock.totalValue,
-          currentPrice: isNaN(stock.currentPrice) ? 0 : stock.currentPrice,
-          percentChange: isNaN(stock.percentChange) ? 0 : stock.percentChange,
-          // Add other fields that might be NaN
-        };
-
-        const newStock = new Stock(newStockData);
-        await newStock.save();
-      }
+    } catch (error) {
+      console.error("Failed to fetch connected broker accounts:", error);
     }
   }
-
-  // OPTIONS
-
-  /*for (const option_position of holdings.response.option_positions) {
-      const ticker = option_position.symbol.symbol.raw_symbol;
-      const stockName = option_position.symbol.symbol.description;
-      const quantity = option_position.units;
-
-      const strikePrice = option_position.symbol.option_symbol.strike_price;
-      const expirationDate =
-        option_position.symbol.option_symbol.expiration_date;
-      const optionType = option_position.symbol.option_symbol.option_type;
-
-      options.push({
-        stockName,
-        ticker,
-        quantity,
-        strikePrice,
-        expirationDate,
-        optionType,
-      });
-    }  */
-
-  //retrieve manually entered stocks
-  //let { calls, puts } = separateCallsAndPuts(options);
 
   console.log(stocks);
 

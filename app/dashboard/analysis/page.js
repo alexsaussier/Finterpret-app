@@ -75,7 +75,8 @@ export default async function AnalyticsDashboard() {
       for (const position of manualHoldings) {
         let ticker = position.ticker;
 
-        if (ticker.endsWith(".PAR")) {
+        //if the ticker ends with ".XXX", strip out the last char so it fits the yahoo finance api that only takes 2 letters after the .
+        if (ticker.match(/\.[A-Z]{3}$/)) {
           ticker = ticker.slice(0, -1);
         }
 
@@ -119,11 +120,27 @@ export default async function AnalyticsDashboard() {
           // Data is too old, fetch from yahoo
           await appendYahooMetrics(stock);
 
+          // Handle NaN values
+          const updatedStock = {
+            ...stock,
+            totalValue: isNaN(stock.totalValue) ? 0 : stock.totalValue,
+            currentPrice: isNaN(stock.currentPrice) ? 0 : stock.currentPrice,
+            percentChange: isNaN(stock.percentChange) ? 0 : stock.percentChange,
+            divYield: isNaN(stock.divYield) ? 0 : stock.divYield,
+            eps: isNaN(stock.eps) ? 0 : stock.eps,
+            peRatio: isNaN(stock.peRatio) ? 0 : stock.peRatio,
+            priceEPS: isNaN(stock.priceEPS) ? 0 : stock.priceEPS,
+            priceToBook: isNaN(stock.priceToBook) ? 0 : stock.priceToBook,
+            sharesOutstanding: isNaN(stock.sharesOutstanding) ? 0 : stock.sharesOutstanding,
+            bookValue: isNaN(stock.bookValue) ? 0 : stock.bookValue,
+          };
+
           try {
-            await stockInDb.updateOne(stock);
-          } catch {
+            await stockInDb.updateOne(updatedStock);
+          } catch (error) {
             console.log(
-              "operation failed, please go to  main dashboard and try again"
+              "Update operation failed, please go to main dashboard and try again",
+              error
             );
           }
 
@@ -152,8 +169,27 @@ export default async function AnalyticsDashboard() {
         // Store stock in mongodb using Stock mongoose model
         await appendYahooMetrics(stock);
 
-        const newStock = new Stock(stock);
-        await newStock.save();
+        // Handle NaN values before saving
+        const newStockData = {
+          ...stock,
+          totalValue: isNaN(stock.totalValue) ? 0 : stock.totalValue,
+          currentPrice: isNaN(stock.currentPrice) ? 0 : stock.currentPrice,
+          percentChange: isNaN(stock.percentChange) ? 0 : stock.percentChange,
+          divYield: isNaN(stock.divYield) ? 0 : stock.divYield,
+          eps: isNaN(stock.eps) ? 0 : stock.eps,
+          peRatio: isNaN(stock.peRatio) ? 0 : stock.peRatio,
+          priceEPS: isNaN(stock.priceEPS) ? 0 : stock.priceEPS,
+          priceToBook: isNaN(stock.priceToBook) ? 0 : stock.priceToBook,
+          sharesOutstanding: isNaN(stock.sharesOutstanding) ? 0 : stock.sharesOutstanding,
+          bookValue: isNaN(stock.bookValue) ? 0 : stock.bookValue,
+        };
+
+        const newStock = new Stock(newStockData);
+        try {
+          await newStock.save();
+        } catch (error) {
+          console.log("Failed to save new stock to database", error);
+        }
       }
     }
     console.log("Stocks array: ", stocks);

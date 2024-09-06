@@ -96,9 +96,13 @@ export default async function Dashboard() {
       for (const position of manualHoldings) {
         let ticker = position.ticker;
 
-        if (ticker.endsWith(".PAR")) {
+       
+        //if the ticker ends with ".XXX", strip out the last char so it fits the yahoo finance api that only takes 2 letters after the .
+        if (ticker.match(/\.[A-Z]{3}$/)) {
           ticker = ticker.slice(0, -1);
         }
+
+
         const units = position.units;
 
         // TO DO: getStockName for each ticker here
@@ -142,11 +146,16 @@ export default async function Dashboard() {
 
           console.log("Refetching stock data" + stock.ticker);
 
-          if (isNaN(stock.totalValue)) {
-            await stockInDb.updateOne({ ...stock, totalValue: 0 });
-          } else {
-            await stockInDb.updateOne(stock);
-          }
+          // Handle NaN values
+          const updatedStock = {
+            ...stock,
+            totalValue: isNaN(stock.totalValue) ? 0 : stock.totalValue,
+            currentPrice: isNaN(stock.currentPrice) ? 0 : stock.currentPrice,
+            percentChange: isNaN(stock.percentChange) ? 0 : stock.percentChange,
+            // Add other fields that might be NaN
+          };
+
+          await stockInDb.updateOne(updatedStock);
         } else {
           // We have recent data in db, no need to fetch from yahoo
 
@@ -169,7 +178,16 @@ export default async function Dashboard() {
 
         await appendYahooMetrics(stock);
 
-        const newStock = new Stock(stock);
+        // Handle NaN values before saving
+        const newStockData = {
+          ...stock,
+          totalValue: isNaN(stock.totalValue) ? 0 : stock.totalValue,
+          currentPrice: isNaN(stock.currentPrice) ? 0 : stock.currentPrice,
+          percentChange: isNaN(stock.percentChange) ? 0 : stock.percentChange,
+          // Add other fields that might be NaN
+        };
+
+        const newStock = new Stock(newStockData);
         await newStock.save();
       }
     }

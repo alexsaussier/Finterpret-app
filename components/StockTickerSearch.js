@@ -22,23 +22,27 @@ export const StockTickerSearch = ({
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${searchTerm}&apikey=${process.env.STOCK_TICKER_API_KEY}`
-      );
+      const response = await fetch(`/api/yahoo-finance/search-stock?ticker=${encodeURIComponent(searchTerm)}`);
       const data = await response.json();
 
-      if (data.Note) {
-        setError("API call frequency is too high. Please try again later.");
-      } else if (data.bestMatches) {
-        setResults(data.bestMatches);
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while fetching the data.');
+      }
+
+      if (data.quotes && data.quotes.length > 0) {
+        setResults(data.quotes.map(quote => ({
+          "1. symbol": quote.symbol,
+          "2. name": quote.longname || quote.shortname
+        })));
       } else {
         setError("No results found.");
       }
     } catch (error) {
-      setError("An error occurred while fetching the data.");
+      console.error('Error:', error);
+      setError(error.message || "An error occurred while fetching the data.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const saveToPortfolio = async () => {

@@ -6,9 +6,21 @@ import getPrice from "./getPrice";
 // and appends stock metrics to the stock object
 
 async function appendYahooMetrics(stock) {
+  
+  // Format ticker before API requests
+  let formattedTicker = stock.ticker;
+  if (formattedTicker.match(/\.[A-Z]{3}$/)) {
+    formattedTicker = formattedTicker.slice(0, -1);
+  }
+  if (formattedTicker === "CGG.PA") {
+    formattedTicker = "VIRI.PA";
+  }
+
   console.log("appending yahoo metrics for: " + stock.ticker);
-  const statsAPI = await getStats(stock.ticker);
-  const priceAPI = await getPrice(stock.ticker);
+
+
+  const statsAPI = await getStats(formattedTicker);
+  const priceAPI = await getPrice(formattedTicker);
 
   console.log("price API response: " + JSON.stringify(statsAPI));
 

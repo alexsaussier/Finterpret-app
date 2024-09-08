@@ -39,9 +39,7 @@ export async function processStockData(user) {
 
       for (const position of manualHoldings) {
         let ticker = position.ticker;
-        if (ticker.match(/\.[A-Z]{3}$/)) {
-          ticker = ticker.slice(0, -1);
-        }
+       
         const units = position.units;
         const stockName = ticker; // TODO: getStockName for each ticker
 

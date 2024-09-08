@@ -1,26 +1,22 @@
-/*import connectMongo from "@/libs/mongoose";
-import InterestRates from "@/models/InterestRates";
-import MarketSentiment from "@/models/MarketSentiment";
-import VolatilityIndex from "@/models/VolatilityIndex";
-import MacroEconomic from "@/models/MacroEconomic";
+import { NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/next-auth";
+import connectMongo from "@/libs/mongoose";
+import getMarketMetrics from "@/utils/getMarketMetrics";
 
-export default async function handler(req, res) {
-  await connectMongo();
+export async function GET() {
+	await connectMongo();
+	const session = await getServerSession(authOptions);
 
-  try {
-    const interestRates = await InterestRates.findOne().lean();
-    const marketSentiment = await MarketSentiment.findOne().lean();
-    const volatilityIndex = await VolatilityIndex.findOne().lean();
-    const macroEconomic = await MacroEconomic.findOne().lean();
+	if (!session) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+	}
 
-    res.status(200).json({
-      interestRates,
-      marketSentiment,
-      volatilityIndex,
-      macroEconomic,
-    });
-  } catch (error) {
-    console.error("Failed to fetch market metrics", error);
-    res.status(500).json({ error: "Failed to fetch market metrics" });
-  }
-}*/
+	try {
+		const marketMetrics = await getMarketMetrics();
+		return NextResponse.json(marketMetrics);
+	} catch (error) {
+		console.error("Failed to fetch market metrics", error);
+		return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+	}
+}

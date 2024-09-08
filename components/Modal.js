@@ -6,33 +6,17 @@ import { sendOpenAi } from "@/libs/gpt";
 
 // A simple modal component which can be shown/hidden with a boolean and a function
 // Because of the setIsModalOpen function, you can't use it in a server component.
-const Modal = ({ isModalOpen, setIsModalOpen, metric }) => {
-  console.log("Metric selected: " + JSON.stringify(metric, null, 2));
-  console.log("Metric name: " + metric[0]);
-  
-  const guideline = "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly" +
-  " Answer in HTML format. Use 1 <br> tags between each paragraph." +
-  " Use <b> tags to put the important statements in bold. " + 
-  " You should sound very confident in your answer, as if you are a financial advisor." +
-  " Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance.";
-
-  const gptMessage = "Tell me more about " + metric[0] + "?" + " Its value for an asset I own is " + metric[1] + ", what does it mean?" +
-  " Focus more on what the metric value means for me." ;
-  
+const Modal = ({ isModalOpen, setIsModalOpen, metric, guideline, gptMessage }) => {
   const [response, setResponse] = useState(null);
-
 
   useEffect(() => {
     if (isModalOpen) {
-    //Run this on component render only
-    //response = sendOpenAi(gptMessage, "1");
-    sendOpenAi(guideline, gptMessage, "1", 300).then((data) => {
-      setResponse(data);
-      console.log(response);
-    });
-  }
-
-  }, [isModalOpen]);
+      sendOpenAi(guideline, gptMessage, "1", 300).then((data) => {
+        setResponse(data);
+        console.log(response);
+      });
+    }
+  }, [isModalOpen, guideline, gptMessage]);
 
   return (
     <Transition appear show={isModalOpen} as={Fragment}>

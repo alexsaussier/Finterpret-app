@@ -2,133 +2,67 @@
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
 
-// TO DO:
-//    - Ensure data is cached so we do not make multiple calls to the API if we click on the stock cards multiple times
-
 const StockAnalyticsCard = ({ stock }) => {
-  const [stats, setStats] = useState(null);
-  const importantMetrics = [];
-  let importantMetricsStock = [];
-
   const [isOpen, setIsOpen] = useState(false);
   const [currentMetric, setCurrentMetric] = useState(["", ""]);
+  const [guideline, setGuideline] = useState("");
+  const [gptMessage, setGptMessage] = useState("");
+
+  const importantMetrics = [
+    ["PE Ratio", parseFloat(stock.peRatio).toFixed(2)],
+    ["Shares Outstanding", stock.sharesOutstanding],
+    ["Earnings Per Share", parseFloat(stock.eps).toFixed(2)],
+    ["Price/EPS", parseFloat(stock.priceEPS).toFixed(2)],
+    ["Book Value", parseFloat(stock.bookValue).toFixed(2)],
+    ["Price to Book", parseFloat(stock.priceToBook).toFixed(2)],
+    ["Dividend Yield", stock.divYield ? stock.divYield + "%" : null]
+  ].filter(metric => metric[1] !== null && metric[1] !== undefined);
 
   const openModal = (metric) => {
     setCurrentMetric(metric);
+    setGuideline(
+      "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly. " +
+      "Answer in HTML format. Use 1 <br> tags between each paragraph. " +
+      "Use <b> tags to put the important statements in bold. " + 
+      "You should sound very confident in your answer, as if you are a financial advisor. " +
+      "Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance."
+    );
+    setGptMessage(
+      `Tell me more about ${metric[0]}? Its value for ${stock.ticker} is ${metric[1]}, what does it mean? ` +
+      "Focus more on what the metric value means for me."
+    );
     setIsOpen(true);
   };
 
-  //-------------LOAD IMPORTANT METRICS -------------
-  try {
-    importantMetrics.push(
-      ["PE Ratio", parseFloat(stock.peRatio).toFixed(2)],
-      ["Shares Outstanding", stock.sharesOutstanding],
-      ["Earnings Per Share", parseFloat(stock.eps).toFixed(2)],
-      ["Price/EPS", parseFloat(stock.priceEPS).toFixed(2)],
-      ["Book Value", parseFloat(stock.bookValue).toFixed(2)],
-      ["Price to Book", parseFloat(stock.priceToBook).toFixed(2)],
-      ["Dividend Yield", stock.divYield ? stock.divYield + "%" : null]
-    );
-  } catch (error) {
-    console.log("Error: Stock metrics are not correctly loaded." + error);
+  if (importantMetrics.length === 0) {
+    return <div>No metrics available</div>;
   }
-
-  if (!importantMetrics) {
-    return (
-      <div className="flex items-center space-x-3">
-        <svg
-          className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        Loading...
-      </div>
-    );
-  }
-
-  // We can add:
-  // stats.quickRatio,
-  // stats.debtToEquity,
-  // stats.grossProfits,
-  // stats.grossMargins
-  // average analyst rating
-  const allMetricsEmpty = importantMetrics.every(
-    (metric) => metric[1] === null || metric[1] === undefined
-  );
-
 
   return (
-    <>
-      {/* 
-    For each statistic, display using a stat component
-    Below or next to each statistic, we will do an LLM API call 
-    */}
-      {importantMetrics.length === 0 ? (
-        <div className="flex items-center space-x-3">
-          <svg
-            className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          Loading...
-        </div>
-      ) : (
-        <div>
-          
-          <div className="flex flex-col">
-          {importantMetrics.map((stockItem, index) => (
-            <button onClick={() => openModal(stockItem)} key={index}>
-              <div className="stats shadow mt-4">
-                <div className="stat">
-                  <div className="stat-title">{stockItem[0]}</div>
-                  <div className="stat-value">{stockItem[1]}</div>
-                  {/* Add more details as needed */}
-                </div>
+    <div>
+      <div className="flex flex-col">
+        {importantMetrics.map((stockItem, index) => (
+          <button onClick={() => openModal(stockItem)} key={index}>
+            <div className="stats shadow mt-4">
+              <div className="stat">
+                <div className="stat-title">{stockItem[0]}</div>
+                <div className="stat-value">{stockItem[1]}</div>
               </div>
-            </button>
-          ))}
-        </div>
-          
-          {isOpen && (
-            <Modal
-              isModalOpen={isOpen}
-              setIsModalOpen={setIsOpen}
-              metric={currentMetric}
-            />
-          )}
-        </div>
+            </div>
+          </button>
+        ))}
+      </div>
+      
+      {isOpen && (
+        <Modal
+          isModalOpen={isOpen}
+          setIsModalOpen={setIsOpen}
+          metric={currentMetric}
+          guideline={guideline}
+          gptMessage={gptMessage}
+        />
       )}
-    </>
+    </div>
   );
 };
 

@@ -16,13 +16,13 @@ async function appendYahooMetrics(stock) {
     formattedTicker = "VIRI.PA";
   }
 
-  console.log("appending yahoo metrics for: " + stock.ticker);
+  console.log("appending yahoo metrics for: " + stock.ticker + "\n");
 
 
   const statsAPI = await getStats(formattedTicker);
   const priceAPI = await getPrice(formattedTicker);
 
-  console.log("price API response: " + JSON.stringify(statsAPI));
+  console.log("price API response: " + JSON.stringify(statsAPI) + "\n");
 
 
   try{
@@ -30,13 +30,13 @@ async function appendYahooMetrics(stock) {
     stock.percentChange = statsAPI.response.regularMarketChangePercent.raw;
     //stock.currency = priceAPI.data.currency;       
   } catch (error) {
-    console.log(stock.ticker + " Error: price or % change is not correctly loaded. " + error);
+    console.log(stock.ticker + " Error: price or % change is not correctly loaded. " + error + "\n");
   }
 
   try{
     stock.totalValue = stock.currentPrice * stock.units;
   }catch(e){
-    console.log("Could not determine total value for stock " + stock.ticker)
+    console.log("Could not determine total value for stock " + stock.ticker + "\n")
   }
 
   // Get PE ratio and append to stock in array
@@ -46,14 +46,14 @@ async function appendYahooMetrics(stock) {
     try {
       stock.peRatio = statsAPI.response.forwardPE.raw;
     } catch (error) {
-      console.log(stock.ticker + " Error: PE Ratio is not correctly loaded.");
+      console.log(stock.ticker + " Error: PE Ratio is not correctly loaded." + "\n");
     }
   }
 
   try {
     stock.sharesOutstanding = statsAPI.response.sharesOutstanding.raw;
   } catch (error) {
-    console.log(stock.ticker + " Error: PE Ratio is not correctly loaded.");
+    console.log(stock.ticker + " Error: PE Ratio is not correctly loaded." + error + "\n");
   }
   
 
@@ -64,7 +64,7 @@ async function appendYahooMetrics(stock) {
     try {
       stock.eps = statsAPI.response.epsTrailingTwelveMonths.raw;
     } catch (error) {
-      console.log(stock.ticker + " Error: EPS is not correctly loaded.");
+      console.log(stock.ticker + " Error: EPS is not correctly loaded." + error + "\n");
     }
   }
 
@@ -72,13 +72,13 @@ async function appendYahooMetrics(stock) {
   try {
     stock.priceEPS = statsAPI.response.priceEpsCurrentYear.raw;
   } catch (error) {
-    console.log(stock.ticker + " Error: P/EPS is not correctly loaded.");
+    console.log(stock.ticker + " Error: P/EPS is not correctly loaded." + error + "\n");
   }
 
   try{
     stock.bookValue = statsAPI.response.bookValue.raw;
   }catch(error){
-    console.log(stock.ticker + " Error: Book Value is not correctly loaded.");
+    console.log(stock.ticker + " Error: Book Value is not correctly loaded." + error + "\n");
   }
 
 
@@ -86,7 +86,7 @@ async function appendYahooMetrics(stock) {
   try {
     stock.priceToBook = statsAPI.response.priceToBook.raw;
   } catch (error) {
-    console.log(stock.ticker + " Error: Price to Book Value is not correctly loaded.");
+    console.log(stock.ticker + " Error: Price to Book Value is not correctly loaded." + error + "\n");
   }
 
   // Get Dividend Yield and append to stock in array
@@ -96,7 +96,7 @@ async function appendYahooMetrics(stock) {
     try {
       stock.divYield = statsAPI.response.trailingAnnualDividendYield.raw;
     } catch (error) {
-      console.log(stock.ticker + " Error: Dividend Yield is not correctly loaded.");
+      console.log(stock.ticker + " Error: Dividend Yield is not correctly loaded." + error + "\n");
     }
   }
 

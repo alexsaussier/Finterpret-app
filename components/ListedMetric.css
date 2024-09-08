@@ -7,18 +7,6 @@
   min-width: 150px;
   text-align: left;
   margin: 8px;
-
-  .metricName {
-    font-weight: bold;
-    font-size: 24px;
-  }
-
-  .metricValue {
-    font-size: 18px;
-  }
 }
 
-.listedStock:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
+

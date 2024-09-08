@@ -1,10 +1,14 @@
 import React from 'react';
 
-export default function Tile({ title, content }) {
+const Tile = ({ title, content }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <h2 className="text-lg font-semibold mb-2">{title}</h2>
-      <div className="text-gray-700">{content}</div>
+    <div className="stats shadow mt-4 w-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-base-200 cursor-pointer">
+      <div className="stat">
+        <div className="stat-title">{title}</div>
+        <div className="stat-value">{content}</div>
+      </div>
     </div>
   );
-}
+};
+
+export default Tile;

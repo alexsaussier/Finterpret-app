@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
+import Tile from "@/components/Tile";
 
 const StockAnalyticsCard = ({ stock }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,13 +43,8 @@ const StockAnalyticsCard = ({ stock }) => {
     <div>
       <div className="flex flex-col">
         {importantMetrics.map((stockItem, index) => (
-          <button onClick={() => openModal(stockItem)} key={index}>
-            <div className="stats shadow mt-4">
-              <div className="stat">
-                <div className="stat-title">{stockItem[0]}</div>
-                <div className="stat-value">{stockItem[1]}</div>
-              </div>
-            </div>
+          <button onClick={() => openModal(stockItem)} key={index} className="w-full">
+            <Tile title={stockItem[0]} content={stockItem[1]} />
           </button>
         ))}
       </div>

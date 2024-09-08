@@ -1,6 +1,15 @@
 import getStats from "./getStats";
 import getPrice from "./getPrice";
 
+// Helper function to format large numbers with commas
+const formatLargeNumber = (num) => {
+  if (num === null || num === undefined){
+    console.log("formatLargeNumber Error: Number is null or undefined");
+    return null;
+  } 
+  console.log("formatting Large Number: " + num);
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 // This function takes an object containing stock stats as input (must have a ticker value) 
 // and appends stock metrics to the stock object
@@ -52,8 +61,10 @@ async function appendYahooMetrics(stock) {
 
   try {
     stock.sharesOutstanding = statsAPI.response.sharesOutstanding.raw;
+    stock.sharesOutstanding = formatLargeNumber(stock.sharesOutstanding);
+
   } catch (error) {
-    console.log(stock.ticker + " Error: PE Ratio is not correctly loaded." + error + "\n");
+    console.log(stock.ticker + " Error: Shares Outstanding is not correctly loaded." + error + "\n");
   }
   
 
@@ -104,8 +115,7 @@ async function appendYahooMetrics(stock) {
   stock.dateTime = new Date();
 
   // append total value of stock to stock in array
-  
-  stock.totalValue = stock.currentPrice * stock.units;
+  stock.totalValue = formatLargeNumber(stock.currentPrice * stock.units);
 
   // We can add:
   // statsAPI.quickRatio,

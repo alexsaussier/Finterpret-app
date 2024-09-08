@@ -122,7 +122,11 @@ function sanitizeStockData(stock) {
   ];
 
   return fields.reduce((acc, field) => {
-    acc[field] = isNaN(stock[field]) ? 0 : stock[field];
+    if (typeof stock[field] === 'number' && isNaN(stock[field])) {
+      acc[field] = 0;
+    } else {
+      acc[field] = stock[field];
+    }
     return acc;
   }, { ...stock });
 }

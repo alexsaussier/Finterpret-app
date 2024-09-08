@@ -176,7 +176,7 @@ export const articles = [
         
 <h1>The Ultimate Guide to DIY Investing Tools</h1>
 
-<p>Are you looking to take control of your investment portfolio? DIY investing tools may be the solution you've been searching for. With the rise of online trading platforms and robust financial applications, individual investors now have access to a wide array of tools to help them make informed decisions about their investments.</p>
+<p>Are you looking to take control of your investment portfolio? DIY investing tools may be the solution you&apos;ve been searching for. With the rise of online trading platforms and robust financial applications, individual investors now have access to a wide array of tools to help them make informed decisions about their investments.</p>
 
 <h2>Benefits of DIY Investing Tools:</h2>
 <ul>
@@ -222,7 +222,7 @@ export const articles = [
 <p>Investing in the stock market can be both thrilling and daunting. With the evolution of technology, stock analysis apps have become essential tools for traders and investors to make informed decisions in the dynamic financial landscape.</p>
 
 <h2>What makes a stock analysis app great?</h2>
-<p>Before diving into the world of stock analysis apps, it's crucial to understand what makes a stock analysis app stand out from the rest. Key features to look out for include real-time market data updates, customizable watchlists, technical analysis tools, financial news integration, and user-friendly interfaces.</p>
+<p>Before diving into the world of stock analysis apps, it&apos;s crucial to understand what makes a stock analysis app stand out from the rest. Key features to look out for include real-time market data updates, customizable watchlists, technical analysis tools, financial news integration, and user-friendly interfaces.</p>
 
 <h2>Top Picks for Stock Analysis Apps</h2>
 
@@ -239,7 +239,7 @@ export const articles = [
 
 <p>By leveraging the capabilities of top stock analysis apps, investors can stay informed, analyze market trends, and make strategic investment decisions. Whether you are a novice or an experienced trader, incorporating these apps into your investment strategy can propel your success in the world of stocks.</p>
 
-<p>Remember, while stock analysis apps provide valuable tools and insights, it's essential to combine them with thorough research and prudent decision-making to achieve your financial goals. Stay informed, stay vigilant, and let these apps guide you on your journey to financial success.</p>
+<p>Remember, while stock analysis apps provide valuable tools and insights, it&apos;s essential to combine them with thorough research and prudent decision-making to achieve your financial goals. Stay informed, stay vigilant, and let these apps guide you on your journey to financial success.</p>
       </>
     ),
   },
@@ -267,9 +267,9 @@ export const articles = [
 <ul>
   <li><strong>Diversification:</strong> One of the most common strategies for managing risk is diversifying your portfolio across different asset classes, industries, and geographic regions. Diversification helps spread risk and reduces the impact of any single investment underperforming.</li>
   
-  <li><strong>Risk Assessment:</strong> It's crucial to regularly assess the risk levels of individual investments as well as the overall portfolio. This can involve analyzing factors such as volatility, correlation, and market conditions to ensure that your portfolio remains in line with your risk tolerance and investment goals.</li>
+  <li><strong>Risk Assessment:</strong> It&apos;s crucial to regularly assess the risk levels of individual investments as well as the overall portfolio. This can involve analyzing factors such as volatility, correlation, and market conditions to ensure that your portfolio remains in line with your risk tolerance and investment goals.</li>
   
-  <li><strong>Monitoring and Rebalancing:</strong> Markets are constantly changing, so it's important to regularly monitor your portfolio and make adjustments as needed. Rebalancing involves buying or selling assets to maintain your desired asset allocation and risk level.</li>
+  <li><strong>Monitoring and Rebalancing:</strong> Markets are constantly changing, so it&apos;s important to regularly monitor your portfolio and make adjustments as needed. Rebalancing involves buying or selling assets to maintain your desired asset allocation and risk level.</li>
   
   <li><strong>Risk Management Tools:</strong> There are various tools and strategies available to help manage portfolio risk, such as stop-loss orders, options, and hedging techniques. These tools can provide added protection during times of market uncertainty or volatility.</li>
 </ul>

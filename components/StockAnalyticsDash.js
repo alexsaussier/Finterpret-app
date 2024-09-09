@@ -69,7 +69,7 @@ const StockAnalyticsDash = ({ stocks }) => {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 mt-4 lg:mt-0">
+      <div className="w-full lg:w-3/5 mt-4 lg:mt-0">
         <p className="mb-2">Click on a metric to get some insights 👇</p>
         <StockAnalyticsCard ticker={selectedStock.ticker} stock={selectedStock} />
       </div>

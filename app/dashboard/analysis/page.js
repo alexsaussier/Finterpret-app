@@ -27,7 +27,7 @@ export default async function AnalyticsDashboard() {
           <StockAnalyticsDash stocks={stocks} />
         ) : (
           <>
-            <p>Uh-oh! Please complete the importing of your portfolio. </p>
+            <p>Uh-oh! Please complete the importing of your portfolio in the main dashboard. </p>
             <ButtonSnaptrade
               title="Import a Portfolio"
               snaptrade_user_secret={user.snaptrade_user_secret}

@@ -26,7 +26,7 @@ const StockAnalyticsCard = ({ stock }) => {
       "Answer in HTML format. Use 1 <br> tags between each paragraph. " +
       "Use <b> tags to put the important statements in bold. " + 
       "You should sound very confident in your answer, as if you are a financial advisor. " +
-      "Make the response very concise and easy to understand for the common folk. The person reading that does not know anything about finance."
+      "Make the response very concise (300 tokens maximums) and easy to understand for the common folk. The person reading that does not know anything about finance."
     );
     setGptMessage(
       `Tell me more about ${metric[0]}? Its value for ${stock.ticker} is ${metric[1]}, what does it mean? ` +

@@ -26,25 +26,20 @@ function calculateAverage(metric, stocks, portfolioValue) {
   let sumOfWeights_positiveStocks = 0;
 
   for (const stock of stocks) {
-    const stockValue = stock.totalValue;
-    
+    const stockValue = Number(stock.totalValue);
     
     if (stock[metric] !== undefined) {
       const metricValue = Math.max(0, stock[metric]);
       
       const stockWeight = stockValue / portfolioValue;
 
-
       // Only consider positive metric values
-      if (metricValue > 0 && stockWeight !== undefined) {
-        
+      if (metricValue > 0 && !isNaN(stockWeight)) {
         sumOfWeights_positiveStocks += stockWeight;
 
         weightedAverage += stockWeight * metricValue;
       }
     }
-
-
   }
   return weightedAverage.toFixed(2);
 }

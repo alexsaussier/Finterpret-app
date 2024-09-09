@@ -31,7 +31,7 @@ export default function MarketDashboard() {
 			"Answer in HTML format. Use <br> tags between paragraphs. " +
 			"Use <b> tags for important points. " +
 			"Be confident in your explanation, as if you're a seasoned financial expert. " +
-			"Your response should be concise and easy to understand for someone with little financial knowledge."
+			"Your response should be concise (250 tokens maximums) and easy to understand for someone with little financial knowledge."
 		);
 		setGptMessage(
 			`Explain the market metric "${metricName}". Its current value is ${metricValue}. ` +

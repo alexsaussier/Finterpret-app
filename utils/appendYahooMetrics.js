@@ -115,7 +115,8 @@ async function appendYahooMetrics(stock) {
   stock.dateTime = new Date();
 
   // append total value of stock to stock in array
-  stock.totalValue = formatLargeNumber(stock.currentPrice * stock.units);
+  stock.totalValue = stock.currentPrice * stock.units;
+  stock.totalValue = formatLargeNumber(stock.totalValue);
 
   // We can add:
   // statsAPI.quickRatio,

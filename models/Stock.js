@@ -44,8 +44,9 @@ const stockSchema = mongoose.Schema(
       type: Date,
     },
 
+    //I think this should be removed - did not have time to check if it breaks something but I don't think so
     totalValue: {
-      type: Number,
+      type: String,
     },
 
     percentChange: {
@@ -57,7 +58,7 @@ const stockSchema = mongoose.Schema(
     },
 
     sharesOutstanding: {
-      type: Number,
+      type: String,
     },  
 
     bookValue: {

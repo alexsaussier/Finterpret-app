@@ -8,7 +8,7 @@ export const sendOpenAi = async (guideline, request, userId, max, temp = 1) => {
     model: "gpt-4o-mini",
     messages: [{"role": "system", "content": guideline}, 
     {"role": "user", "content": request}],
-    max_tokens: max,
+    max_tokens: max || 500, // Set a higher default, or remove if not needed
     temperature: temp,
     user: userId,
   });

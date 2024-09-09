@@ -28,15 +28,16 @@ export default function MarketDashboard() {
 		setCurrentMetric([metricName, metricValue]);
 		setGuideline(
 			"You are a financial advisor explaining market metrics. Your tone should be professional yet accessible. " +
-			"Answer in HTML format. Use <br> tags between paragraphs. " +
+			"Answer in HTML format. Space the text with <br> tags." +
 			"Use <b> tags for important points. " +
-			"Be confident in your explanation, as if you're a seasoned financial expert. " +
-			"Your response should be concise (250 tokens maximums) and easy to understand for someone with little financial knowledge."
+			"Be confident in your explanation, as if you're a seasoned financial expert. " 
 		);
 		setGptMessage(
 			`Explain the market metric "${metricName}". Its current value is ${metricValue}. ` +
 			"What does this metric represent, and what does the current value indicate about market conditions? " +
-			"How might this affect individual investors or the broader economy?"
+			"How might this affect individual investors or the broader economy?" +
+			"Your response should be concise (250 tokens maximums) and easy to understand for someone with little financial knowledge. " +
+			"The first paragraph should be a summary of the definiton of the metric and its intepretation."
 		);
 		setIsModalOpen(true);
 	};

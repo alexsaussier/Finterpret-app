@@ -23,14 +23,15 @@ const StockAnalyticsCard = ({ stock }) => {
     setCurrentMetric(metric);
     setGuideline(
       "You are a financial advisor. You are helping a client understand all sorts of financial metrics. Your tone should be serious but friendly. " +
-      "Answer in HTML format. Use 1 <br> tags between each paragraph. " +
+      "Answer in HTML format. Space the text with <br> tags. " +
       "Use <b> tags to put the important statements in bold. " + 
-      "You should sound very confident in your answer, as if you are a financial advisor. " +
-      "Make the response very concise (300 tokens maximums) and easy to understand for the common folk. The person reading that does not know anything about finance."
+      "You should sound very confident in your answer, as if you are a financial advisor. " 
     );
     setGptMessage(
       `Tell me more about ${metric[0]}? Its value for ${stock.ticker} is ${metric[1]}, what does it mean? ` +
-      "Focus more on what the metric value means for me."
+      "Focus more on what the metric value means for me." +
+      "Make the response very concise (250 tokens maximums) and easy to understand for the common folk. The person reading that does not know anything about finance." +
+      "The first paragraph should be a summary of the definition of the metric and its interpretation."
     );
     setIsOpen(true);
   };

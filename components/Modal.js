@@ -124,7 +124,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, metric, guideline, gptMessage }) =
                     />
                     
                     {/* Show More/Less button */}
-                    {contentRef.current && contentRef.current.scrollHeight > 20 && !deeperResponse && !isExpanded && (
+                    {!deeperResponse && !isExpanded && (
                       <button
                         onClick={toggleExpand}
                         className="mt-4 px-4 py-2 text-blue-500 hover:text-blue-700 focus:outline-none self-start"

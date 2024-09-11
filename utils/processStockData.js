@@ -34,6 +34,7 @@ export async function processStockData(user) {
     try {
       const manualHoldings = user.portfolio.map((item) => ({
         ticker: item.ticker,
+        stockName: item.stockName,
         units: item.units,
       }));
 
@@ -41,7 +42,12 @@ export async function processStockData(user) {
         let ticker = position.ticker;
        
         const units = position.units;
-        const stockName = ticker; // TODO: getStockName for each ticker
+        let stockName = position.stockName;
+        try {
+          stockName = position.stockName; 
+        } catch (error) {
+          console.log("Could not find stock name for " + ticker + "\n");
+        }
 
         if (ticker === "CGG.PA") {
           ticker = "VIRI.PA";

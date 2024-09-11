@@ -52,6 +52,7 @@ const userSchema = mongoose.Schema(
 
     portfolio: [{
       ticker: String,
+      stockName: String,
       units: Number
     }],
 

@@ -12,6 +12,8 @@ export const StockTickerSearch = ({
   setSearchTerm,
   results,
   setResults,
+  stockName,
+  setStockName,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,6 +32,9 @@ export const StockTickerSearch = ({
       }
 
       if (data.quotes && data.quotes.length > 0) {
+        const newStockName = data.quotes[0].longname || data.quotes[0].shortname;
+        setStockName(newStockName);
+        console.log("Stock name set:", newStockName); // Add this log
         setResults(data.quotes.map(quote => ({
           "1. symbol": quote.symbol,
           "2. name": quote.longname || quote.shortname
@@ -48,6 +53,7 @@ export const StockTickerSearch = ({
   const saveToPortfolio = async () => {
     try {
       setLoading(true);
+      console.log("Saving to portfolio:", { ticker, stockName, units }); // Add this log
       const response = await fetch("/api/user/add-stocks-to-portfolio", {
         method: "POST",
         headers: {
@@ -55,14 +61,16 @@ export const StockTickerSearch = ({
         },
         body: JSON.stringify({
           ticker,
+          stockName, // Make sure this is included
           units,
         }),
       });
 
       if (response.ok) {
         // Handle success
-        console.log("Data saved to portfolio");
+        console.log("Data saved to portfolio:", { ticker, stockName, units });
         setTicker();
+        setStockName();
         setUnits();
         setSearchTerm("");
         setResults([]);

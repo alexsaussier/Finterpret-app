@@ -10,12 +10,13 @@ export async function POST(req) {
     await connectMongo();
     const body = await req.json();
 
-    const { ticker, units } = body;
+    const { ticker, stockName, units } = body;
 
 
     //save to mongo
     try{
         console.log("API ticker saved: " + ticker)
+        console.log("API stockName saved: " + stockName)
         console.log("API units saved: " + units)
 
         // Extract numeric value if units is an object
@@ -45,7 +46,7 @@ export async function POST(req) {
             user.portfolio = [];
         }
 
-        user.portfolio.push({ ticker, units });
+        user.portfolio.push({ ticker, stockName, units });
         await user.save();
 
         console.log('Portfolio updated successfully');

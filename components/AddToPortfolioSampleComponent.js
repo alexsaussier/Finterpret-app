@@ -9,6 +9,7 @@ export const AddToPortfolioSampleComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [units, setUnits] = useState();
+  const [stockName, setStockName] = useState("");
 
   return (
     <div className="bg-white rounded-lg p-5 shadow-md flex flex-col h-full">
@@ -29,6 +30,8 @@ export const AddToPortfolioSampleComponent = () => {
           setTicker={setTicker}
           units={units}
           setUnits={setUnits}
+          stockName={stockName}
+          setStockName={setStockName}
         />
       </div>
     </div>

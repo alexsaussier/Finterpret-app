@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/utils/svgIcons";
 
 //For when you want to display a value on the title
-const DashboardCollapseStock = ({ title, units, children }) => {
+const DashboardCollapseStock = ({ title, stockName, units, children }) => {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [editUnits, setEditUnits] = useState(units);
@@ -124,7 +124,7 @@ const DashboardCollapseStock = ({ title, units, children }) => {
       <input type="checkbox" onChange={handleOpen} />
 
       <div className="collapse-title font-bold flex justify-between items-center p-4">
-        <div className="">{title}</div>
+        <div className="">{stockName || title}</div>
         {!editing && <div className="">{units}</div>}
       </div>
 

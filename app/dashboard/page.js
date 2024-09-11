@@ -202,6 +202,7 @@ export default async function Dashboard() {
                     key={stock.ticker}
                     title={stock.ticker}
                     units={stock.units}
+                    stockName={stock.stockName}
                   />
                 ))
               ) : (

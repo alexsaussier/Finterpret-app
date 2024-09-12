@@ -20,7 +20,7 @@ const DashboardCollapseStock = ({ title, stockName, units, children }) => {
 
   const gptMessage =
     "Can you provide me with a description of the following company: " +
-    title +
+    stockName +
     "?" +
     "Give me a short rundown of what the company does, what it is known for, and any insights about its historical financial performance. " +
     "Also tell me about the future prospects of the company." + 
@@ -214,7 +214,7 @@ const DashboardCollapseStock = ({ title, stockName, units, children }) => {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            Our Intelligent Advisor is looking for information about {title} ...
+            Our Intelligent Advisor is looking for information about {stockName} ...
           </div>
         ) : (
           <section dangerouslySetInnerHTML={{ __html: response }} />

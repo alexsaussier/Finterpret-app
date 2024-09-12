@@ -62,6 +62,7 @@ const StockAnalyticsDash = ({ stocks }) => {
                   name={stock.stockName || stock.ticker}
                   units={stock.units}
                   currency={stock.currency}
+                  ticker={stock.ticker}
                 />
               </button>
             </div>

@@ -11,6 +11,7 @@ const ListedStock = ({
   name,
   units,
   currency,
+  ticker
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const isNegative = (changePercent ?? "").toString().startsWith("-")
@@ -30,7 +31,7 @@ const ListedStock = ({
         selected ? "bg-teal-300/50 " : ""
       }`}
     >
-      <p className="stockName">{name}</p>
+      <p className="stockName">{ticker}</p>
       <p className="stockAmount">{units} units</p>
       <div className="priceMetrics space-x-4">
         <p className="stockPrice">

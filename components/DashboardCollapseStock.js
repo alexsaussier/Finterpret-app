@@ -85,14 +85,6 @@ const DashboardCollapseStock = ({ title, stockName, units, children }) => {
     let ticker = title;
     const newUnits = 0;
 
-    // We need to re-add the character that we stripped off when we added the stock to the portfolio
-    if (ticker.endsWith(".PA")) {
-      ticker += "R";
-      console.log("ticker to delete:", ticker);
-    }
-    if (ticker.endsWith(".DE")) {
-      ticker += "X";
-    }
 
     // when units is 0, this api route removes the stock from the portfolio
     try {

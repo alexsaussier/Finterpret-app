@@ -44,6 +44,7 @@ async function appendYahooMetrics(stock) {
 
   try{
     stock.totalValue = stock.currentPrice * stock.units;
+    console.log("total value of " + stock.ticker + ": " + stock.totalValue);
   }catch(e){
     console.log("Could not determine total value for stock " + stock.ticker + "\n")
   }
@@ -114,10 +115,7 @@ async function appendYahooMetrics(stock) {
   // Append current datetime to stock in array
   stock.dateTime = new Date();
 
-  // append total value of stock to stock in array
-  stock.totalValue = stock.currentPrice * stock.units;
-  stock.totalValue = formatLargeNumber(stock.totalValue);
-
+  
   // We can add:
   // statsAPI.quickRatio,
   // statsAPI.debtToEquity,

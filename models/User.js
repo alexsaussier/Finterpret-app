@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import toJSON from "./plugins/toJSON";
+import { sendNewUserNotification } from "@/utils/sendNewUserNotification";
 
 // USER SCHEMA
 const userSchema = mongoose.Schema(
@@ -69,6 +70,10 @@ const userSchema = mongoose.Schema(
         type: Date,
         default: Date.now
       }
+    },
+    lastOnline: {
+      type: Date,
+      default: Date.now
     }
   },
   {
@@ -81,5 +86,19 @@ const userSchema = mongoose.Schema(
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
+
+// Send email notification when a new user is created
+userSchema.post('save', async function(doc, next) {
+  if (this.isNew) {
+    // This is a new user
+    try {
+      await sendNewUserNotification(doc);
+      console.log('New user notification sent.');
+    } catch (error) {
+      console.error('Failed to send new user notification:', error);
+    }
+  }
+  next();
+});
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

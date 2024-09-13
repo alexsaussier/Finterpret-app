@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/next-auth";
 import config from "@/config";
 import SideNav from "@/components/SideNavbar";
+import { User } from "@/models/User";  // Import the User model
 
 // This is a server-side component to ensure the user is logged in.
 // If not, it will redirect to the login page.
@@ -15,6 +16,13 @@ export default async function LayoutPrivate({ children }) {
   if (!session) {
     redirect(config.auth.loginUrl);
   }
+
+  // Update lastOnline for the user
+  await User.findOneAndUpdate(
+    { email: session.user.email },
+    { lastOnline: new Date() },
+    { new: true /* return the updated document */ }
+  );
 
   return (
     <div className="flex flex-col md:flex-row h-screen md:overflow-hidden">

@@ -142,11 +142,7 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
               }
               onClick={handleForceRefetch}
             />
-            {refreshesRemaining !== 'unlimited' && (
-              <span className="text-sm text-gray-500 mt-1">
-                Refreshes remaining: {refreshesRemaining}
-              </span>
-            )}
+            
           </div>
         )}
       </div>

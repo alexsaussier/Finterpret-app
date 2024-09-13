@@ -25,7 +25,7 @@ export default function SideNav() {
         className="md:hidden flex justify-between items-center p-4"
         style={{ backgroundColor: "#fff" }}
       >
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <span className="font-extrabold text-lg" style={{ color: "#285A5D" }}>
             {config.appName}
           </span>
@@ -58,7 +58,7 @@ export default function SideNav() {
             <Link
               className="flex h-10 items-center justify-center gap-2"
               style={{ backgroundColor: "#fff", color: "#285A5D" }}
-              href="/dashboard"
+              href="/"
             >
               <span className="font-extrabold text-lg">{config.appName}</span>
             </Link>

@@ -3,10 +3,13 @@
 import { sendOpenAi } from "@/libs/gpt";
 import React, { useEffect, useState } from "react";
 import ButtonGlass from "./ButtonGlass";
+import { LoadingSpinner, RefreshIcon } from "@/utils/svgIcons";
+import toast from 'react-hot-toast'; // Assuming you're using react-hot-toast for toasts
 
 export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
   const [gptResponse, setGptResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshesRemaining, setRefreshesRemaining] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -27,6 +30,12 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
           "gpt response in db for this user - Portfolio analysis is recent."
         );
         setGptResponse(userData.generalAnalysis.gptResponse);
+      }
+
+      if (userData.hasAccess) {
+        setRefreshesRemaining('unlimited');
+      } else {
+        setRefreshesRemaining(3 - userData.analysisRefreshes.count);
       }
     };
 
@@ -63,7 +72,7 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
     "and provide me with some advice on how to improve my portfolio?" +
     "You should not list all the metrics I provide, just give me an overall overview. Do not start with an introduction sentence, and be very concise. ";
 
-  const fetchGptResponse = async () => {
+  const fetchGptResponse = async (forceRefetch = false) => {
     setIsLoading(true); // Start loading for displaying the svg icon
     console.log("General Analysis requested");
 
@@ -73,64 +82,82 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
         guideline,
         gptMessage,
         "1",
-        400,
-        0
+        1000,
+        0.5
       );
       setGptResponse(answerFromGpt);
 
-      // Step 4: Update the user in the database
-      fetch("/api/user/set-portfolio-analysis-generated", {
+      // Update the user in the database
+      const response = await fetch("/api/user/set-portfolio-analysis-generated", {
         method: "POST",
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ gptAnalysis: answerFromGpt }), // Ensure the body is properly stringified
-      })
-        .then((response) => response.json()) // Handle the response from the server
-        .then((data) => console.log("User updated successfully:", data))
-        .catch((error) => console.error("Error updating user:", error));
+        body: JSON.stringify({ 
+          gptAnalysis: answerFromGpt,
+          forceRefetch: forceRefetch 
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        console.log("User updated successfully:", data);
+        setRefreshesRemaining(data.refreshesRemaining);
+      } else {
+        throw new Error(data.error || "Failed to update analysis");
+      }
     } catch (e) {
       console.error("Error: " + e);
+      setGptResponse("An error occurred while generating the analysis. Please try again.");
     } finally {
       setIsLoading(false); // Stop loading regardless of the outcome
     }
   };
 
+  const handleForceRefetch = () => {
+    console.log("Refreshes remaining: " + refreshesRemaining);
+    if (refreshesRemaining === 0) {
+      toast.error("You have reached the daily limit for refreshes. Please try again tomorrow or upgrade your account.");
+    } else {
+      setGptResponse("Generating a fresh new analysis of your portfolio...");
+      fetchGptResponse(true);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg p-5 shadow-md relative">
-      <h1 className="text-lg md:text-xl font-bold text-left mb-4">
-        General Portfolio Analysis and Advice
-      </h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-lg md:text-xl font-bold">
+          General Portfolio Analysis and Advice
+        </h1>
+        {!isLoading && (
+          <div className="flex flex-col items-end">
+            <ButtonGlass
+              title={
+                <span className="flex items-center">
+                  <RefreshIcon />
+                  Refresh Analysis
+                </span>
+              }
+              onClick={handleForceRefetch}
+            />
+            {refreshesRemaining !== 'unlimited' && (
+              <span className="text-sm text-gray-500 mt-1">
+                Refreshes remaining: {refreshesRemaining}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
 
       <div className="relative">
         <div className="flex flex-col">
           {!gptResponse && !isLoading && (
-            <ButtonGlass title="Generate" onClick={fetchGptResponse} />
+            <ButtonGlass title="Generate" onClick={() => fetchGptResponse(false)} />
           )}
-          {!gptResponse && isLoading && (
-            <div className="text-center mt-4">
-              <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-            </div>
-          )}
+          
+          {isLoading && <LoadingSpinner />}
 
           {gptResponse && (
             <div className="mt-4">
@@ -138,15 +165,6 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
             </div>
           )}
         </div>
-        {/*<div className="absolute flex flex-col top-0 left-0 right-0 bottom-0 bg-white bg-opacity-70 flex justify-center items-center text-black font-bold">
-                    Get gold to see your portfolio report and access tailored advice
-                    <a
-                    href="http://localhost:3000/#pricing"
-                    className="btn btn-primary"
-                    >
-                    Get Gold
-                    </a>
-                </div>*/}
       </div>
     </div>
   );

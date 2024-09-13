@@ -59,6 +59,16 @@ const userSchema = mongoose.Schema(
     generalAnalysis: {
       gptResponse: String,
       timeStamp: Number
+    },
+    analysisRefreshes: {
+      count: {
+        type: Number,
+        default: 0
+      },
+      lastRefreshDate: {
+        type: Date,
+        default: Date.now
+      }
     }
   },
   {

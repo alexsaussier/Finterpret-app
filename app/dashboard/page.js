@@ -100,7 +100,7 @@ export default async function Dashboard() {
     dividendPaying: percentageDividend,
   };
 
-  console.log(portfolioGeneralData);
+  console.log("portfolio General Data: ", portfolioGeneralData);
 
   //------
 
@@ -158,8 +158,10 @@ export default async function Dashboard() {
           )}
         </div>
 
+        {/* Comonpenent that lets you manually add stocks to your portfolio */}
         <AddToPortfolioSampleComponent />
 
+        {/* Comonpenent that contains the genaral analysis of the portfolio */}
         {portfolioGeneralData && stocks.length > 0 ? (
           <PortfolioAnalysis portfolioGeneralData={portfolioGeneralData} />
         ) : (

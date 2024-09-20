@@ -4,7 +4,7 @@ const config = {
   // REQUIRED
   appName: "Finterpret",
   // REQUIRED: a short description of your app for SEO tags (can be overwritten)
-  appDescription: "LLM-Powered Analytics for retail investors.",
+  appDescription: "Your AI companion for your stock portfolio.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
   domainName: "finterpret.co",
   crisp: {

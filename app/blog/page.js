@@ -5,9 +5,9 @@ import config from "@/config";
 import { getSEOTags } from "@/libs/seo";
 
 export const metadata = getSEOTags({
-  title: `${config.appName} Blog | Stripe Chargeback Protection`,
+  title: `${config.appName} Blog | Finterpret, the AI companion for your stock investments`,
   description:
-    "Learn how to prevent chargebacks, how to accept payments online, and keep your Stripe account in good standing",
+    "Learn tricks and tips about investing, make smarter financial decisions, and use AI to optimize your portfolio",
   canonicalUrlRelative: "/blog",
 });
 

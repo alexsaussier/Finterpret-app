@@ -190,7 +190,7 @@ export const articles = [
 <p>Understanding how much risk you are willing to take is crucial in stock investment planning. Consider factors such as your age, financial obligations, and investment timeline to determine the level of risk that aligns with your comfort zone.</p>
 
 <h3>3. Diversify Your Portfolio:</h3>
-<p>Spread your investments across various asset classes, industries, and geographical regions to reduce risk. Diversification can help minimize the impact of market volatility on your portfolio's overall performance.</p>
+<p>Spread your investments across various asset classes, industries, and geographical regions to reduce risk. Diversification can help minimize the impact of market volatility on your portfolio&apos;s overall performance.</p>
 
 <h3>4. Conduct Thorough Research:</h3>
 <p>Before making any investment decisions, perform in-depth research on the companies or funds you are considering. Analyze financial statements, market trends, and potential risks to make informed choices.</p>

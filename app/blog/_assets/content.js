@@ -178,10 +178,10 @@ export const articles = [
 <p>As a retail investor, conducting thorough stock analysis is crucial for making informed and successful investment decisions. Whether you are a seasoned trader or a beginner in the world of stocks, understanding how to analyze stocks can help you identify opportunities and mitigate risks.</p>
 
 <h2>Types of Stock Analysis</h2>
-<p>There are two main approaches to stock analysis: fundamental analysis and technical analysis. Fundamental analysis involves assessing a company's financial health, management team, industry trends, and overall business prospects. On the other hand, technical analysis focuses on studying historical price patterns and trading volume to predict future price movements.</p>
+<p>There are two main approaches to stock analysis: fundamental analysis and technical analysis. Fundamental analysis involves assessing a company&apos;s financial health, management team, industry trends, and overall business prospects. On the other hand, technical analysis focuses on studying historical price patterns and trading volume to predict future price movements.</p>
 
 <h2>Key Metrics to Consider</h2>
-<p>When conducting stock analysis, retail investors should pay attention to key metrics such as price-to-earnings ratio (P/E), earnings per share (EPS), return on equity (ROE), and debt-to-equity ratio. These metrics can provide valuable insights into a company's valuation, profitability, and financial health.</p>
+<p>When conducting stock analysis, retail investors should pay attention to key metrics such as price-to-earnings ratio (P/E), earnings per share (EPS), return on equity (ROE), and debt-to-equity ratio. These metrics can provide valuable insights into a company&apos;s valuation, profitability, and financial health.</p>
 
 <h2>Tools for Stock Analysis</h2>
 <p>There are various tools and resources available to help retail investors analyze stocks more effectively. From financial websites and news outlets to stock screening tools and charting software, leveraging these resources can streamline the analysis process and provide valuable insights.</p>

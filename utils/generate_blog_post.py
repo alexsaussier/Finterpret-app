@@ -15,6 +15,7 @@ def read_keywords(file_path):
 
 def generate_blog_post(keyword):
     prompt = f"""Generate a compelling blog post title and content about '{keyword}'. 
+    Optimize the blog post content for SEO.
     The content should be in HTML format, excluding the outer <html>, <head>, and <body> tags.
     Make sure to add a title within <h1> tags."""
     client = OpenAI(api_key="sk-proj-ZWZVp9jM0e3SqUQQELX8T3BlbkFJ8fDmikeoI9FKtTqsM36B")

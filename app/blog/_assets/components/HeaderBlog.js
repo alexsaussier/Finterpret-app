@@ -6,6 +6,7 @@ import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/app/icon.png";
+import logo_2 from "@/app/FinterpretLogoIdea2.png";
 import config from "@/config";
 import { categories } from "../content";
 import ButtonSignin from "@/components/ButtonSignin";
@@ -156,19 +157,19 @@ const HeaderBlog = () => {
           <Link
             className="flex items-center gap-2 shrink-0 "
             href="/"
-            title={`${config.appName} hompage`}
+            title={`${config.appName} homepage`}
           >
             <Image
-              src={logo}
-              alt={`${config.appName} logo`}
-              className="w-8"
+              src={logo_2}
+              className="w-30 md:w-15 lg:w-35"
+              alt="Logo"
               priority={true}
-              width={32}
-              height={32}
+              width={150}
             />
-            <span className="font-extrabold text-lg">{config.appName}</span>
+            
           </Link>
         </div>
+
         {/* Burger button to open menu on mobile */}
         <div className="flex lg:hidden">
           <button

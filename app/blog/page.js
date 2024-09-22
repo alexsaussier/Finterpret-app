@@ -5,7 +5,7 @@ import config from "@/config";
 import { getSEOTags } from "@/libs/seo";
 
 export const metadata = getSEOTags({
-  title: `${config.appName} Blog | Finterpret, the AI companion for your stock investments`,
+  title: `${config.appName} Blog | The AI companion for your stock investments`,
   description:
     "Learn tricks and tips about investing, make smarter financial decisions, and use AI to optimize your portfolio",
   canonicalUrlRelative: "/blog",

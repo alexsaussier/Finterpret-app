@@ -20,9 +20,9 @@ def generate_blog_post(keyword):
     Make sure to add a title within <h1> tags."""
     client = OpenAI(api_key="sk-proj-ZWZVp9jM0e3SqUQQELX8T3BlbkFJ8fDmikeoI9FKtTqsM36B")
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant that generates blog posts."},
+            {"role": "system", "content": "You are a helpful assistant that generates SEO-optimized blog posts for finterpret.co, an AI advisor for retail investors."},
             {"role": "user", "content": prompt}
         ]
     )

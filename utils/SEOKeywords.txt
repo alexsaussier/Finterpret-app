@@ -5,7 +5,6 @@ Stock performance tracker
 Portfolio risk management
 Track stock holdings
 Financial metric interpretation
-Company financial metrics
 Investment performance metrics
 Stock fundamentals analysis
 Stock valuation metrics

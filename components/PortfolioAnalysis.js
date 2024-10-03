@@ -131,7 +131,7 @@ export const PortfolioAnalysis = ({ portfolioGeneralData }) => {
         <h1 className="text-lg md:text-xl font-bold">
           General Portfolio Analysis and Advice
         </h1>
-        {!isLoading && (
+        {!isLoading && gptResponse && (
           <div className="flex flex-col items-end">
             <ButtonGlass
               title={

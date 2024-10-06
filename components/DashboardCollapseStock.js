@@ -2,16 +2,18 @@
 import { sendOpenAi } from "@/libs/gpt";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LoadingSpinner } from "@/utils/svgIcons";
+import { LoadingSpinner, ChevronDownIcon, ChevronUpIcon } from "@/utils/svgIcons";
+
 
 //For when you want to display a value on the title
-const DashboardCollapseStock = ({ title, stockName, units, children }) => {
+const DashboardCollapseStock = ({ title, stockName, units }) => {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [editUnits, setEditUnits] = useState(units);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [hasMadeApiCall, setHasMadeApiCall] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const guideline =
@@ -29,6 +31,7 @@ const DashboardCollapseStock = ({ title, stockName, units, children }) => {
   
 
   const handleOpen = async (event) => {
+    setIsOpen(event.target.checked);
     if (event.target.checked && !hasMadeApiCall) {
       // The component is being opened, send a request to OpenAI
       const res = await sendOpenAi(guideline, gptMessage, "1", 500);
@@ -117,7 +120,12 @@ const DashboardCollapseStock = ({ title, stockName, units, children }) => {
 
       <div className="collapse-title font-bold flex justify-between items-center p-4">
         <div className="">{stockName || title}</div>
-        {!editing && <div className="">{units}</div>}
+        <div className="flex items-center">
+          {!editing &&
+            <div className="mr-2">{units}</div>
+          }
+          {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        </div>
       </div>
 
       <div className="collapse-content flex flex-col items-center justify-between space-y-4">

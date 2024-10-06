@@ -1,7 +1,7 @@
 "use client";
 import { sendOpenAi } from "@/libs/gpt";
 import React, { useState } from "react";
-
+import { ChevronDownIcon, ChevronUpIcon } from "@/utils/svgIcons";
 //For when you want to display a value on the title
 const DashboardCollapseValue = ({ title, units, children }) => {
   const guideline =
@@ -20,8 +20,10 @@ const DashboardCollapseValue = ({ title, units, children }) => {
 
   const [response, setResponse] = useState(null);
   const [hasMadeApiCall, setHasMadeApiCall] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = async (event) => {
+    setIsOpen(event.target.checked);
     if (event.target.checked && !hasMadeApiCall) {
       // The component is being opened, send a request to OpenAI
       const res = await sendOpenAi(guideline, gptMessage, "1", 300);
@@ -36,7 +38,10 @@ const DashboardCollapseValue = ({ title, units, children }) => {
 
       <div className="collapse-title font-bold flex justify-between items-center p-4">
         <div className="">{title}</div>
-        <div className="">{units}</div>
+        <div className="flex items-center">
+          <div className="mr-2">{units}</div>
+          {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        </div>
       </div>
 
       <div className="collapse-content space-y-4">

@@ -24,6 +24,7 @@ export default function RootLayout({ children }) {
     <html lang="en" data-theme={config.colors.theme} className={font.className}>
       {config.domainName && (
         <head>
+          <script defer data-domain="finterpret.co" src="https://plausible.io/js/script.js"></script>
           <Analytics />
           <PlausibleProvider domain={config.domainName} />
           <meta

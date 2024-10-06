@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/utils/svgIcons";
+import { toast } from 'react-hot-toast';
+
 
 export const StockTickerSearch = ({
   ticker,
@@ -68,6 +70,10 @@ export const StockTickerSearch = ({
 
       if (response.ok) {
         // Handle success
+        toast.success(ticker + ' added to your portfolio successfully!', {
+          duration: 3000,
+          position: 'top-center',
+        });
         console.log("Data saved to portfolio:", { ticker, stockName, units });
         setTicker();
         setStockName();

@@ -96,7 +96,7 @@ const Item = ({ item }) => {
 const FAQ = () => {
   return (
     <section
-      className="min-h-screen bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-20 px-20 py-8 lg:py-20 md:pt-20 background"
+      className="bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-20 px-20 py-8 md:pt-20 background"
       id="faq"
     >
       <div className="py-24 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-12">

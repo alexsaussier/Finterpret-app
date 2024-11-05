@@ -116,7 +116,7 @@ const Item = ({ feature, isOpen, setFeatureSelected }) => {
   return (
     <li>
       <button
-        className="relative flex gap-2 items-center w-full py-5 text-base font-medium text-left md:text-lg"
+        className="relative flex gap-2 items-center justify-center w-full py-5 text-base font-medium text-center md:text-lg"
         onClick={(e) => {
           e.preventDefault();
           setFeatureSelected();
@@ -130,7 +130,7 @@ const Item = ({ feature, isOpen, setFeatureSelected }) => {
           {svg}
         </span>
         <span
-          className={`flex-1 text-base-content`}
+          className={`text-base-content text-center`}
           style={{ color: isOpen ? "#285a5d" : "#222" }}
         >
           <h3 className="inline">{title}</h3>
@@ -139,7 +139,7 @@ const Item = ({ feature, isOpen, setFeatureSelected }) => {
 
       <div
         ref={accordion}
-        className={`transition-all duration-300 ease-in-out text-base-content-secondary overflow-hidden`}
+        className={`transition-all duration-300 ease-in-out text-base-content-secondary overflow-hidden text-center`}
         style={
           isOpen
             ? { maxHeight: accordion?.current?.scrollHeight, opacity: 1 }
@@ -200,7 +200,7 @@ const FeaturesAccordion = () => {
   const [featureSelected, setFeatureSelected] = useState(0);
 
   return (
-    <section className="backgroundImage py-8 md:py-32 space-y-12 md:space-y-32 mx-auto bg-base-100 px-6 md:px-20 md:pt-20">
+    <section className="backgroundImage py-8 md:pt-24 space-y-12 md:space-y-32 mx-auto bg-base-100 px-6 md:px-20">
       <div className="container px-8">
         <h2 className="font-extrabold text-4xl lg:text-6xl tracking-tight mb-12 md:mb-24">
           Use AI to optimize your portfolio
@@ -211,9 +211,9 @@ const FeaturesAccordion = () => {
             and start investing like a pro.
           </span>
         </h2>
-        <div className="flex flex-col md:flex-row gap-12 md:gap-24">
-          <div className="grid grid-cols-1 items-stretch gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20 w-full">
-            <ul>
+        <div className="flex flex-col md:flex-row gap-12">
+          <div className="items-stretch gap-8 sm:gap-12 lg:gap-20 w-full flex justify-center">
+            <ul className="w-full max-w-3xl">
               {features.map((feature, i) => (
                 <Item
                   key={feature.title}
@@ -224,7 +224,6 @@ const FeaturesAccordion = () => {
                 />
               ))}
             </ul>
-            {/*<Media feature={features[featureSelected]} key={featureSelected} />*/}
           </div>
         </div>
       </div>

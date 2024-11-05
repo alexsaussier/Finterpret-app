@@ -7,17 +7,22 @@ import { useRef, useState } from "react";
 
 const faqList = [
   {
-    question: "What do I get exactly?",
+    question: "What is Finterpret exactly?",
     answer: (
       <div className="space-y-2 leading-relaxed">
-        A dashboard that outputs metrics about your portfolio, and tailored
-        advice generated just for you.
+        Fintrepret is a dashboard that helps you make smart investment on the stock market.
+        It lets you add stocks to your portfolio, and outputs metrics for each stock you own, as well as aggregated metrics for your portfolio.
+        It uses generative AI to give you insights on the decisions you made and what investmet risks you are exposed to. Try it now!
       </div>
     ),
   },
   {
-    question: "Can I get a refund?",
-    answer: <p>No, but you have 7 days of free trial to test Finterpret.</p>,
+    question: "How much does it cost?",
+    answer: <p>Finterpret is totally free. The product is in beta stage and we are making it free to get as much feedback as possible from early users.</p>,
+  },
+  {
+    question: "How can I give feedback?",
+    answer: <p>Please email me at alex@finterpret.co, would love to hear what you think and how I can improve the product.</p>,
   },
   {
     question: "I have another question",

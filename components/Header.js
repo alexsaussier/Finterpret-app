@@ -10,14 +10,8 @@ import config from "@/config";
 import Logo from "@/public/images/LogoWide.png";
 
 const links = [
-  {
-    href: "/#pricing",
-    label: "Pricing",
-  },
-  {
-    href: "/#faq",
-    label: "FAQ",
-  },
+  
+  
 ];
 
 const cta = <ButtonSignin extraStyle="btn-primary" />;

@@ -15,12 +15,13 @@ const Hero = () => {
       <div className="flex flex-col gap-10 lg:gap-10 items-center justify-center text-center lg:text-left lg:items-start w-full max-w-xl mx-auto">
         
         <a href="https://www.producthunt.com/posts/finterpret?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-finterpret" target="_blank">
-          <img 
+          <Image 
             src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=478329&theme=light" 
-            alt="Finterpret - LLM&#0045;Powered&#0032;Analytics&#0032;for&#0032;retail&#0032;investors&#0046; | Product Hunt" 
-            style={{ width: "250px", height: "54px" }} 
-            width="250" 
-            height="54" 
+            alt="Finterpret - LLM-Powered Analytics for retail investors | Product Hunt" 
+            width={250}
+            height={54}
+            style={{ width: "250px", height: "54px" }}
+            unoptimized
           />      
         </a>
         
@@ -40,8 +41,8 @@ const Hero = () => {
           <ButtonSignin/>
         </div>
 
-        <p className="text-s opacity-80 leading-relaxed">
-          As part of our Product Hunt launch, Finterpret is entirely free for you to try it!
+        <p className="text-sm opacity-80 leading-relaxed">
+          Finterpret is entirely free. We are looking to get your feedback, please email me with your thoughts at alex@finterpret.co
         </p>
         
         

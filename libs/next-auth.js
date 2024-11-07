@@ -44,6 +44,8 @@ export const authOptions = {
       if (session?.user) {
         session.user.id = token.sub;
         session.user.snaptrade_user_secret = token.snaptrade_user_secret;
+        session.user.hasAccess = token.hasAccess;
+        session.user.portfolio = token.portfolio;
       }
       return session;
     },

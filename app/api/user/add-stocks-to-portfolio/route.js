@@ -41,9 +41,17 @@ export async function POST(req) {
             throw new Error('User not found');
         }
 
-        // Initialize portfolio as an empty array if it's undefined
+        // Initialize portfolio if undefined
         if (!user.portfolio) {
             user.portfolio = [];
+        }
+
+        // Check if free user has reached limit
+        if (!user.hasAccess && user.portfolio.length >= 5) {
+            return NextResponse.json({ 
+                error: 'Free tier users can only add up to 5 stocks. Please upgrade to add more stocks.',
+                code: 'FREE_TIER_LIMIT'
+            }, { status: 403 });
         }
 
         user.portfolio.push({ ticker, stockName, units });

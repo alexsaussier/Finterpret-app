@@ -2,6 +2,7 @@
 import { useState } from "react";
 import AddStockModal from "./AddStockModal";
 import { StockTickerSearch } from "./StockTickerSearch";
+import { useSession } from "next-auth/react";
 
 export const AddToPortfolioSampleComponent = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -10,6 +11,12 @@ export const AddToPortfolioSampleComponent = () => {
   const [results, setResults] = useState([]);
   const [units, setUnits] = useState();
   const [stockName, setStockName] = useState("");
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  console.log("user:", user);
+  console.log("hasAccess:", user?.hasAccess);
+  console.log("portfolio:", user?.portfolio);
 
   return (
     <div className="bg-white rounded-lg p-5 shadow-md flex flex-col h-full">
@@ -17,6 +24,11 @@ export const AddToPortfolioSampleComponent = () => {
         <h1 className="text-lg md:text-xl font-bold">
           Add stocks to your portfolio
         </h1>
+        {(!user?.hasAccess && user?.portfolio) && (
+          <div className="badge badge-neutral badge-outline">
+            Free tier: {Math.max(5 - (user?.portfolio?.length || 0), 0)} stocks remaining
+          </div>
+        )}
         <div className="badge badge-neutral badge-outline">Enter ticker, then quantity</div>
       </div>
 

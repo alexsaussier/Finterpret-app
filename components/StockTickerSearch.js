@@ -55,7 +55,7 @@ export const StockTickerSearch = ({
   const saveToPortfolio = async () => {
     try {
       setLoading(true);
-      console.log("Saving to portfolio:", { ticker, stockName, units }); // Add this log
+      console.log("Saving to portfolio:", { ticker, stockName, units });
       const response = await fetch("/api/user/add-stocks-to-portfolio", {
         method: "POST",
         headers: {
@@ -63,13 +63,14 @@ export const StockTickerSearch = ({
         },
         body: JSON.stringify({
           ticker,
-          stockName, // Make sure this is included
+          stockName,
           units,
         }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        // Handle success
         toast.success(ticker + ' added to your portfolio successfully!', {
           duration: 3000,
           position: 'top-center',
@@ -82,14 +83,24 @@ export const StockTickerSearch = ({
         setResults([]);
         router.refresh();
       } else {
-        // Handle error
-        console.error("Failed to save data to portfolio");
+        if (data.code === 'FREE_TIER_LIMIT') {
+          toast.error(data.error, {
+            duration: 5000,
+            position: 'top-center',
+          });
+        } else {
+          console.error("Failed to save data to portfolio, free tier limit reached");
+          toast.error('Failed to add stock to portfolio, free tier limit reached', {
+            duration: 3000,
+            position: 'top-center',
+          });
+        }
       }
     } catch (error) {
       console.error("An error occurred while saving data to portfolio:", error);
     } finally {
       setLoading(false);
-    } 
+    }
   };
 
   return (

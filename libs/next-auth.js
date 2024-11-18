@@ -1,11 +1,57 @@
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
+//import LinkProvider from "next-auth/providers/link";
+
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import config from "@/config";
 import connectMongo from "./mongo";
 
+function LinkProvider(options) {
+  console.log(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+  console.log(options.clientId);
+  console.log(options.clientSecret);
+
+  return {
+
+    id: "link",
+    name: "Link",
+    type: "oauth",
+    checks: ["state"],
+    authorization: {
+      url: `https://login.link.com/auth?key=${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`,
+      params: {
+        scope: "read_email",
+        key: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+      },
+    },
+    token: {
+      url: `https://login.link.com/auth/token?key=${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}&client_id=${options.clientId}&client_secret=${options.clientSecret}`,
+      params: {
+        key: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+        client_id: options.clientId,
+        client_secret: options.clientSecret
+      },
+    },
+    userinfo: {
+      url: `https://login.link.com/access/consumer?key=${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}&livemode=true`,
+      params: { livemode: true }
+    },
+    async profile(profile) {
+      console.log(profile);
+      return {
+        id: profile.email
+      };
+    },
+    options,
+  };
+}
+
+
+
+
 export const authOptions = {
   // Set any random key in .env.local
+  debug: true,
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
@@ -22,6 +68,14 @@ export const authOptions = {
         };
       },
     }),
+
+    
+      LinkProvider({
+      clientId: process.env.LINK_CLIENT_ID,
+      clientSecret: process.env.LINK_SECRET,
+    }),
+      
+    
 
     // Follow the "Login with Email" tutorial to set up your email server
     // Requires a MongoDB database. Set MONOGODB_URI env variable.
@@ -49,6 +103,9 @@ export const authOptions = {
       }
       return session;
     },
+
+    
+
   },
   session: {
     strategy: "jwt",

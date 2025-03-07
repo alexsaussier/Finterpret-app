@@ -4,6 +4,10 @@ from datetime import datetime
 import re
 from openai import OpenAI
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env.local
+load_dotenv('.env.local')
 
 def slugify(text):
     text = text.lower()
@@ -18,7 +22,7 @@ def generate_blog_post(keyword):
     Optimize the blog post content for SEO.
     The content should be in HTML format, excluding the outer <html>, <head>, and <body> tags.
     Make sure to add a title within <h1> tags."""
-    client = OpenAI(api_key="sk-proj-ZWZVp9jM0e3SqUQQELX8T3BlbkFJ8fDmikeoI9FKtTqsM36B")
+    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
